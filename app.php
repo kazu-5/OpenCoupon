@@ -7,4 +7,5 @@ $app->SetEnv("layout-dir","layout");
 $app->SetEnv("layout","default");
 $app->SetEnv("template-dir","template");
 $app->SetEnv("controller-name","index.php");
+$app->config(new CouponConfig());
 $app->Dispatch();
