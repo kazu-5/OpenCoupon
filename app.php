@@ -3,9 +3,19 @@
 include('NewWorld5.class.php');
 $app = new App();
 $app->mark();
-$app->SetEnv("layout-dir","layout");
-$app->SetEnv("layout","default");
-$app->SetEnv("template-dir","template");
+
+//  Set environment.
 $app->SetEnv("controller-name","index.php");
-$app->config(new CouponConfig());
+
+//  layout
+$app->SetEnv("layout-dir","layouts");
+$app->SetEnv("layout","default");
+
+//  template
+$app->SetEnv("template-dir","template");
+
+//  config
+$app->config( new CouponConfig() );
+
+//  Do dispatch
 $app->Dispatch();
