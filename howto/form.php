@@ -22,7 +22,7 @@ $config->input->$input_name->type  = 'submit';
 $config->input->$input_name->value = ' Submit!! ';
 
 //  debug
-$this->d( Toolbox::toArray($config) );
+//$this->d( Toolbox::toArray($config) );
 
 //  フォームを設定する
 $this->form()->AddForm($config);

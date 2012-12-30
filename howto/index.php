@@ -52,5 +52,7 @@ switch($args[0]){
  <a href="<?=$this->ConvertURL('ctrl:/index')?>">index</a> |
  <a href="<?=$this->ConvertURL('ctrl:/other')?>">other</a> | 
  <a href="<?=$this->ConvertURL('ctrl:/other/1')?>">OK</a> | 
- <a href="<?=$this->ConvertURL('ctrl:/other/0')?>">NG</a>
+ <a href="<?=$this->ConvertURL('ctrl:/other/0')?>">NG</a> | 
+ <a href="<?=$this->ConvertURL('ctrl:/form')?>">Form</a> | 
+ <a href="<?=$this->ConvertURL('ctrl:/pdo')?>">PDO</a> | 
  ]
