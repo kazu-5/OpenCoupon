@@ -13,6 +13,14 @@ switch($args[0]){
 	case 'index':
 		$this->template('index.phtml');
 		break;
+	
+	case 'form':
+		include('form.php');
+		break;
+		
+	case 'pdo':
+		include('pdo.php');
+		break;
 		
 	case 'other':
 		//  テンプレートに渡すオブジェクト（これにViewで使用する変数を入れる）
