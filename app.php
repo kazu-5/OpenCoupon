@@ -8,7 +8,7 @@ $app->mark();
 $app->SetEnv("controller-name","index.php");
 
 //  layout
-$app->SetEnv("layout-dir","layouts");
+$app->SetEnv("layout-dir","layout");
 $app->SetEnv("layout","default");
 
 //  template
