@@ -1,6 +1,5 @@
 <?php
 
-//include('NewWorld.class.php');
 include('NewWorld5.class.php');
 
 class Coupon extends App{
@@ -36,7 +35,7 @@ class Coupon extends App{
 	}
 	
 	function doDebug(){
-		if($this->system()){
+		if($this->admin()){
 			include('debug.phtml');
 		}
 	}
@@ -189,7 +188,6 @@ class Coupon extends App{
 		//  PDOの取得
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
-		var_dump($io);
 		
 		/*
 		$select['table'] = 't_coupon';

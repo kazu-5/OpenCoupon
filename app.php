@@ -11,11 +11,14 @@ $app->mark();
 $app->SetEnv("controller-name","index.php");
 
 //  layout
-$app->SetEnv("layout-dir","layout");
+$app->SetEnv("layout-dir","app:/zlib/layout");
 $app->SetEnv("layout","default");
 
 //  template
-$app->SetEnv("template-dir","template");
+$app->SetEnv("template-dir","app:/zlib/template");
+
+//  Set model directory
+$app->SetEnv('model-dir','app:/zlib/model');
 
 //  config
 $app->config( new CouponConfig() );
@@ -23,9 +26,6 @@ $app->config( new CouponConfig() );
 //  PDOの取得
 $pdo = $app->pdo();
 $io = $pdo->Connect($database);
-
-//  coupon
-//$app->config( new Coupon() );
 
 //  Do dispatch
 $app->Dispatch();
