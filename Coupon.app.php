@@ -14,7 +14,7 @@ class Coupon extends App
 	}
 	
 	function GetAction(){
-		$args = $this->GetSmartArgs();
+		$args = $this->GetArgs();
 		$action = isset($args[0]) ? $args[0]: '';
 		return $action;
 	}
@@ -179,12 +179,17 @@ class Coupon extends App
 
 	//	デフォルト表示のcoupon_id（トップページのオススメクーポンなどに利用）
 	function GetDefaultCID(){
+		/*
 		$database = $this->config()->database();
 		$this->d( Toolbox::toArray($database) );
 		
 		//  PDOの取得
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
+		*/
+		
+		//$record = $this->PDO()->Quick(' t_test.id = 1 ');
+		//$this->d($record);
 		
 		/*
 		$select['table'] = 't_coupon';
@@ -194,21 +199,29 @@ class Coupon extends App
 		$select['cache'] = 1;
 		$t_coupon = $this->mysql->select($select);
 		*/
+		
 		//  SELECTの定義を作成
-		$config = new Config();
+		$config = $this->config()->select_coupon_default();
+		//$this->d( Toolbox::toArray($config));
+		
+		/*
 		$config->table = 't_coupon';
 		$config->where->is_delete = 'null';
 		$config->limit = 3;
 		$config->order = 'timestamp desc';
+		*/
 		
 		//  SELECTを実行
-		$record = $pdo->select($config);
-		$this->d($record);
+		$t_coupon = $this->pdo()->select($config);
+		//$this->d($this->pdo()->qu());
+		//$this->d($t_coupon);
 		
 		//$this->d($t_coupon);
 		//$this->mark($this->mysql->qu());
 		
-		return isset($t_coupon['coupon_id']) ? $t_coupon['coupon_id']: 1;
+		//return isset($t_coupon['coupon_id']) ? $t_coupon['coupon_id']: 1;
+		
+		return $t_coupon['coupon_id'];
 	}
 
 	/**
@@ -217,8 +230,8 @@ class Coupon extends App
 	 * @param  integer  coupon_id
 	 * @return mixed    成功=record
 	 */
-	function GetCoupon( $coupon_id=null ){
-
+	function GetCoupon( $coupon_id=null )
+	{
 		if(!$coupon_id){
 			$coupon_id = $this->GetDefaultCID();
 		}
@@ -235,9 +248,11 @@ class Coupon extends App
 		//$this->d($t_coupon);
 		
 		//  PDOの取得
+		/*
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
 		var_dump($io);
+		*/
 		
 		//  SELECTの定義を作成
 		$config = new Config();
@@ -246,9 +261,11 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-		$record = $pdo->select($config);
+		$record = $this->pdo()->select($config);
 		$this->d($record);
 		
+		
+		return null;
 		
 		//	クーポンの販売枚数を取得
 		$select = array();
@@ -262,8 +279,6 @@ class Coupon extends App
 	//		$this->d($t_buy);
 			return false;
 		}
-		
-		
 		
 		//	販売枚数
 		$t_coupon['coupon_sales_num_sum'] = $t_buy['sum'];
@@ -286,7 +301,10 @@ class Coupon extends App
 		return $t_coupon;
 	}
 	
-	function GetTShopByShopId($shop_id){
+	function GetTShopByShopId($shop_id)
+	{
+		return null;
+		
 		$select = array();
 		$select['table'] = 't_shop';
 		$select['where']['shop_id'] = $shop_id;

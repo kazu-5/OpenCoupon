@@ -37,5 +37,19 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
+	function select_coupon()
+	{
+		$config = $this->select();
+		$config->table = 't_coupon';
+		return $config;
+	}
+
+	function select_coupon_default()
+	{
+		$config = $this->select_coupon();
+		$config->order = 'updated desc';
+		$config->limit = 1;
+		return $config;
+	}
 }
 
