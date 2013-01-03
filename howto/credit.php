@@ -1,22 +1,25 @@
 <?php
 
+$result = $this->model('Credit')->test();
+
 // カード認証（有効か無効か残高があるかチェック）
 $config = new Config();
-$config->cardno  = Credit_model::TEST_CARD_NO; // カード番号
-$config->cardexp = '14-01'; // カードの有効期限
-$config->amount  = 10000; // 引き落とし金額
-$result = $this->model('credit')->Auth($config);
+$config->cardno  = $result = $this->model('Credit')->Const('TEST_CARD_NO'); // カード番号
+$config->cardexp = '2013-01'; // カードの有効期限
+$config->amount  = 100; // 引き落とし金額
+$config->email   = 'test@example.com';
+$result = $this->model('Credit')->Auth($config);
 $sid = $result->sid;
 if( $sid ){
-	$this->p("![.blue[このカード番号は有効です。（sid=$sid）]]");
+	$this->p("![.blue[このカード番号は有効です。sid={$sid}]]");
 }else{
-	$this->p('![.red[このカード番号は無効です]]');
+	$this->p("![.red[このカード番号は無効です。[{$result->status}] {$result->message}]]");
 }
 
 // 実際の決済
 $config = new Config();
 $config->sid = $sid;
-$result = $this->model('credit')->Commit($config);
+$result = $this->model('Credit')->Commit($config);
 $io = $result->io;
 if( $io ){
 	$this->p("![.blue[決済が完了しました。]]");
@@ -27,7 +30,7 @@ if( $io ){
 // 決済のキャンセル
 $config = new Config();
 $config->sid = $sid;
-$result = $this->model('credit')->Cancel($config);
+$result = $this->model('Credit')->Cancel($config);
 $io = $result->io;
 if( $io ){
 	$this->p("![.blue[決済をキャンセルしました。]]");
