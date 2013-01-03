@@ -8,11 +8,11 @@ $app->mark();
 $app->SetEnv("controller-name","index.php");
 
 //  layout
-$app->SetEnv("layout-dir","layout");
+$app->SetEnv("layout-dir","app:/zlib/layout");
 $app->SetEnv("layout","default");
 
 //  template
-$app->SetEnv("template-dir","template");
+$app->SetEnv("template-dir","app:/zlib/template");
 
 //  Set model directory
 $app->SetEnv('model-dir','app:/zlib/model');
