@@ -1,16 +1,12 @@
 <?php
 
-//include('NewWorld.class.php');
 include('NewWorld5.class.php');
 
-class Coupon extends App{
-
-	function __construct($args=null){
-		parent::__construct($args);
-	}
-
-	function __destruct() {
-		parent::__destruct();
+class Coupon extends App
+{	
+	function Init()
+	{
+		parent::Init();
 	}
 	
 	function InitAction(){
@@ -189,7 +185,6 @@ class Coupon extends App{
 		//  PDOの取得
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
-		var_dump($io);
 		
 		/*
 		$select['table'] = 't_coupon';
