@@ -1,11 +1,7 @@
 <?php
 
-//include('NewWorld5.class.php');
-//$app = new App();
 include('Coupon.app.php');
 $app = new Coupon();
-
-$app->mark();
 
 //  Set environment.
 $app->SetEnv("controller-name","index.php");
@@ -20,12 +16,13 @@ $app->SetEnv("template-dir","template");
 //  config
 $app->config( new CouponConfig() );
 
-//  PDOの取得
-$pdo = $app->pdo();
-$io = $pdo->Connect($database);
+//  PDOの初期化
+$database = $app->config()->database();
+$io = $app->pdo()->Connect($database);
 
-//  coupon
-//$app->config( new Coupon() );
+// Access test
+// $record = $app->pdo()->Quick(' t_test.id=1 ');
+// $app->d($record);
 
 //  Do dispatch
 $app->Dispatch();
