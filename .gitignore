@@ -1,5 +1,8 @@
+/images/
+/img/
 
 .buildpath
 .project
 .settings/
+.svn
 
