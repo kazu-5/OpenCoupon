@@ -1,0 +1,47 @@
+<h4>お届け先</h4>
+<table>
+	<tr>
+		<th>お名前</th>
+		<td>
+			姓：<?php $this->form->Input('receiver_last_name');?>
+			名：<?php $this->form->Input('receiver_first_name');?>
+			<p class="red"><?=$this->form->InputError('receiver_last_name')?></p>
+			<p class="red"><?=$this->form->InputError('receiver_first_name')?></p>
+		</td>
+	</tr>
+	<tr>
+		<th>郵便番号</th>
+		<td>
+			<?php $this->form->Input('receiver_postal_code');?>
+			<p class="red"><?=$this->form->InputError('receiver_postal_code')?></p>
+		</td>
+	</tr>
+	<tr>
+		<th>都道府県</th>
+		<td>
+			<?php $this->form->Input('receiver_pref');?>
+			<p class="red"><?=$this->form->InputError('receiver_pref')?></p>
+		</td>
+	</tr>
+	<tr>
+		<th>市区町村</th>
+		<td>
+			<?php $this->form->Input('receiver_city');?>
+			<p class="red"><?=$this->form->InputError('receiver_city')?></p>
+		</td>
+	</tr>
+	<tr>
+		<th>丁目番地</th>
+		<td>
+			<?php $this->form->Input('receiver_address');?>
+			<p class="red"><?=$this->form->InputError('receiver_address')?></p>
+		</td>
+	</tr>
+	<tr>
+		<th>建物名</th>
+		<td>
+			<?php $this->form->Input('receiver_building');?>
+			<p class="red"><?=$this->form->InputError('receiver_building')?></p>
+		</td>
+	</tr>
+</table>

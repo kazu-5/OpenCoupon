@@ -1,0 +1,212 @@
+<?php
+//$this->mark();
+//$this->d($t_coupon);
+?>
+
+<style>
+
+#coupon_buy_area{
+	margin: 2px;
+	
+	width:  200px;
+	background-color: #d7f1f7;
+}
+
+#coupon_buy_area_top{
+	border: 1px solid #89d2f7;
+	text-align: center;	
+}
+
+#coupon_top_buy_price_area{
+	margin-bottom: 10px;
+	padding: 5px 5px 5px 0px;
+	color:			 white;
+	text-align:		 right;
+	font-weight:	 bold;
+	background-color: #67bcd7;
+}
+
+#coupon_top_buy_price_info{
+	margin: 10px;
+}
+
+#coupon_top_buy_price_info .td1{
+	color: #494a4a;
+	font-size: smaller;
+	font-weight: bold;
+	border: 0px dotted blue;
+	text-align: left;
+}
+
+#coupon_top_buy_price_info .td2{
+	color: #e5154d;
+	font-size: smaller;
+	font-weight: bold;
+	text-align: right;
+	border: 0px dotted blue;
+}
+
+#coupon_top_buy_price_info .td3{
+	border: 0px dotted blue;
+	color: #494a4a;
+	font-size: smaller;
+	font-weight: normal;
+	text-align: left;
+}
+
+#coupon_buy_area_countdown{
+	text-align: right;
+	background-color:black;
+	color:white;
+}
+
+.count_big{
+	font-size:16px;
+}
+
+.count_small{
+	font-size:10px;
+}
+
+</style>
+
+<div id="coupon_buy_area" style="">
+	<div id="coupon_buy_area_top">
+		<div id="coupon_top_buy_price_area">
+			<span style="font-size:40px;"><?=number_format($t_coupon['coupon_sales_price'])?></span><span style="font-size:25px;">円</span>
+		</div>
+		<div>
+			<?php if( strtotime($t_coupon['coupon_sales_limit']) > time() ): ?>
+				<a href="/buy/<?=$t_coupon['coupon_id']?>"><img src="/images/buy_button.png"></a>
+			<?php else: ?>
+				（販売終了ボタンの表示）
+			<?php endif; ?>		
+		</div>
+		<table id="coupon_top_buy_price_info" class="collapse" width="90%" style="border-width:0px;">
+			<tr>
+				<td class="td1">通常価格
+				<td class="td2"><?=number_format($t_coupon['coupon_normal_price'])?>
+				<td class="td3">円
+			<tr>
+				<td class="td1">割引率
+				<td class="td2"><?=number_format($t_coupon['coupon_discount_rate'])?>％
+				<td class="td3">OFF
+			<tr>
+				<td class="td1">割引額
+				<td class="td2"><?=number_format($t_coupon['coupon_discount_price'])?>
+				<td class="td3">円
+		</table>
+	</div>
+	<div>
+		<?php if( strtotime($t_coupon['coupon_sales_limit']) > time() ): ?>
+			<div id="coupon_buy_area_countdown" style="">
+			<?php if($t_coupon['rest_time_day']): ?>
+			<span id="rest_time_day" class="count_big"><?=$t_coupon['rest_time_day']?></span>
+			<span class="count_small">日</span>
+			<span><?php endif; ?>
+			<span id="rest_time_hour" class="count_big"><?=$t_coupon['rest_time_hour']?></span>
+			<span class="count_small">時間</span>
+			<span id="rest_time_minute" class="count_big"><?=$t_coupon['rest_time_minute']?></span>
+			<span class="count_small">分</span>
+			<span id="rest_time_second" class="count_big"><?=$t_coupon['rest_time_second']?></span>
+			<span class="count_small">秒</span>
+			</div>
+		<?php else: ?>
+			<!-- 販売終了 -->
+			<p class="red small bold">このクーポンは販売終了しました</p>
+		<?php endif; ?>
+		
+		<!--
+		<p>終了時刻：<?=date('Y年m月d日 H時i分',strtotime($t_coupon['coupon_sales_limit']))?></p>
+		<p>上限：<?=$t_coupon['coupon_sales_num_top']?>枚</p>
+		<p>下限：<?=$t_coupon['coupon_sales_num_bottom']?>枚</p>
+		-->
+	</div>
+	<div>
+		<div style="line-height:1.1em; margin-top:0.5em;">
+			<span class="bigger blue bold"><?=$t_coupon['coupon_sales_num_bottom']?></span><span class="small">枚中</span>
+			<span class="bigger blue bold"><?=$t_coupon['coupon_sales_num_sum']?></span><span class="small">枚が購入申し込み中</span>
+
+			<?php if( $t_coupon['coupon_sales_num_bottom'] > $t_coupon['coupon_sales_num_sum'] ): ?>
+				<span class="small">あと</span>
+				<span class="bigger blue bold"><?=$t_coupon['coupon_sales_num_bottom']-$t_coupon['coupon_sales_num_sum']?></span>
+				<span class="small">枚で購入決定！</span><br>
+				<span class="small">みんなが購入したクーポンの合計枚数が</span>
+				<span class="bigger red bold"><?=$t_coupon['coupon_sales_num_bottom']?></span>
+				<span class="small">枚に達しないと無効になります。</span>
+			<?php else:?>
+				<span class="small">みんなが購入した枚数が最低購入枚数を上回りました！</span><br>
+				<span class="small">クーポンは残り</span>
+				<span class="bigger red bold"><?=$t_coupon['coupon_sales_num_top']-$t_coupon['coupon_sales_num_sum']?></span>
+				<span class="small">枚です！</span>
+			<?php endif;?>
+		</div>
+	</div>
+</div>
+
+<script>
+
+function printf2d(i){
+	if( i < 10 ){
+		i = '0'+i;
+	}
+	return i;
+}
+
+//	ドキュメントが読み込まれたら実行
+$(document).ready(function(){
+	
+	var current_time = <?=time()?>;
+	var time_limit = <?=strtotime($t_coupon['coupon_sales_limit'])?>;
+	
+	//	定期実行（１秒毎）
+	var timer_id = setInterval(function(){
+		current_time++;
+		if( current_time < time_limit ){
+			var rest_time_second = $('#rest_time_second').text();
+			rest_time_second--;
+			if(rest_time_second >= 0){
+				//	秒
+				$('#rest_time_second').text(printf2d(rest_time_second));
+			}else{
+				//	分
+				$('#rest_time_second').text(59);
+				var rest_time_minute = $('#rest_time_minute').text();
+				rest_time_minute--;
+				if(rest_time_minute >= 0){
+					$('#rest_time_minute').text(printf2d(rest_time_minute));
+				}else{
+					//	時
+					$('#rest_time_minute').text(59);
+					var rest_time_hour = $('#rest_time_hour').text();
+					rest_time_hour--;
+					if(rest_time_hour >= 0){
+						$('#rest_time_hour').text(printf2d(rest_time_hour));
+					}else{
+						//	日
+						$('#rest_time_hour').text(23);
+						var rest_time_day = $('#rest_time_day').text();
+						rest_time_day--;
+						if(rest_time_day > 0){
+							$('#rest_time_day').text(rest_time_day);
+						}
+					}
+				}
+			}
+		}else{
+			clearInterval(timer_id);
+		}
+	}, 1000); 
+	
+	if(0){
+		$('#console').css('border','1px dotted blue');
+		$('#console').css('margin','5px');
+		$('#console').append('<h2>Console</h2><hr>');
+		$('#console').append('<p>current_limit='+current_time+'</p>');
+		$('#console').append('<p>time_limit='+time_limit+'</p>');
+//		$('#console').append('<p>quantity='+quantity+'</p>');
+	}
+});
+
+</script>
+<div id="console"></div>

@@ -1,0 +1,43 @@
+<?php
+/*
+$this->Load('~/zlib/action/info.action.php');
+$info = new InfoAction($this);
+$coupons = $info->GetCoupons();
+*/
+$select = array();
+$select['table'] = 't_coupon';
+$select['limit'] = 10;
+$coupons = $this->mysql->select($select);
+?>
+<style>
+
+#info_coupon_small{
+	margin:3px;
+	padding-bottom: 5px;
+	background-color: #f0ffdd;
+	border:1px solid gray;
+	font-size: small;
+	width: 234px;
+}
+
+div.info_coupon_small{
+	padding: 3px;
+	font-size: small;
+	border:1px solid grey;
+	border-width: 1px 0px 0px 0px;
+}
+
+p.info_coupon_small{
+	font-size: small;
+}
+
+</style>
+<div id="info_coupon_small" class="arc" >
+	<div class="center" style="">
+		<p class="small">おすすめのクーポン</p>
+	</div>
+	<?php foreach($coupons as $coupon): ?>
+	<?php $this->Template('right_side_info_small.phtml',$coupon); ?>
+	<?php endforeach; ?>
+</div>
+
