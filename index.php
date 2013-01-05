@@ -1,4 +1,5 @@
 <?php
+echo 'test';
 
 echo 'index.php';
 

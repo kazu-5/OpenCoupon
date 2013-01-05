@@ -253,6 +253,7 @@ class Coupon extends App
 		
 		//  PDOの取得
 		/*
+		$database = $this->config()->database();
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
 		var_dump($io);
@@ -265,11 +266,12 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-
 		$record = $this->pdo()->select($config);
 		$this->d($record);
 		
-		return null;
+		$t_coupon = $pdo->select($config);
+		$this->d($coupon_id);
+		$this->d($t_coupon);
 		
 		//	クーポンの販売枚数を取得
 		/*
@@ -285,21 +287,21 @@ class Coupon extends App
 		$config = new Config();
 		$config->table = 't_buy';
 		$config->where->coupon_id = $coupon_id;
-		$config->as->sum = 1;
+		$config->agg->sum = 'coupon_id';
 		$config->group = 'coupon_id';
 		$config->limit = 1;
 		
 		//  SELECTを実行
 		$t_buy = $pdo->select($config);
-		//$this->d($t_buy);
+		$t_buy = $this->pdo()->select($config);
+		$this->d($t_buy);
 		
 		if(!count($t_buy)){
-	//		$this->d($t_buy);
 			return false;
 		}
 		
 		//	販売枚数
-		$t_coupon['coupon_sales_num_sum'] = $t_buy['sum'];
+		$t_coupon['coupon_sales_num_sum'] = $t_buy['SUM(coupon_id)'];
 
 		//	割引額
 		$t_coupon['coupon_discount_price'] = $t_coupon['coupon_normal_price'] - $t_coupon['coupon_sales_price'];
@@ -328,12 +330,7 @@ class Coupon extends App
 		$select['limit'] = 1;
 		$t_shop = $this->mysql->select($select);
 		*/
-		
-		//  PDOの取得
-		$pdo = $this->pdo();
-		$io = $pdo->Connect($database);
-		var_dump($io);
-		
+				
 		//  SELECTの定義を作成
 		$config = new Config();
 		$config->table = 't_shop';
@@ -341,7 +338,7 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-		$t_shop = $pdo->select($config);
+		$t_shop = $this->pdo()->select($config);
 		$this->d($t_shop);
 		
 		return $t_shop;
