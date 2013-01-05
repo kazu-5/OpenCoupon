@@ -1,0 +1,35 @@
+<div class="info_coupon_small" style="background-color: white;">
+	<p class="small bold"><?=$coupon_title?></p>
+	<p class="info_coupon_small" style=""><?=$coupon_description?></p>
+	
+	<table>
+		<tr>
+			<td>
+				<div class ="deal_price" >
+					<span class="small"><?=number_format($coupon_sales_price)?>円</span>
+				</div>
+				<div class="deal_cut_rate">
+					<?php
+					//	割引額
+					$coupon_discount_price = $coupon_normal_price - $coupon_sales_price;
+
+					//	割引率(%)
+					$coupon_discount_rate = 100 - (($coupon_sales_price / $coupon_normal_price) * 100);
+					
+					print number_format($coupon_discount_rate);
+					?>
+					％OFF
+				</div>
+			</td><td>
+				<div>
+					<img src="/img/36682_top_side.jpg" style="width:124; height:75;">
+					<?php
+					/*
+					<img src="/<?=$shop_id?>/<?=$coupon_id?>/small.png" style="width:124; height:75;">
+					*/
+					?>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

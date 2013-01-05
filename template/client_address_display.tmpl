@@ -1,0 +1,20 @@
+
+<table>
+	<tr>
+		<th>お名前</th>
+		<td>
+			<?php
+				echo $address['last_name'].' '.$address['first_name'];
+			?>
+		</td>
+	</tr>
+	<tr>
+		<th>ご住所</th>
+		<td>
+			<?php
+				echo '〒'.$address['postal_code'].' '.$address['pref'].' '.
+						$address['city'].' '.$address['address'].' '.$address['building'];
+			?>
+		</td>
+	</tr>
+</table>

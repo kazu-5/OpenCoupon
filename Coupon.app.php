@@ -1,5 +1,5 @@
 <?php
-
+ 
 include('NewWorld5.class.php');
 
 class Coupon extends App
@@ -41,6 +41,8 @@ class Coupon extends App
 		
 		$t_coupon = $this->GetCoupon(null);
 		$t_shop   = $this->GetTShopByShopId($t_coupon['shop_id']);
+		
+		$this->d($t_coupon);
 		
 		include('index.phtml');
 	}
@@ -208,12 +210,14 @@ class Coupon extends App
 		$config->table = 't_coupon';
 		$config->where->is_delete = 'null';
 		$config->limit = 3;
+
 		$config->order = 'timestamp desc';
 		*/
 		
 		//  SELECTを実行
 		$t_coupon = $this->pdo()->select($config);
 		//$this->d($this->pdo()->qu());
+
 		//$this->d($t_coupon);
 		
 		//$this->d($t_coupon);
@@ -248,11 +252,10 @@ class Coupon extends App
 		//$this->d($t_coupon);
 		
 		//  PDOの取得
-		/*
+		$database = $this->config()->database();
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
 		var_dump($io);
-		*/
 		
 		//  SELECTの定義を作成
 		$config = new Config();
@@ -261,13 +264,15 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-		$record = $this->pdo()->select($config);
-		$this->d($record);
+
+		$t_coupon = $pdo->select($config);
+		$this->d($coupon_id);
+		$this->d($t_coupon);
 		
-		
-		return null;
+		//return null;
 		
 		//	クーポンの販売枚数を取得
+		/*
 		$select = array();
 		$select['table'] = 't_buy';
 		$select['where']['coupon_id'] = $coupon_id;
@@ -275,13 +280,27 @@ class Coupon extends App
 		$select['group'] = 'coupon_id';
 		$select['limit'] = 1;
 		$t_buy = $this->mysql->select($select);
+		*/
+		//  SELECTの定義を作成
+		$config = new Config();
+		$config->table = 't_buy';
+		$config->where->coupon_id = $coupon_id;
+		$config->agg->sum = 'coupon_id';
+		$config->group = 'coupon_id';
+		$config->limit = 1;
+		
+		//  SELECTを実行
+		$t_buy = $this->pdo()->select($config);
+		print $this->pdo()->qu();
+		$this->d($t_buy);
+		
 		if(!count($t_buy)){
 	//		$this->d($t_buy);
 			return false;
 		}
 		
 		//	販売枚数
-		$t_coupon['coupon_sales_num_sum'] = $t_buy['sum'];
+		$t_coupon['coupon_sales_num_sum'] = $t_buy['SUM(coupon_id)'];
 
 		//	割引額
 		$t_coupon['coupon_discount_price'] = $t_coupon['coupon_normal_price'] - $t_coupon['coupon_sales_price'];
@@ -302,14 +321,31 @@ class Coupon extends App
 	}
 	
 	function GetTShopByShopId($shop_id)
-	{
-		return null;
-		
+	{	
+		/*
 		$select = array();
 		$select['table'] = 't_shop';
 		$select['where']['shop_id'] = $shop_id;
 		$select['limit'] = 1;
 		$t_shop = $this->mysql->select($select);
+		*/
+		
+		//  PDOの取得
+		/*
+		$pdo = $this->pdo();
+		$io = $pdo->Connect($database);
+		var_dump($io);
+		*/
+		
+		//  SELECTの定義を作成
+		$config = new Config();
+		$config->table = 't_shop';
+		$config->where->shop_id = $shop_id;
+		$config->limit = 1;
+		
+		//  SELECTを実行
+		$t_shop = $this->pdo()->select($config);
+		$this->d($t_shop);
 		
 		return $t_shop;
 	}
