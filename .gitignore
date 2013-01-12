@@ -3,4 +3,5 @@ images/
 .buildpath
 .project
 .settings/
+.svn
 
