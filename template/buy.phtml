@@ -55,17 +55,29 @@
 		<th>合計</th>
 	</tr>
 	<tr>
-		<td><img style="float: left; margin: 5px;" height="75px"
-			src="../img/dummy.jpg">
-		<p style="font-size: 13px;"><?=$record['coupon_description']?></p>
+		<td>
+			<img style="float: left; margin: 5px;" height="75px" src="../img/dummy.jpg">
+			<p style="font-size: 13px;"><?=$record['coupon_description']?></p>
 		</td>
-		<td colspan="3" style="font-size: 40px; text-align: center;"><nobr> <span
-			class="coupon_price"> <span class="coupon_price"> <?php $this->form->Input('quantity');?>
-		</span> × <span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
-		＝ <span id="price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
-		</span>
-		<p style="font-size: 13px; color: #FF9800;">▲数量の変更はこちらから</p>
-		</nobr></td>
+		<td colspan="3" style="font-size: 40px; text-align: center;">
+			<nobr>
+				<span class="coupon_price">
+					<span class="coupon_price">
+						<?php $this->form->Input('quantity');?>
+					</span>
+					 × 
+					<span id="coupon_normal_price" class="coupon_price">
+						<?=$record['coupon_normal_price']?>
+					</span>
+					円 ＝ 
+					<span id="price" class="coupon_price">
+						<?=$record['coupon_normal_price']?>
+					</span>
+					円
+				</span>
+			</nobr>
+			<p style="font-size: 13px; color: #FF9800;">▲数量の変更はこちらから</p>
+		</td>
 	</tr>
 </table>
 <div style="text-align: center"><?=$this->form->Input('submit_button')?>

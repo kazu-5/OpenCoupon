@@ -7,14 +7,14 @@ $app = new Coupon();
 $app->SetEnv("controller-name","index.php");
 
 //  layout
-$app->SetEnv("layout-dir","app:/zlib/layout");
+$app->SetEnv("layout-dir","app:/layout");
 $app->SetEnv("layout","default");
 
 //  template
-$app->SetEnv("template-dir","app:/zlib/template");
+$app->SetEnv("template-dir","app:/template");
 
 //  Set model directory
-$app->SetEnv('model-dir','app:/zlib/model');
+$app->SetEnv('model-dir','app:/model');
 
 //  config
 $app->config( new CouponConfig() );

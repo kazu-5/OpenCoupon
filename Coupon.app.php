@@ -279,6 +279,7 @@ class Coupon extends App
 		$this->d($record);
 		
 		//$t_coupon = $pdo->select($config);
+		$t_coupon = $this->pdo()->select($config);
 		$this->d($coupon_id);
 		$this->d($t_coupon);
 		
@@ -417,7 +418,7 @@ class Coupon extends App
 		$select['limit'] = 1;
 		$select['as'][] = 'customer_id';
 		$temp = $this->mysql->select($select);
-
+		
 		return $temp['customer_id'];
 	}
 
