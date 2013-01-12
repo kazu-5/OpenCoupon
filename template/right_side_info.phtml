@@ -2,7 +2,7 @@
 $select = array();
 $select['table'] = 't_coupon';
 $select['limit'] = 10;
-$coupons = $this->mysql->select($select);
+$coupons = $this->pdo()->select($select);
 ?>
 <style>
 
