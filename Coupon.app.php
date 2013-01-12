@@ -25,6 +25,9 @@ class Coupon extends App
 			case 'debug':
 				$this->doDebug();
 				break;
+			case 'buy':
+				$this->doBuy();
+				break;
 			default:
 				$this->doIndex();
 				break;
@@ -45,6 +48,12 @@ class Coupon extends App
 		$this->d($t_coupon);
 		
 		include('index.phtml');
+	}
+	
+	function doBuy(){
+		include('action.buy.php');
+		$buy = new buy($this);
+		$buy->action();
 	}
 	
 	/**

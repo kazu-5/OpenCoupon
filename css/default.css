@@ -1,0 +1,379 @@
+/*
+
+  汎用 - 他のサイトでも使用する
+
+*/
+
+*{
+	margin:0px;
+	padding:0px;
+	font-size:medium;
+	/*
+	font: normal normal 13px/22px  "メイリオ", "ＭＳ Ｐゴシック", Verdana,Osaka, sans-serif;
+	*/
+}
+
+/* HTML5 */
+section, article, aside, header, footer, nav{
+	display:block;
+}
+
+/* Block */
+p{
+	line-height: 20px;
+}
+
+/* リスト */
+ol,ul{
+	_border:1px dotted blue;
+	padding-left: 1em;
+}
+
+ul li{
+	_border:1px dotted green;
+	margin-left:1em;
+}
+
+ol li{
+	_border:1px dotted green;
+	margin-left:3em;
+}
+
+dl{
+	_border:1px dotted blue;
+}
+
+dt{
+	_border:1px dotted red;
+}
+
+dd{
+	_border:1px dotted green;
+	padding-left: 2em;
+	padding-bottom: 1.5em;
+}
+
+/* テーブル */
+
+div.table{
+    display: table;
+}
+
+div.tr{
+    display: table-row;
+}
+
+div.td{
+    display: table-cell;
+}
+
+table{
+	border: 0px solid black;
+	border-collapse: separate;
+	border-spacing: 1px;
+}
+
+th,td{
+	vertical-align:top;
+	border: 0px solid black;
+	padding: 0px 2px;
+}
+
+.separate{
+	border-collapse: separate;
+}
+
+.collapse{
+	border-collapse: collapse;
+	border-width: 0px;
+}
+
+.collapse td{
+	border-width: 0px;
+}
+
+/* イメージ */
+img{
+	border-width:0px;
+}
+
+/*  幅  */
+.micro{
+	width:50px;
+}
+
+.mini{
+	width:100px;
+}
+
+.short{
+	width:150px;
+}
+
+.middle{
+	width:200px;
+}
+
+.long{
+	width:300px;
+}
+
+.wide{
+	width:400px;
+}
+
+.ext{ /* extensive */
+	width:500px;
+}
+
+/*  高さ  */
+.tall{
+	height:200px;
+}
+
+/*  配置  */
+.right{
+	text-align:right;
+}
+
+.left{
+	text-align:left;
+}
+
+.center{
+	text-align:center;
+}
+
+.top{
+    vertical-align: top;
+}
+
+.middle{
+    vertical-align: middle;
+}
+
+.super{
+	vertical-align: super;
+}
+
+.up{
+	vertical-align: super;
+}
+
+.sub{
+	vertical-align: sub;
+}
+
+.down{
+	vertical-align: sub;
+}
+
+/*  文字の大きさ  */
+.medium{
+	font-size: medium;
+}
+
+.smaller{
+	font-size: smaller;
+}
+
+.small{
+	font-size:small;
+}
+
+.x-small{
+	font-size:x-small;
+}
+
+.xx-small{
+	font-size:xx-small;
+}
+
+.larger{
+	font-size: larger;
+}
+
+.large{
+	font-size:large;
+}
+
+.x-large{
+	font-size:x-large;
+}
+
+.xx-large{
+	font-size:xx-large;
+}
+
+.bigger{
+	font-size: larger;
+}
+
+.big{
+	font-size:large;
+}
+
+.x-big{
+	font-size:x-large;
+}
+
+.xx-big{
+	font-size:xx-large;
+}
+
+/*  文字のスタイル  */
+.bold{
+	font-weight:bold;
+}
+
+.normal{
+	font-weight:normal;
+}
+
+/*  文字の装飾  */
+.strike{
+	text-decoration: line-through;
+}
+
+.delete{
+	text-decoration: line-through;
+}
+
+.underline{
+	text-decoration: underline;
+}
+
+.overline{
+	text-decoration: overline;
+}
+
+.blink{
+	text-decoration: blink;
+}
+
+/*  文字の色  */
+.red{
+	color:red;
+}
+
+.blue{
+	color:blue;
+}
+
+.green{
+	color:green;
+}
+
+.yellow{
+	color:yellow;
+}
+
+.gray{
+	color:gray;
+}
+
+.black{
+	color:black;
+}
+
+/*  背景の色  */
+.bg-white{
+	background-color: #ffffff;
+}
+
+.bg-blue{
+	background-color:#eef4ff;
+	border-color:#6f96de;
+}
+
+.bg-sky{
+	background-color: #ebeff9;
+	border-color: #6b90da;
+}
+
+.bg-beige{
+	background-color: #ffffd9;
+	border-color: #d2d26a;
+}
+
+.bg-yellow{
+	background-color: #ffffd9;
+	border-color: #d2d26a;
+}
+
+.bg-clear{
+	background-color: white;
+	background-image: url("");
+}
+
+
+/*  枠線  */
+.border{
+	border: 1px solid black;
+}
+
+.border-0{
+	border-width: 0px;
+}
+
+.border-1{
+	border: 1px solid black;
+}
+
+.dotted{
+	border: 1px dotted black;
+}
+
+.border-blue{
+	border-color: blue;
+}
+
+.border-yellow{
+	border-color: yellow;
+}
+
+/*  文字色、背景色、枠線色の一括指定  */
+.message{
+
+}
+
+.error{
+
+}
+
+.notice{
+	color: #3030ff;
+	background-color: #ffffd9;
+	
+	border: 1px solid blue;
+}
+
+/*  弧線  */
+.arc{
+	border-radius:         5px;
+	-o-border-radius:      5px;
+	-ms-border-radius:     5px;
+	-moz-border-radius:    5px;
+	-webkit-border-radius: 5px;
+}
+
+/*  ディスプレイ  */
+.box{
+	display: box;
+	display: -o-box;
+	display: -ms-box;
+	display: -moz-box;
+	display: -webkit-box;
+}
+
+.inline{
+	display:inline;
+}
+
+
+
+
+
+
+
+

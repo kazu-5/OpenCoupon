@@ -1,9 +1,4 @@
 <?php
-echo 'test';
-
-echo 'index.php';
-
-
 /* @var $this Coupon */
 
 $this->Action();
