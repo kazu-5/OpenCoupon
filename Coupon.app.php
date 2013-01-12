@@ -278,7 +278,7 @@ class Coupon extends App
 		$record = $this->pdo()->select($config);
 		$this->d($record);
 		
-		$t_coupon = $pdo->select($config);
+		//$t_coupon = $pdo->select($config);
 		$this->d($coupon_id);
 		$this->d($t_coupon);
 		
@@ -301,7 +301,7 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-		$t_buy = $pdo->select($config);
+		//$t_buy = $pdo->select($config);
 		$t_buy = $this->pdo()->select($config);
 		$this->d($t_buy);
 		
