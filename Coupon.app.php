@@ -1,5 +1,5 @@
 <?php
- 
+
 include('NewWorld5.class.php');
 
 class Coupon extends App
@@ -35,7 +35,7 @@ class Coupon extends App
 	}
 	
 	function doDebug(){
-		if($this->system()){
+		if($this->admin()){
 			include('debug.phtml');
 		}
 	}
@@ -261,10 +261,12 @@ class Coupon extends App
 		//$this->d($t_coupon);
 		
 		//  PDOの取得
+		/*
 		$database = $this->config()->database();
 		$pdo = $this->pdo();
 		$io = $pdo->Connect($database);
 		var_dump($io);
+		*/
 		
 		//  SELECTの定義を作成
 		$config = new Config();
@@ -273,12 +275,12 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
-
-		$t_coupon = $pdo->select($config);
+		$record = $this->pdo()->select($config);
+		$this->d($record);
+		
+		//$t_coupon = $pdo->select($config);
 		$this->d($coupon_id);
 		$this->d($t_coupon);
-		
-		//return null;
 		
 		//	クーポンの販売枚数を取得
 		/*
@@ -299,12 +301,11 @@ class Coupon extends App
 		$config->limit = 1;
 		
 		//  SELECTを実行
+		//$t_buy = $pdo->select($config);
 		$t_buy = $this->pdo()->select($config);
-		print $this->pdo()->qu();
 		$this->d($t_buy);
 		
 		if(!count($t_buy)){
-	//		$this->d($t_buy);
 			return false;
 		}
 		
@@ -338,14 +339,7 @@ class Coupon extends App
 		$select['limit'] = 1;
 		$t_shop = $this->mysql->select($select);
 		*/
-		
-		//  PDOの取得
-		/*
-		$pdo = $this->pdo();
-		$io = $pdo->Connect($database);
-		var_dump($io);
-		*/
-		
+				
 		//  SELECTの定義を作成
 		$config = new Config();
 		$config->table = 't_shop';
