@@ -51,5 +51,26 @@ class CouponConfig extends ConfigMgr
 		$config->limit = 1;
 		return $config;
 	}
+	
+	function select_buy()
+	{
+		$config = $this->select();
+		$config->table = 't_buy';
+		return $config;
+	}
+	
+	function select_shop()
+	{
+		$config = $this->select();
+		$config->table = 't_shop';
+		return $config;
+	}
+	
+	function select_account()
+	{
+		$config = $this->select();
+		$config->table = 't_account';
+		return $config;
+	}
 }
 

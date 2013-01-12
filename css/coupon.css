@@ -1,0 +1,44 @@
+body {
+	background-repeat: no-repeat;
+	background-color: #89B555;
+	background-image: url('/img/backgroud.png');
+}
+
+#header {
+	background-repeat: repeat-x;
+	background-image: url('/img/backgroud_header.png');
+	min-width: 970px;
+}
+
+/* �E���̏������������߃N�[�|�� */
+.deal_price{
+	background: url("/img/pricetag.png") no-repeat scroll 0 0 transparent;
+	
+	border: medium none;
+	color: #FFFFFF;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 1;
+	margin: 0 0 0 -12px;
+	min-height: 25px;
+	/*padding: 6px 4px 0 0;*/
+	padding-right: 3px;
+	/*padding: auto 1px auto 0px;*/
+	text-align: right;
+	width: 98px;
+}
+.deal_cut_rate{
+	font-size: 11px;
+	background-color: #CFEEF6;
+	border-bottom: 1px solid #57B9D6;
+	border-left: 1px solid #57B9D6;
+	border-right: 1px solid #57B9D6;
+	padding: 3px 0;
+	text-align: center;
+	width: 86px;
+	
+	
+	font-weight: 100;
+	line-height: 120%;
+	list-style: none outside none;
+}
