@@ -2,11 +2,31 @@
 
 include('NewWorld5.class.php');
 
-class Coupon extends App
+class CouponApp extends App
 {	
 	function Init()
 	{
 		parent::Init();
+	}
+
+	function GetCouponID()
+	{
+		return $this->GetEnv('coupon_id');
+	}
+	
+	function GetBuyAction()
+	{
+		$args = $this->GetArgs();
+		//$this->d($args);
+		
+		//  URLをパース
+		$coupon_id = isset($args[0]) ? $args[0]: null;
+		$action    = isset($args[1]) ? $args[1]: 'index';
+		
+		//  coupon_idを保存
+		$this->SetEnv('coupon_id',$coupon_id);
+		
+		return $action;
 	}
 	
 	function InitAction(){
@@ -277,8 +297,8 @@ class Coupon extends App
 		//  SELECTを実行
 		$record = $this->pdo()->select($config);
 		$this->d($record);
-		
-		//$t_coupon = $pdo->select($config);
+
+		$t_coupon = $this->pdo()->select($config);
 		$this->d($coupon_id);
 		$this->d($t_coupon);
 		
@@ -300,8 +320,6 @@ class Coupon extends App
 		$config->group = 'coupon_id';
 		$config->limit = 1;
 		
-		//  SELECTを実行
-		//$t_buy = $pdo->select($config);
 		$t_buy = $this->pdo()->select($config);
 		$this->d($t_buy);
 		
@@ -417,7 +435,7 @@ class Coupon extends App
 		$select['limit'] = 1;
 		$select['as'][] = 'customer_id';
 		$temp = $this->mysql->select($select);
-
+		
 		return $temp['customer_id'];
 	}
 
