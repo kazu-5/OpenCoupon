@@ -5,7 +5,7 @@ $this->mark('このindex.phpにdispatch(配送)される');
 
 //  URL引数の取得
 $args = $this->GetArgs();
-$this->d($args);
+//$this->d($args);
 
 //  アクション相当
 switch($args[0]){
@@ -20,6 +20,10 @@ switch($args[0]){
 		
 	case 'pdo':
 		include('pdo.php');
+		break;
+		
+	case 'credit':
+		include('credit.php');
 		break;
 		
 	case 'other':
@@ -48,6 +52,7 @@ switch($args[0]){
 }
 
 ?>
+<div style="font-size:smaller;">
 [
  <a href="<?=$this->ConvertURL('ctrl:/index')?>">index</a> |
  <a href="<?=$this->ConvertURL('ctrl:/other')?>">other</a> | 
@@ -55,4 +60,7 @@ switch($args[0]){
  <a href="<?=$this->ConvertURL('ctrl:/other/0')?>">NG</a> | 
  <a href="<?=$this->ConvertURL('ctrl:/form')?>">Form</a> | 
  <a href="<?=$this->ConvertURL('ctrl:/pdo')?>">PDO</a> | 
+ <a href="<?=$this->ConvertURL('ctrl:/credit')?>">Credit</a> | 
  ]
+ </div>
+ 
