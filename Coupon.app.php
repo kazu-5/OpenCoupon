@@ -2,11 +2,31 @@
 
 include('NewWorld5.class.php');
 
-class Coupon extends App
+class CouponApp extends App
 {	
 	function Init()
 	{
 		parent::Init();
+	}
+
+	function GetCouponID()
+	{
+		return $this->GetEnv('coupon_id');
+	}
+	
+	function GetBuyAction()
+	{
+		$args = $this->GetArgs();
+		//$this->d($args);
+		
+		//  URLをパース
+		$coupon_id = isset($args[0]) ? $args[0]: null;
+		$action    = isset($args[1]) ? $args[1]: 'index';
+		
+		//  coupon_idを保存
+		$this->SetEnv('coupon_id',$coupon_id);
+		
+		return $action;
 	}
 	
 	function InitAction(){

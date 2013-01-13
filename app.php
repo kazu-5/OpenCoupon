@@ -1,7 +1,7 @@
 <?php
 
 include('Coupon.app.php');
-$app = new Coupon();
+$app = new CouponApp();
 
 //  Set environment.
 $app->SetEnv("controller-name","index.php");
