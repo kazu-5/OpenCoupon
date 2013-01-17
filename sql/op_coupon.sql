@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 1 月 06 日 15:42
--- サーバのバージョン: 5.1.44
--- PHP のバージョン: 5.3.1
+-- 生成時間: 2013 年 1 月 17 日 18:07
+-- サーバのバージョン: 5.5.16
+-- PHP のバージョン: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -37,11 +38,6 @@ CREATE TABLE IF NOT EXISTS `dc_ip_user_id` (
   PRIMARY KEY (`ip_user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='IP_USER_IDを保存するテーブル' AUTO_INCREMENT=1 ;
 
---
--- テーブルのデータをダンプしています `dc_ip_user_id`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -56,11 +52,6 @@ CREATE TABLE IF NOT EXISTS `t_account` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- テーブルのデータをダンプしています `t_account`
---
-
 
 -- --------------------------------------------------------
 
@@ -82,11 +73,6 @@ CREATE TABLE IF NOT EXISTS `t_address` (
   PRIMARY KEY (`customer_id`,`seq_no`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- テーブルのデータをダンプしています `t_address`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -104,11 +90,6 @@ CREATE TABLE IF NOT EXISTS `t_buy` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`buy_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- テーブルのデータをダンプしています `t_buy`
---
-
 
 -- --------------------------------------------------------
 
@@ -132,12 +113,14 @@ CREATE TABLE IF NOT EXISTS `t_coupon` (
   `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日時',
   PRIMARY KEY (`coupon_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- テーブルのデータをダンプしています `t_coupon`
 --
 
+INSERT INTO `t_coupon` (`coupon_id`, `coupon_title`, `coupon_description`, `coupon_normal_price`, `coupon_sales_price`, `coupon_sales_num_top`, `coupon_sales_num_bottom`, `coupon_expire`, `coupon_sales_limit`, `shop_id`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 'テストクーポン', 'これはテスト用のクーポンです。', 1000, 500, 100, 50, '2014-01-01 00:00:00', '2014-01-01 00:00:00', 1, NULL, NULL, NULL, '2013-01-17 16:59:22');
 
 -- --------------------------------------------------------
 
@@ -162,11 +145,6 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
   PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- テーブルのデータをダンプしています `t_customer`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -184,12 +162,14 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
   `shop_nearest_station` text NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間',
   PRIMARY KEY (`shop_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- テーブルのデータをダンプしています `t_shop`
 --
 
+INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_address`, `shop_telephone`, `shop_holiday`, `shop_opening_hour`, `shop_nearest_station`, `timestamp`) VALUES
+(1, 'テストショップ', 'テスト用のショップです。', '東京都千代田区神田町', '03-xxxx-xxxx', '年中無休', '９：００～１９：００', '秋葉原', '2013-01-17 17:00:52');
 
 -- --------------------------------------------------------
 
@@ -204,7 +184,6 @@ CREATE TABLE IF NOT EXISTS `t_test` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- テーブルのデータをダンプしています `t_test`
---
-
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

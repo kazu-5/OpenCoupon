@@ -19,9 +19,15 @@ $app->SetEnv('model-dir','app:/model');
 //  config
 $app->config( new CouponConfig() );
 
-//  PDOの初期化
+//  PDO Initialized
 $database = $app->config()->database();
 $io = $app->pdo()->Connect($database);
+
+//  If failed to connect database.
+if(!$io){
+	$app->d( Toolbox::toArray($database) );
+	exit(0);
+}
 
 // Access test
 // $record = $app->pdo()->Quick(' t_test.id=1 ');
