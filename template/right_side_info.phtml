@@ -49,7 +49,7 @@ $config->limit = 10;
 $config = $this->config()->select_coupon();
 //  SELECTを実行
 $coupons = $this->pdo()->select($config);
-$this->d($coupons);
+$this->d($coupons,'debug');
 ?>
 <style>
 
