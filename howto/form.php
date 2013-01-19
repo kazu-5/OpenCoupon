@@ -15,6 +15,20 @@ $config->input->$input_name->name  = $input_name;
 $config->input->$input_name->label = 'ニックネーム';
 $config->input->$input_name->validate->required = true;
 
+//  select
+$input_name = 'gender';
+$config->input->$input_name->name  = $input_name;
+$config->input->$input_name->type  = 'select';
+$config->input->$input_name->label = '性別';
+$config->input->$input_name->validate->required = true;
+	$config->input->$input_name->option->none->value = '';
+
+	$config->input->$input_name->option->male->label   = '男性';
+	$config->input->$input_name->option->male->value   = 'male';
+
+	$config->input->$input_name->option->female->label = '女性';
+	$config->input->$input_name->option->female->value = 'female';
+
 //  input submit
 $input_name = 'submit';
 $config->input->$input_name->name  = $input_name;
@@ -63,6 +77,15 @@ div.td{
 			<div class="td">
 				<?php $this->form()->Input('nickname'); ?>
 				<p><?php $this->form()->Error('nickname'); ?></p>
+			</div>
+		</div>
+		<div class="tr">
+			<div class="td" style="padding: 0em 1em;">
+				<?php $this->form()->Label('gender'); ?>
+			</div>
+			<div class="td">
+				<?php $this->form()->Input('gender'); ?>
+				<p><?php $this->form()->Error('gender'); ?></p>
 			</div>
 		</div>
 		<div class="tr">
