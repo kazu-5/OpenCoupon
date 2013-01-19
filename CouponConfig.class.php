@@ -2,15 +2,8 @@
 
 class CouponConfig extends ConfigMgr
 {
-	function database()
-	{
-		$config = parent::database();
 
-		$config->database = 'op_coupon';
-		$config->user     = 'op_coupon';
-		
-		return $config;
-	}
+	//===========================================//
 	
 	function form_test()
 	{
@@ -86,6 +79,18 @@ class CouponConfig extends ConfigMgr
 		//	$this->d( Toolbox::toArray($form_config) );
 	
 		return $form_config;
+	}
+
+	//===========================================//
+
+	function database()
+	{
+		$config = parent::database();
+	
+		$config->database = 'op_coupon';
+		$config->user     = 'op_coupon';
+	
+		return $config;
 	}
 	
 	function select_coupon()
