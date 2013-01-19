@@ -60,8 +60,14 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->onchange = 'change_quantity();';
 		
 		for( $i=1; $i<10; $i++){
+			$form_config->input->$input_name->options->$i->value = $i;
+			$form_config->input->$input_name->options->$i->label = $i;
+			$form_config->input->$input_name->options->$i->style = 'text-align:center;';
+			
+			/*
 			$form_config->input->$input_name->option->value = $i;
 			$form_config->input->$input_name->option->label = $i;
+			*/
 			/*
 			$option = array();
 			$option['value'] = $i;
@@ -96,7 +102,9 @@ $form['input'][]  = $input;
 		$input_name = 'submit';
 		$form_config->input->$input_name->name  = 'submit';
 		$form_config->input->$input_name->type  = 'submit';
-		$form_config->input->$input_name->value = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value = 'この内容で購入';
 		
 		//  フォームを設定する
 		/*

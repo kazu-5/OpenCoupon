@@ -9,7 +9,7 @@
 	.coupon_price{
 		font-size: 26px;
 	}
-	.input_button{
+	.submit{
 		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
 		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
 		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
@@ -51,7 +51,7 @@
 					<nobr>
 						<span class="coupon_price">
 							<span class="coupon_price">
-							<?php $this->form()->Input('quantity'); ?>
+							<?php //$this->form()->Input('quantity'); ?>
 							</span>
 							×
 							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
