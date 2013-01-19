@@ -37,7 +37,8 @@ class CouponConfig extends ConfigMgr
 	
 		// form name
 		$form_config->name = 'form_buy';
-	
+		$form_config->action = '/buy/login';
+		
 		// input text
 		$input_name = 'coupon_id';
 		$form_config->input->$input_name->name  = 'coupon_id';
@@ -46,51 +47,17 @@ class CouponConfig extends ConfigMgr
 		
 		// input text
 		$input_name = 'quantity';
-		$form_config->input->$input_name->name  = 'quantity';
+		$form_config->input->$input_name->name  = $input_name;
 		$form_config->input->$input_name->type  = 'select';
-		$form_config->input->$input_name->id  = 'quantity';
+		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->style  = 'font-size:1em; height:1.5em;';
-		$form_config->input->$input_name->onchange = 'change_quantity();';
+		$form_config->input->$input_name->option->none->value = '';
 		
 		for( $i=1; $i<10; $i++){
-			$form_config->input->$input_name->options->$i->value = $i;
-			$form_config->input->$input_name->options->$i->label = $i;
-			$form_config->input->$input_name->options->$i->style = 'text-align:center;';
-			
-			/*
-			$form_config->input->$input_name->option->value = $i;
-			$form_config->input->$input_name->option->label = $i;
-			*/
-			/*
-			$option = array();
-			$option['value'] = $i;
-			$option['label'] = $i;
-			$option['style'] = 'text-align:center;';
-			$input['options'][] = $option;
-			*/
+			$form_config->input->$input_name->option->$i->label   = $i;
+			$form_config->input->$input_name->option->$i->value   = $i;
 		}
 		
-		//$form_config->input->$input_name->value = 'default';
-		
-		/*
-		//購入内容
-$input = array();
-$input['name'] 	 = 'quantity';
-$input['type']	 = 'select';
-$input['id']	 = 'quantity';
-//$input['style']	 = 'width:40px; text-align:center; font-size:30px; font-weight: 900;';
-$input['style']	 = 'font-size:1em; height:1.5em;';
-$input['onchange'] = 'change_quantity();';
-for( $i=1; $i<10; $i++){
-	$option = array();
-	$option['value'] = $i;
-	$option['label'] = $i;
-	$option['style'] = 'text-align:center;';
-	$input['options'][] = $option;
-}
-$form['input'][]  = $input; 
-		
-		 */
 		// input submit
 		$input_name = 'submit';
 		$form_config->input->$input_name->name  = 'submit';
