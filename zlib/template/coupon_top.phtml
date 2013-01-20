@@ -8,10 +8,10 @@
 	</tr>
 	<tr>
 		<td valign="top">
-			<?=$this->template('coupon_buy_form.tmpl',array('t_coupon'=>$t_coupon))?>
+			<?=$this->template('coupon_buy_form.phtml',array('t_coupon'=>$t_coupon))?>
 		</td>
 		<td valign="top">
-			<?=$this->template('coupon_info_detail.tmpl',array('t_coupon'=>$t_coupon))?>
+			<?=$this->template('coupon_info_detail.phtml',array('t_coupon'=>$t_coupon))?>
 			<p>ここはクーポンの説明１</p>
 			<p style="color:#8AB657; font-size:90%; border-bottom:2px solid #E3E3E3" class="bold">ご利用上の注意</p>
 			<p>ここにご利用上の注意が必要</p>
@@ -22,6 +22,6 @@
 
 <div style="border: 0px dotted red; background-color:white; margin:5px; padding:5px;" class="arc">
 	<p>ここがお店の説明欄</p>
-	<?=$this->template('coupon_info_shop.tmpl',array('t_shop'=>$t_shop))?>
+	<?=$this->template('coupon_info_shop.phtml',array('t_shop'=>$t_shop))?>
 </div>
 
