@@ -52,11 +52,15 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->style  = 'font-size:1em; height:1.5em;';
 		$form_config->input->$input_name->id  = 'quantity';
+		//$input['onchange'] = 'change_quantity();';
+		$form_config->input->$input_name->onchange  = 'change_quantity();';
 		//$form_config->input->$input_name->option->none->value = '';
 		
 		for( $i=1; $i<10; $i++){
 			$form_config->input->$input_name->option->$i->label   = $i;
 			$form_config->input->$input_name->option->$i->value   = $i;
+			//$option['style'] = 'text-align:center;';
+			$form_config->input->$input_name->option->$i->style   = 'text-align:center;';
 		}
 		
 		// input submit
