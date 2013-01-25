@@ -9,8 +9,11 @@ class CouponApp extends App
 	 * @see App::Config()
 	 * @return CouponConfig
 	 */
-	function Config( $cmgr )
+	function Config( $cmgr=null )
 	{
+		if(!$cmgr){
+			$cmgr = new CouponConfig();
+		}
 		return parent::Config( $cmgr );
 	}
 	
