@@ -7,6 +7,9 @@ $this->mark(null,'controller');
 $config = $this->config()->form_login();
 $this->form()->AddForm($config);
 
+$config = $this->config()->form_register();
+$this->form()->AddForm($config);
+
 //  Check login
 if( $id = $this->model('Login')->GetLoginId() ){
 	$this->p('既にログインしています。');
@@ -27,5 +30,7 @@ if( $id = $this->model('Login')->GetLoginId() ){
 			$this->p('パスワードが一致しません。');
 		}
 	}
+	
 	$this->template('form_login.phtml');
+	$this->template('form_register.phtml');
 }
