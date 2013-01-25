@@ -71,6 +71,7 @@
 <?php $this->form()->Finish('form_buy'); ?>
 
 <script>
+/*
 function change_quantity(){
 	var price = $('#coupon_normal_price').text();
 	var quantity = $('#quantity').val();
@@ -79,13 +80,24 @@ function change_quantity(){
 	
 	$('#price').text(price);
 }
+*/
 
 //	ドキュメントが読み込まれたら実行
 $(document).ready(function(){
-	var price = $('#price').text();
-	var quantity = $('#quantity').val();
+	//  quantityが変更されたら価格を変更する。
+	$('#quantity').change(function() {
+		var price = $('#coupon_normal_price').text();
+		var quantity = $('#quantity').val();
+		
+		price = price * quantity;
+		
+		$('#price').text(price);
+	});
 	
-	if(0){
+	//  debug
+	if( 0 ){
+		var price = $('#price').text();	
+		var quantity = $('#quantity').val();
 		$('#console').css('border','1px dotted blue');
 		$('#console').css('margin','5px');
 		$('#console').append('<h2>Console</h2><hr>');

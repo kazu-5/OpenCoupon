@@ -4,30 +4,20 @@ include('NewWorld5.class.php');
 
 class CouponApp extends App
 {
-	/*
-	function InitAction(){
-		return true;
+	/**
+	 * (non-PHPdoc)
+	 * @see App::Config()
+	 * @return CouponConfig
+	 */
+	function Config( $cmgr=null )
+	{
+		if(!$cmgr){
+			$cmgr = new CouponConfig();
+		}
+		return parent::Config( $cmgr );
 	}
-	*/
 	
 	/***		ACTION		***/
-	
-	/*
-	 function Action(){
-	$action = $this->GetAction();
-	switch($action){
-	case 'debug':
-	$this->doDebug();
-	break;
-	case 'buy':
-	$this->doBuy();
-	break;
-	default:
-	$this->doIndex();
-	break;
-	}
-	}
-	*/
 	
 	function GetAction(){
 		$args = $this->GetArgs();
@@ -48,28 +38,6 @@ class CouponApp extends App
 		$this->SetEnv('coupon_id',$coupon_id);
 		
 		return $action;
-	}
-	
-	function doDebug(){
-		if($this->admin()){
-			include('debug.phtml');
-		}
-	}
-	
-	function doIndex(){
-		
-		$t_coupon = $this->GetCoupon(null);
-		$t_shop   = $this->GetTShopByShopId($t_coupon['shop_id']);
-		
-		$this->d($t_coupon,'debug');
-		
-		include('index.phtml');
-	}
-	
-	function doBuy(){
-		include('action.buy.php');
-		$buy = new buy($this);
-		$buy->action();
 	}
 	
 	/**
@@ -95,76 +63,7 @@ class CouponApp extends App
 		}
 		return $io;
 	}
-
-	/**
-	 *
-	 *  ログイン状態を取得
-	 *
-	 *  @return integer t_account.idを返す
-	 */
-	function isLoggedin(){
-		return $this->GetSession('isLoggedin');
-	}
-
-	/**
-	 *
-	 *  ログインに設定
-	 *
-	 *  @param  string  $mailaddr  メールアドレス
-	 *  @param  string  $password  パスワード
-	 *  @return Boolean 成功の場合はt_account.idを返す
-	 */
-	function Login( $mailaddr=null, $password=null ){
-		$this->mark();
-		$this->StackLog(__METHOD__,'Coupon');
-		
-		if(!$this->form){
-			$this->StackError("Does not initialized Form object.");
-			return false;
-		}
-
-		$this->mark();
-		$mailaddr = $mailaddr ? $mailaddr: $this->form->GetInputValue('mailaddr');
-		$password = $password ? $password: $this->form->GetInputValue('password');
-		$this->StackLog("mailaddr=$mailaddr, password=$password",'Coupon');
-		
-		//	メールアドレスが存在するか
-		$select = array();
-		$select['table'] = 't_account';
-		$select['where']['mailaddr_md5'] = md5($mailaddr);
-		$select['limit'] = 1;
-		$t_account = $this->mysql->select($select);
-		$this->StackLog("id={$t_account['id']}",'Coupon');
-		
-		$this->mark();
-		//	パスワードが一致するかチェック
-		if( $t_account['password'] == md5($password) ){
-			$this->mark();
-			$this->StackLog("password is match!",'Coupon');
-			$id = $t_account['id'];
-			$this->SetSession('isLoggedin',true);
-			$this->SetSession('account_id',$id);
-			$this->mark();
-		}else{
-			$this->mark();
-			$this->StackLog("password is unmatch...",'Coupon');
-			$id = 0;
-		}
-		$this->mark("id=$id");
-
-		return $id;
-	}
-
-	/**
-	 *
-	 *  ログアウトに設定
-	 *
-	 */
-	function Logout(){
-		$this->SetSession('isLoggedin',0);
-		return null;
-	}
-
+	
 	function GetMailaddrFromId( $id ){
 
 		//	IDからレコードを取得

@@ -17,7 +17,7 @@ $app->SetEnv("template-dir","app:/zlib/template");
 $app->SetEnv('model-dir','app:/zlib/model');
 
 //  config
-$app->config( new CouponConfig() );
+$app->config();
 
 //  PDO Initialized
 $database = $app->config()->database();
