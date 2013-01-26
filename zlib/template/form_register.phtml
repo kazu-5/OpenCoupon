@@ -1,0 +1,83 @@
+<?php
+/* @var $this CouponApp */
+?>
+
+<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">
+	はじめての方・会員登録をされていない方
+</h2>
+
+<?php $this->form()->Start('form_register') ?>
+<table>
+	<tr>
+		<td>
+			<?php $this->form()->Label('nick_name') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('nick_name') ?>
+			<?php $this->form()->Error('nick_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('first_name') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('first_name') ?>
+			<?php $this->form()->Error('first_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('last_name') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('last_name') ?>
+			<?php $this->form()->Error('last_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('birthday') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('birthday') ?>
+			<?php $this->form()->Error('birthday') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('gender') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('gender') ?>
+			<?php $this->form()->Error('gender') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('pref') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('pref') ?>
+			<?php $this->form()->Error('pref') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('agree') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('agree') ?>
+			<?php $this->form()->Error('agree') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		
+		</td>
+		<td>
+			<?php $this->form()->Input('submit') ?>
+		</td>
+	</tr>
+</table>
+<?php $this->form()->Finish('form_register') ?>

@@ -122,8 +122,121 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'submit';
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
-		$form_config->input->$input_name->value = ' ログイン ';
+		$form_config->input->$input_name->value = ' ログインして購入手続きに進む ';
 		
+		return $form_config;
+	}
+	
+	function form_register()
+	{
+		$form_config = new Config;
+	
+		// form name
+		$form_config->name = 'form_register';
+
+		$input_name = 'first_name';
+		$form_config->input->$input_name->label = '姓';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'last_name';
+		$form_config->input->$input_name->label = '名';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'nick_name';
+		$form_config->input->$input_name->label = 'メールアドレス';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'email';
+		$form_config->input->$input_name->label = 'メールアドレス';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'email_confirm';
+		$form_config->input->$input_name->label = 'メールアドレス（確認）';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'password';
+		$form_config->input->$input_name->label = 'パスワード';
+		$form_config->input->$input_name->type  = 'password';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+
+		$input_name = 'password_confirm';
+		$form_config->input->$input_name->label = 'パスワード（確認）';
+		$form_config->input->$input_name->type  = 'password';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'gender';
+		$form_config->input->$input_name->label = '性別';
+		$form_config->input->$input_name->type  = 'select';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+			$form_config->input->$input_name->options->M->label = '男性';
+			$form_config->input->$input_name->options->M->value = 'M';
+
+			$form_config->input->$input_name->options->F->label = '女性';
+			$form_config->input->$input_name->options->F->value = 'F';
+		
+		$input_name = 'pref';
+		$form_config->input->$input_name->label = '都道府県';
+		$form_config->input->$input_name->type  = 'select';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+			$form_config->input->$input_name->options->M->value = '北海道';
+			$form_config->input->$input_name->options->F->value = '東京';
+		
+		//  birthday
+		$input_name = 'birthday';
+		$form_config->input->$input_name->label  = '生年月日';
+		$form_config->input->$input_name->joint  = '-';
+		$form_config->input->$input_name->cookie = true;
+		$form_config->input->$input_name->validate->permit = 'date';
+		
+			$i = 'year';
+			$form_config->input->$input_name->options->$i->type  = 'select';
+			$form_config->input->$input_name->options->$i->tail  = '-';
+			$form_config->input->$input_name->options->$i->value = '1980';
+
+			for( $n=1; $n<=80; $n++){
+				$v = date('Y') - $n;
+				$form_config->input->$input_name->options->$i->options->$v->value = $v;
+			}
+			
+			$i = 'month';
+			$form_config->input->$input_name->options->$i->type  = 'select';
+			$form_config->input->$input_name->options->$i->tail  = '-';
+			
+			for( $n=1; $n<=12; $n++){
+				$form_config->input->$input_name->options->$i->options->$n->value = $n;
+			}
+			
+			$i = 'day';
+			$form_config->input->$input_name->options->$i->type  = 'select';
+			for( $n=1; $n<=31; $n++){
+				$form_config->input->$input_name->options->$i->options->$n->value = $n;
+			}
+			
+		$input_name = 'agree';
+		$form_config->input->$input_name->label = '利用規約';
+		$form_config->input->$input_name->type  = 'checkbox';
+		$form_config->input->$input_name->value = '';
+		
+			$form_config->input->$input_name->options->yes->label = '利用規約に同意する';
+			$form_config->input->$input_name->options->yes->value = 1;
+		
+		$input_name = 'submit';
+		$form_config->input->$input_name->type  = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value = ' この内容で仮登録する ';
+	
 		return $form_config;
 	}
 	
