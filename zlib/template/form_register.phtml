@@ -10,6 +10,20 @@
 <table>
 	<tr>
 		<td>
+			名前
+		</td>
+		<td>
+			<?php $this->form()->Label('first_name') ?>
+			<?php $this->form()->Input('first_name') ?>
+			<?php $this->form()->Error('first_name') ?>
+			
+			<?php $this->form()->Label('last_name') ?>
+			<?php $this->form()->Input('last_name') ?>
+			<?php $this->form()->Error('last_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<?php $this->form()->Label('nick_name') ?>
 		</td>
 		<td>
@@ -19,29 +33,38 @@
 	</tr>
 	<tr>
 		<td>
-			<?php $this->form()->Label('first_name') ?>
+			<?php $this->form()->Label('email') ?>
 		</td>
 		<td>
-			<?php $this->form()->Input('first_name') ?>
-			<?php $this->form()->Error('first_name') ?>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<?php $this->form()->Label('last_name') ?>
-		</td>
-		<td>
-			<?php $this->form()->Input('last_name') ?>
-			<?php $this->form()->Error('last_name') ?>
+			<?php $this->form()->Input('email') ?>
+			<?php $this->form()->Error('email') ?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<?php $this->form()->Label('birthday') ?>
+			<?php $this->form()->Label('email_confirm') ?>
 		</td>
 		<td>
-			<?php $this->form()->Input('birthday') ?>
-			<?php $this->form()->Error('birthday') ?>
+			<?php $this->form()->Input('email_confirm') ?>
+			<?php $this->form()->Error('email_confirm') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('password') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('password') ?>
+			<?php $this->form()->Error('password') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('password_confirm') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('password_confirm') ?>
+			<?php $this->form()->Error('password_confirm') ?>
 		</td>
 	</tr>
 	<tr>
@@ -51,6 +74,15 @@
 		<td>
 			<?php $this->form()->Input('gender') ?>
 			<?php $this->form()->Error('gender') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('birthday') ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('birthday') ?>
+			<?php $this->form()->Error('birthday') ?>
 		</td>
 	</tr>
 	<tr>
