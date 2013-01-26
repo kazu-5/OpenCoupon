@@ -12,7 +12,7 @@ $this->mark($this->ConvertPath('app:/zlib/form/register.form.php'));
 */
 
 
-//$io = $this->form()->AddForm($this->config()->form_buy());
+$io = $this->form()->AddForm($this->config()->form_buy());
 $io = $this->form()->AddForm($this->config()->form_login());
 $io = $this->form()->AddForm($this->config()->form_register());
 
@@ -21,7 +21,7 @@ $io = $this->form()->AddForm($this->config()->form_register());
  *  	→CheckFormをしないと、送信されたフォームの値をセッションに保存しないため
  *  		→セッションにフォームの送信値を保存するにはCheckFormが必要
  */
-if( $this->form()->Secure('buy')){
+if( $this->form()->Secure('form_buy')){
 	// OK
 	$this->mark();
 }else{
