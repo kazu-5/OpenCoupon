@@ -1,5 +1,12 @@
 以下の内容でよろしいですか？
-<?php $this->form()->Start('form_register') ?>
-<?php $this->Value('email') ?>
-<?php $this->form()->Finish('form_register') ?>
+<?php $this->form()->Start($form_name) ?>
 
+<?php $this->form()->Value('first_name') ?><br/>
+<?php $this->form()->Value('last_name') ?><br/>
+<?php $this->form()->Value('nick_name') ?><br/>
+<?php $this->form()->Value('email') ?><br/>
+<?php $this->form()->Value('birthday') ?><br/>
+<?php print $this->form()->GetInputValue('gender') ?><br/>
+<?php $this->form()->Value('pref') ?><br/>
+
+<?php $this->form()->Finish($form_name) ?>
