@@ -1,24 +1,20 @@
 <?php
 /* @var $this CouponApp */
 
-$this->mark('','controller');
-$temp = array();
-$temp['POST']    = $_POST;
-$temp['GET']     = $_GET;
-$temp['REQUEST'] = $_REQUEST;
-$this->d($temp,'debug');
-
 //  Init form
+$form_name = 'form_register';
 $config = $this->config()->form_register();
 $this->form()->AddForm($config);
 
 //  Check secure
-if( $this->form()->Secure('form_register') ){
-	$this->template('form_register_confirm.phtml');
+if( $this->form()->Secure($form_name) ){
+	$this->mark('secure');
+	$this->template('form_register_confirm.phtml',array('form_name'=>$form_name));
+//	$this->template('form_register.phtml',array('form_name'=>$form_name));
 }else{
-	$this->template('form_register.phtml');
+	$this->mark('not secure');
+	$this->template('form_register.phtml',array('form_name'=>$form_name));
 }
 
 //  debug
-$this->form()->debug('form_register');
-
+//$this->form()->debug('form_register');
