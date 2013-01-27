@@ -37,7 +37,7 @@ class CouponConfig extends ConfigMgr
 	
 		// form name
 		$form_config->name = 'form_buy';
-		$form_config->action = '/buy/login'; // URL controll by controller
+	//	$form_config->action = '/buy/login'; // URL controll by controller
 		
 		// input text
 		$input_name = 'coupon_id';
@@ -133,7 +133,8 @@ class CouponConfig extends ConfigMgr
 		
 		//  form name
 		$form_config->name   = 'form_register';
-
+		$form_config->action = 'app:/register';
+		
 		//  First name
 		$input_name = 'first_name';
 		$form_config->input->$input_name->label = '姓';
