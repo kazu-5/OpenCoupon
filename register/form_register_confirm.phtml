@@ -2,7 +2,7 @@
 /* @var $this CouponApp */
 ?>
 以下の内容でよろしいですか？
-<?php $this->form()->Start($form_name) ?>
+<?php $this->form()->Start($form_name,'./commit') ?>
 <table>
 	<tr>
 		<td>
@@ -53,10 +53,24 @@
 			<?php $this->form()->Value('pref') ?><br/>
 		</td>
 	</tr>
+	<tr>
+		<td>
+		
+		</td>
+		<td>
+			<?php $this->form()->Input('submit'," この内容で登録する ") ?><br/>
+		</td>
+	</tr>
 </table>
 <?php $this->form()->Finish($form_name) ?>
 
-<form action="./">
-	<input type="submit" value=" 戻る ">
-</form>
+<table>
+	<tr>
+		<td>
+			<form action="./">
+				<input type="submit" value=" 入力内容を修正する ">
+			</form>
+		</td>
+	</tr>
+</table>
 

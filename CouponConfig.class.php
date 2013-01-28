@@ -71,18 +71,6 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
 		$form_config->input->$input_name->value = 'この内容で購入';
 		
-		//  フォームを設定する
-		/*
-		$this->form()->AddForm($config);
-		
-		if( $this->form()->Secure($form_name) ){
-			$this->p('Submit form is successful!!');
-		}else{
-			$this->form()->debug($form_name);
-		}
-		*/
-		//	$this->d( Toolbox::toArray($form_config) );
-	
 		return $form_config;
 	}
 
@@ -133,7 +121,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  form name
 		$form_config->name   = 'form_register';
-		$form_config->action = 'app:/register/';
+		$form_config->action = 'app:/register/confirm';
 		
 		//  First name
 		$input_name = 'first_name';
@@ -308,6 +296,24 @@ class CouponConfig extends ConfigMgr
 	{
 		$config = $this->select();
 		$config->table = 't_account';
+		return $config;
+	}
+	
+	function insert_account()
+	{
+		$_post = $this->form()->GetInputValueAll('form_register');
+		//$this->d($_post);
+		
+		$blowfish = new Blowfish();
+		
+		$email    = $_post->email;
+		$password = $_post->password;
+		
+		$config = parent::insert('t_account');
+		$config->set->email     = $blowfish->Encrypt( $email, '04B915BA43FEB5B6' );
+		$config->set->email_md5 = md5($email);
+		$config->set->password  = md5($password);
+		
 		return $config;
 	}
 }
