@@ -138,13 +138,11 @@ class CouponConfig extends ConfigMgr
 		//  First name
 		$input_name = 'first_name';
 		$form_config->input->$input_name->label = '姓';
-		$form_config->input->$input_name->tail  = '<br/>';
 		$form_config->input->$input_name->required = true;
 
 		//  Last name
 		$input_name = 'last_name';
 		$form_config->input->$input_name->label = '名';
-		$form_config->input->$input_name->tail  = '<br/>';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -210,10 +208,8 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 			
-			$form_config->input->$input_name->options->a->value = '';
-			$form_config->input->$input_name->options->b->value = '北海道';
-			$form_config->input->$input_name->options->c->value = '東京都';
-			
+			$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
+		
 		//  birthday
 		$input_name = 'birthday';
 		$form_config->input->$input_name->label  = '生年月日';
