@@ -11,6 +11,9 @@ $config = $this->config()->form_register();
 $this->form()->AddForm($config);
 
 //  Check login
+
+$this->d( $this->model('Login')->GetLoginId() );
+
 if( $id = $this->model('Login')->GetLoginId() ){
 	$this->p('既にログインしています。');
 }else{
@@ -22,11 +25,17 @@ if( $id = $this->model('Login')->GetLoginId() ){
 		$email = md5($email);
 		$pass  = md5($pass);
 		
-		$password = $this->pdo()->quick("password <- t_account.email_md5 = $email");
+		list($id,$password) = $this->pdo()->quick("id, password <- t_account.email_md5 = $email");
+		$this->mark("$id, $password");
 		if( $pass === $password ){
-			$this->p('ログインしました。');
+			//  OK
+			$this->model('Login')->SetLoginId($id);
+			$cid = $this->GetCouponID();
+			$url = $this->ConvertUrl("app:/buy/$cid");
+			$this->template('login_success.phtml',array('url'=>$url));
 			return;
 		}else{
+			//  NG
 			$this->p('パスワードが一致しません。');
 		}
 	}
