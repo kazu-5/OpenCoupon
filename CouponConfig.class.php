@@ -73,7 +73,25 @@ class CouponConfig extends ConfigMgr
 		
 		return $form_config;
 	}
-
+	
+	/**
+	 * Get Form Buy Confirm Config
+	 * 
+	 * @param  integer $account_id
+	 * @param  integer $coupon_id
+	 * @return  Config
+	 */
+	function form_buy_confirm( $aid, $cid )
+	{
+		$config = $this->form_buy();
+		$config->merge( $this->form_address($aid,$cid) );
+		
+		$config->name = 'buy_confirm';	
+//		$this->d( Toolbox::toArray($config) );
+		
+		return $config;	
+	}
+	
 	function form_login()
 	{
 		$form_config = new Config;
@@ -242,13 +260,71 @@ class CouponConfig extends ConfigMgr
 			
 		//  submit
 		$input_name = 'submit';
-		$form_config->input->$input_name->type  = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
-		$form_config->input->$input_name->value = ' この内容で仮登録する ';
+		$form_config->input->$input_name->value  = ' この内容で仮登録する ';
 		
 		return $form_config;
 		
+	}
+	
+	function form_address( $account_id, $coupon_id )
+	{
+		$form_config = new Config();
+		
+		$qu = " first_name, last_name, pref <- t_customer.account_id = $account_id ";
+		list( $first_name, $last_name, $pref ) = $this->pdo()->quick($qu);
+		$pref = $this->model('JapanesePref')->GetName($pref);
+		
+		//  form name
+		$form_config->name   = 'form_address';
+		$form_config->action = "app:/buy/$coupon_id/commit";
+		
+		//  First name
+		$input_name = 'first_name';
+		$form_config->input->$input_name->label = '姓';
+		$form_config->input->$input_name->value = $first_name;
+		$form_config->input->$input_name->required = true;
+		
+		//  Last name
+		$input_name = 'last_name';
+		$form_config->input->$input_name->label = '名';
+		$form_config->input->$input_name->value = $last_name;
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  postcode
+		$input_name = 'postcode';
+		$form_config->input->$input_name->label = '郵便番号';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  pref
+		$input_name = 'pref';
+		$form_config->input->$input_name->label = '都道府県';
+		$form_config->input->$input_name->value = $pref;
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+
+		//  city
+		$input_name = 'city';
+		$form_config->input->$input_name->label = '市区町村';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  address
+		$input_name = 'address';
+		$form_config->input->$input_name->label = '丁目番地';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  building
+		$input_name = 'building';
+		$form_config->input->$input_name->label = '建物名';
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		return $form_config;
 	}
 	
 	//===========================================//
@@ -316,5 +392,36 @@ class CouponConfig extends ConfigMgr
 		
 		return $config;
 	}
+	
+	function insert_customer( $account_id )
+	{
+		if(!$account_id){
+			$this->StackError("acount_id is empty.");
+			return false;
+		}
+		
+		$_post = $this->form()->GetInputValueAll('form_register');
+		//$this->d($_post);
+		
+		$nick_name  = $_post->nick_name;
+		$first_name = $_post->first_name;
+		$last_name  = $_post->last_name;
+		$gender     = $_post->gender;
+		$pref       = $_post->pref;
+		$birthday   = $_post->birthday;
+		
+		$config = parent::insert('t_customer');
+
+		$config->set->account_id = $account_id;
+		$config->set->nick_name   = $nick_name;
+		$config->set->first_name  = $first_name;
+		$config->set->last_name   = $last_name;
+		$config->set->gender      = $gender;
+		$config->set->pref        = $pref;
+		$config->set->birthday    = $birthday;
+		
+		return $config;
+	}
+	
 }
 

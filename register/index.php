@@ -32,14 +32,33 @@ switch( $action ){
 			//  Insert account
 			$insert = new Config();
 			$insert = $this->config()->insert_account();
-			$this->d( Toolbox::toArray($insert) );
 			$id = $this->pdo()->Insert($insert);
-			$this->mark("Account ID:$id");
+			if( $id === false ){
+				$this->StackError("ID is false.");
+				return;
+			}
 
 			//  Insert customer
+			$insert = new Config();
+			$insert = $this->config()->insert_customer( $id );
+			$id = $this->pdo()->Insert($insert);
+			if( $id === false ){
+				$this->StackError("ID is false.");
+				return;
+			}
 			
-			//  View
-			$this->template('form_register_commit.phtml',array('form_name'=>$form_name));
+			//  coupon_id
+			$coupon_id = $this->GetSession('current_coupon_id');
+			
+			//  Form clear
+			$this->form()->Clear('form_register');
+			
+			//  Transfer
+			$args = array();
+			$args['form_name'] = $form_name;
+			$args['count']     = 5;
+			$args['url']       = $this->ConvertUrl("app:/login");
+			$this->template('form_register_commit.phtml',$args);
 		}
 		break;
 }

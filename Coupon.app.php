@@ -34,8 +34,13 @@ class CouponApp extends App
 		$coupon_id = isset($args[0]) ? $args[0]: null;
 		$action    = isset($args[1]) ? $args[1]: 'index';
 		
-		//  coupon_idを保存
-		$this->SetEnv('coupon_id',$coupon_id);
+		if(!$coupon_id ){
+			$coupon_id = $this->GetDefaultCouponId();
+			$this->mark("GetDefaultCouponId: $coupon_id ",'debug');
+		}
+		
+		//  現在のCoupon IDを保存
+		$this->SetSession('current_coupon_id',$coupon_id);
 		
 		return $action;
 	}
@@ -110,7 +115,7 @@ class CouponApp extends App
 	 */
 	function GetCouponID()
 	{
-		return $this->GetEnv('coupon_id');
+		return $this->GetSession('current_coupon_id');
 	}
 	
 	/**
