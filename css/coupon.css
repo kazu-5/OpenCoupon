@@ -10,7 +10,6 @@ body {
 	min-width: 970px;
 }
 
-/* �E���̏������������߃N�[�|�� */
 .deal_price{
 	background: url("/img/pricetag.png") no-repeat scroll 0 0 transparent;
 	
@@ -27,6 +26,7 @@ body {
 	text-align: right;
 	width: 98px;
 }
+
 .deal_cut_rate{
 	font-size: 11px;
 	background-color: #CFEEF6;
