@@ -86,7 +86,7 @@ class CouponConfig extends ConfigMgr
 		$config = $this->form_buy();
 		$config->merge( $this->form_address($aid,$cid) );
 		
-		$config->name = 'buy_confirm';	
+		$config->name = 'form_buy_confirm';	
 //		$this->d( Toolbox::toArray($config) );
 		
 		return $config;	
@@ -422,6 +422,38 @@ class CouponConfig extends ConfigMgr
 		
 		return $config;
 	}
+
+	function insert_address( $account_id )
+	{
+		if(!$account_id){
+			$this->StackError("acount_id is empty.");
+			return false;
+		}
 	
+		$_post = $this->form()->GetInputValueAll('form_buy_confirm');
+		$_post = $this->Decode($_post);
+	//	$this->d($_post);
+
+		$last_name  = $_post->last_name;
+		$first_name = $_post->first_name;
+		$postcode   = $_post->postcode;
+		$pref       = $_post->pref;
+		$city       = $_post->city;
+		$address    = $_post->address;
+		$building   = $_post->building;
+		
+		$config = parent::insert('t_address');
+	
+		$config->set->account_id  = $account_id;
+		$config->set->first_name  = $first_name;
+		$config->set->last_name   = $last_name;
+		$config->set->postcode    = $postcode;
+		$config->set->pref        = $pref;
+		$config->set->city        = $city;
+		$config->set->address     = $address;
+		$config->set->building    = $building;
+	
+		return $config;
+	}
 }
 
