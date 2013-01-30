@@ -388,7 +388,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  Get email
 		$qu = " email <- t_account.id = $id ";
-		list ($email) = $this->pdo()->Quick($qu);
+		$email = $this->pdo()->Quick($qu);
 		
 		//  Decrypt email
 		$blowfish = new Blowfish();
@@ -404,7 +404,7 @@ class CouponConfig extends ConfigMgr
 		$config->cardno  = $cardno;
 		$config->cardexp = $cardexp;
 		$config->amount  = $amount;
-		$this->d( Toolbox::toArray($config) );
+	//	$this->d( Toolbox::toArray($config) );
 		
 		return $config;
 	}
@@ -511,7 +511,7 @@ class CouponConfig extends ConfigMgr
 			$this->StackError("acount_id is empty.");
 			return false;
 		}
-	
+		
 		$_post = $this->form()->GetInputValueAll('form_buy_confirm');
 		$_post = $this->Decode($_post);
 	//	$this->d($_post);
@@ -538,4 +538,3 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 }
-

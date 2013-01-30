@@ -20,10 +20,25 @@ switch( $action ){
 		break;
 		
 	case 'execute':
+		
+		//  Init
 		$amount = 100;
 		$config = $this->config()->credit( $id, $amount );
-		$io = $this->model('credit')->Auth($config);
-		$this->mark($io);
+		
+		//  Execute
+		if( $io = $this->model('credit')->Auth($config) ){
+			$io = $this->model('credit')->Commit($config);
+		}
+	//	$this->d( Toolbox::toArray($config) );
+		
+		$io      = $config->io;
+		$sid     = $config->sid; // 決済ID. このIDを決済(Commit)する
+		$uid     = $config->uid; // UserID. このIDで決済できるようになる
+		$status  = $config->status;
+		$message = $config->message;
+		
+		
+		
 		break;
 		
 	default:
