@@ -6,7 +6,7 @@
  * @author Tomoaki Nagahara
  *
  */
-class Credit_model extends Model_model
+class Model_credit extends Model_Model
 {
 	private $result = null;
 	
@@ -22,6 +22,7 @@ class Credit_model extends Model_model
 	
 	function Init()
 	{
+		parent::Init();
 		$this->result = new Config();
 	}
 	
@@ -160,25 +161,25 @@ class Credit_model extends Model_model
 	
 	private function CheckCardExp( $config )
 	{	
-		//  get card exp
+		//  Get card exp
 		$exp = $config->cardexp;
 		preg_match('|([0-9]{2,4})[-/]?([0-9]{2,4})|',$exp,$match);
 		//$this->d($match);
 		
-		//  check year
-		if( strlen($match[1]) == 4 or strlen($match[1]) == 4 ){
+		$error = "Does not match card expire($exp). Examle:2018/01";
+		
+		//  Check year
+		if( strlen($match[1]) == 4 or strlen($match[2]) == 4 ){
 			// OK
 		}else{
 			// NG
-			throw new Exception('Does not match card expire. Examle:2014/01'); 
+			throw new Exception($error); 
 		}
 
-		//  check double year
-		if( strlen($match[1]) == 4 and strlen($match[1]) == 4 ){
-			// OK
-		}else{
+		//  Check both year
+		if( strlen($match[1]) == 4 and strlen($match[2]) == 4 ){
 			// NG
-			throw new Exception('Does not match card expire. Examle:2014/01'); 
+			throw new Exception($error); 
 		}
 		
 		//  get
