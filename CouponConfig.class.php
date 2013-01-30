@@ -37,7 +37,8 @@ class CouponConfig extends ConfigMgr
 	
 		// form name
 		$form_config->name = 'form_buy';
-	//	$form_config->action = '/buy/login'; // URL controll by controller
+		$form_config->action = '/buy'; // URL controll by controller
+		//$form_config->action = '/buy/login'; // URL controll by controller
 		
 		// input text
 		$input_name = 'coupon_id';
