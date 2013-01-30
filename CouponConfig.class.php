@@ -266,7 +266,6 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->value  = ' この内容で仮登録する ';
 		
 		return $form_config;
-		
 	}
 	
 	function form_address( $account_id, $coupon_id )
@@ -323,6 +322,60 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'building';
 		$form_config->input->$input_name->label = '建物名';
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		return $form_config;
+	}
+	
+	function form_payment()
+	{
+		$form_config = new Config;
+		
+		//  form name
+		$form_config->name   = 'form_payment';
+		$form_config->action = 'ctrl:/execute';
+		
+		//  card no
+		$input_name = 'card_no';
+		$form_config->input->$input_name->label    = "カード番号";
+		$form_config->input->$input_name->required = true;
+		
+		//  exp year
+		$input_name = 'exp_yy';
+		$form_config->input->$input_name->label = "カード有効期限（年）";
+		$form_config->input->$input_name->type  = 'select';
+		$form_config->input->$input_name->options = $this->model('Helper')->GetFormOptionsDateYear();
+		$form_config->input->$input_name->required = true;
+		
+		//  exp month
+		$input_name = 'exp_mm';
+		$form_config->input->$input_name->label = "カード有効期限（月）";
+		$form_config->input->$input_name->type  = 'select'; 
+		$form_config->input->$input_name->options = $this->model('Helper')->GetFormOptionsDateMonth();
+		$form_config->input->$input_name->required = true;
+					
+		//  csc
+		$input_name = 'csc';
+		$form_config->input->$input_name->label = "セキュリティコード";
+		$form_config->input->$input_name->required = true;
+
+		/*
+		//  支払い方法？（リボ、分割？）
+		$input_name = 'paymode';
+		$form_config->input->$input_name->label = "paymode";
+		$form_config->input->$input_name->required = true;
+		
+		//  支払い方法？（回数？）
+		$input_name = 'incount';
+		$form_config->input->$input_name->label = "incount";
+		$form_config->input->$input_name->validate->required = true;
+		*/
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = ' 決済 ';
 		
 		return $form_config;
 	}

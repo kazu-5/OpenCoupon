@@ -1,3 +1,16 @@
 <?php
+/* @var $this CouponApp */
+$action = $this->GetAction();
 
-$this->mark(__FILE__);
+switch( $action ){
+	case 'index':
+		$config = $this->config()->form_payment();
+		$this->form()->AddForm($config);
+		include('form_payment.phtml');
+		break;
+		
+	default:
+		$this->mark("undefined action: $action");
+		break;
+}
+
