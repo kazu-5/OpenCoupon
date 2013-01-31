@@ -16,6 +16,15 @@ if(empty($id)){
 //  Get Coupon ID
 $cid = $this->GetCouponID();
 
+//  Check form coupon_id
+$form_buy = $this->form()->GetInputValueAll('form_buy',true);
+$this->d( Toolbox::toArray($form_buy) );
+
+if( $form_buy->coupon_id != $cid ){
+	$this->mark("![ .red [ Does not match Coupon ID of buy-form. ]]");
+	return false;
+}
+
 //  debug
 $this->mark("account_id: $id", 'debug');
 $this->mark("coupon_id: $cid", 'debug');
