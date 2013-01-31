@@ -2,6 +2,16 @@
 
 class CouponConfig extends ConfigMgr
 {
+	function __call($name, $args)
+	{
+		$object = CouponApp;
+		$io = method_exists($object, $name);
+		if( $io ){
+			throw new Exception("$name is CouponApp-method.");
+		}
+		
+		parent::__call($name, $args);
+	}
 
 	//===========================================//
 	
@@ -267,7 +277,6 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->value  = ' この内容で仮登録する ';
 		
 		return $form_config;
-		
 	}
 	
 	function form_address( $account_id, $coupon_id )
@@ -326,6 +335,89 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		return $form_config;
+	}
+	
+	function form_payment()
+	{
+		$form_config = new Config;
+		
+		//  form name
+		$form_config->name   = 'form_payment';
+		$form_config->action = 'ctrl:/execute';
+		
+		//  card no
+		$input_name = 'card_no';
+		$form_config->input->$input_name->label    = "カード番号";
+		$form_config->input->$input_name->required = true;
+		
+		//  exp year
+		$input_name = 'exp_yy';
+		$form_config->input->$input_name->label = "カード有効期限（年）";
+		$form_config->input->$input_name->type  = 'select';
+		$form_config->input->$input_name->options = $this->model('Helper')->GetFormOptionsDateYear();
+		$form_config->input->$input_name->required = true;
+		
+		//  exp month
+		$input_name = 'exp_mm';
+		$form_config->input->$input_name->label = "カード有効期限（月）";
+		$form_config->input->$input_name->type  = 'select'; 
+		$form_config->input->$input_name->options = $this->model('Helper')->GetFormOptionsDateMonth();
+		$form_config->input->$input_name->required = true;
+					
+		//  csc
+		$input_name = 'csc';
+		$form_config->input->$input_name->label = "セキュリティコード";
+		$form_config->input->$input_name->required = true;
+
+		/*
+		//  支払い方法？（リボ、分割？）
+		$input_name = 'paymode';
+		$form_config->input->$input_name->label = "paymode";
+		$form_config->input->$input_name->required = true;
+		
+		//  支払い方法？（回数？）
+		$input_name = 'incount';
+		$form_config->input->$input_name->label = "incount";
+		$form_config->input->$input_name->validate->required = true;
+		*/
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = ' 決済 ';
+		
+		return $form_config;
+	}
+
+	//===========================================//
+	
+	function credit( $id, $amount )
+	{
+		$config = new Config();
+		
+		//  Get email
+		$qu = " email <- t_account.id = $id ";
+		$email = $this->pdo()->Quick($qu);
+		
+		//  Decrypt email
+		$blowfish = new Blowfish();
+		$email = $blowfish->Decrypt($email);
+		
+		$cardno = $this->form()->GetValue('card_no', 'form_payment');
+		$exp_yy = $this->form()->GetValue('exp_yy',  'form_payment');
+		$exp_mm = $this->form()->GetValue('exp_mm',  'form_payment');
+		$cardexp = "$exp_yy-$exp_mm";
+		
+		//  Create config
+		$config->email   = $email;
+		$config->cardno  = $cardno;
+		$config->cardexp = $cardexp;
+		$config->amount  = $amount;
+	//	$this->d( Toolbox::toArray($config) );
+		
+		return $config;
 	}
 	
 	//===========================================//
@@ -430,7 +522,7 @@ class CouponConfig extends ConfigMgr
 			$this->StackError("acount_id is empty.");
 			return false;
 		}
-	
+		
 		$_post = $this->form()->GetInputValueAll('form_buy_confirm');
 		$_post = $this->Decode($_post);
 	//	$this->d($_post);
@@ -456,5 +548,52 @@ class CouponConfig extends ConfigMgr
 	
 		return $config;
 	}
+	
+	function insert_buy( $cid, $num, $sid )
+	{
+		//  Check
+		if( !$cid ){
+			$this->StackError('coupon_id is empty.');
+		}else if( !$num ){
+			$this->StackError('num is empty.');
+		}else if( !$sid ){
+			$this->StackError('sid is empty.');
+		}
+		if( !$cid or !$num or !$sid ){
+			return false;
+		}
+		
+		//  Init
+		$config = parent::insert('t_buy');
+		
+		//  table name
+		$config->table = 't_buy';
+		
+		//  Get varlue from form
+		$aid = $this->model('Login')->GetLoginID();
+		$cid = $cid;
+		$num = $num;
+		$sid = $sid;
+		
+		//  Set
+		$config->set->account_id = $aid;
+		$config->set->coupon_id  = $cid;
+		$config->set->num        = $num;
+		$config->set->sid        = $sid;
+		
+		return $config;
+	}
+	
+	function update_uid( $aid, $uid )
+	{
+		//  Init
+		$config = parent::update('t_customer');
+		
+		//  Set
+		$config->set->uid = $uid;
+		$config->where->account_id = $aid;
+		$config->limit = 1;
+		
+		return $config;
+	}
 }
-
