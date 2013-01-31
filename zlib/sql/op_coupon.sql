@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 1 月 29 日 14:12
+-- 生成時間: 2013 年 1 月 31 日 14:51
 -- サーバのバージョン: 5.1.44
 -- PHP のバージョン: 5.3.1
 
@@ -75,8 +75,8 @@ INSERT INTO `t_account` (`id`, `email_md5`, `email`, `password`, `created`, `upd
 --
 
 CREATE TABLE IF NOT EXISTS `t_address` (
-  `customer_id` int(11) NOT NULL,
-  `seq_no` int(11) NOT NULL COMMENT '順番号',
+  `account_id` int(11) NOT NULL,
+  `seq_no` int(11) NOT NULL DEFAULT '1' COMMENT '順番号',
   `last_name` varchar(20) CHARACTER SET utf8 NOT NULL,
   `first_name` varchar(20) CHARACTER SET utf8 NOT NULL,
   `postcode` int(11) NOT NULL,
@@ -84,14 +84,19 @@ CREATE TABLE IF NOT EXISTS `t_address` (
   `city` varchar(10) CHARACTER SET utf8 NOT NULL,
   `address` varchar(30) CHARACTER SET utf8 NOT NULL,
   `building` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customer_id`,`seq_no`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`account_id`,`seq_no`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='住所テーブル。１つのアカウントに複数の住所が紐づく';
 
 --
 -- テーブルのデータをダンプしています `t_address`
 --
 
+INSERT INTO `t_address` (`account_id`, `seq_no`, `last_name`, `first_name`, `postcode`, `pref`, `city`, `address`, `building`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 1, '太郎', '<h1>山田', 177, '東京都', '練馬区', '石神井町５−２−１２', '', '2013-01-29 16:34:02', '2013-01-31 04:36:13', NULL, '2013-01-31 13:36:13');
 
 -- --------------------------------------------------------
 
@@ -104,17 +109,40 @@ CREATE TABLE IF NOT EXISTS `t_buy` (
   `account_id` int(11) NOT NULL,
   `coupon_id` int(11) NOT NULL,
   `num` int(11) NOT NULL COMMENT '数量',
-  `payment_id` int(11) NOT NULL COMMENT '支払方法',
-  `settle_flag` int(11) NOT NULL COMMENT '決済フラグ',
-  `SID` varchar(16) NOT NULL COMMENT '取引コード（購入商品と決済情報を紐付ける）',
+  `sid` varchar(32) NOT NULL COMMENT '取引コード（購入商品と決済情報を紐付ける）',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`buy_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 --
 -- テーブルのデータをダンプしています `t_buy`
 --
 
+INSERT INTO `t_buy` (`buy_id`, `account_id`, `coupon_id`, `num`, `sid`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 1, 1, 1, '', '2013-01-31 04:53:05', NULL, NULL, '2013-01-31 13:53:05'),
+(2, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 04:53:33', NULL, NULL, '2013-01-31 13:53:33'),
+(3, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:30:14', NULL, NULL, '2013-01-31 21:30:14'),
+(4, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:33:22', NULL, NULL, '2013-01-31 21:33:22'),
+(5, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:33:36', NULL, NULL, '2013-01-31 21:33:36'),
+(6, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:39:48', NULL, NULL, '2013-01-31 21:39:48'),
+(7, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:42:14', NULL, NULL, '2013-01-31 21:42:14'),
+(8, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:42:44', NULL, NULL, '2013-01-31 21:42:44'),
+(9, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:43:53', NULL, NULL, '2013-01-31 21:43:53'),
+(10, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:44:09', NULL, NULL, '2013-01-31 21:44:09'),
+(11, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:44:20', NULL, NULL, '2013-01-31 21:44:20'),
+(12, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:45:31', NULL, NULL, '2013-01-31 21:45:31'),
+(13, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:49:05', NULL, NULL, '2013-01-31 21:49:05'),
+(14, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:49:35', NULL, NULL, '2013-01-31 21:49:35'),
+(15, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:51:43', NULL, NULL, '2013-01-31 21:51:43'),
+(16, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 12:55:16', NULL, NULL, '2013-01-31 21:55:16'),
+(17, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 13:04:37', NULL, NULL, '2013-01-31 22:04:37'),
+(18, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 13:05:33', NULL, NULL, '2013-01-31 22:05:33'),
+(19, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 13:06:23', NULL, NULL, '2013-01-31 22:06:23'),
+(20, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 13:06:33', NULL, NULL, '2013-01-31 22:06:33'),
+(21, 1, 1, 1, '01eb8a9956865747637639482336f5f8', '2013-01-31 13:25:19', NULL, NULL, '2013-01-31 22:25:19');
 
 -- --------------------------------------------------------
 
@@ -166,8 +194,8 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
   `pref` varchar(100) NOT NULL,
   `city` varchar(100) NOT NULL,
   `birthday` date NOT NULL,
-  `address_seq_no` int(11) NOT NULL COMMENT 't_addressの主たる所在地',
-  `IP_USER_ID` varchar(16) NOT NULL,
+  `address_seq_no` int(11) NOT NULL DEFAULT '1' COMMENT 't_addressの主たる所在地',
+  `uid` varchar(32) NOT NULL COMMENT 'For credit card',
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
@@ -179,8 +207,8 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
 -- テーブルのデータをダンプしています `t_customer`
 --
 
-INSERT INTO `t_customer` (`account_id`, `shop_id`, `shop_flag`, `memo`, `nick_name`, `last_name`, `first_name`, `gender`, `pref`, `city`, `birthday`, `address_seq_no`, `IP_USER_ID`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, NULL, NULL, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;山田', 'M', '13', '', '1980-01-02', 0, '', '2013-01-29 04:18:11', '2013-01-29 04:36:38', NULL, '2013-01-29 13:36:38');
+INSERT INTO `t_customer` (`account_id`, `shop_id`, `shop_flag`, `memo`, `nick_name`, `last_name`, `first_name`, `gender`, `pref`, `city`, `birthday`, `address_seq_no`, `uid`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, NULL, NULL, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;山田', 'M', '13', '', '1980-01-02', 1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '2013-01-29 04:18:11', '2013-01-31 13:25:19', NULL, '2013-01-31 22:25:19');
 
 -- --------------------------------------------------------
 
@@ -197,6 +225,9 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
   `shop_holiday` text NOT NULL,
   `shop_opening_hour` text NOT NULL,
   `shop_nearest_station` text NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間',
   PRIMARY KEY (`shop_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
@@ -205,8 +236,8 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
 -- テーブルのデータをダンプしています `t_shop`
 --
 
-INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_address`, `shop_telephone`, `shop_holiday`, `shop_opening_hour`, `shop_nearest_station`, `timestamp`) VALUES
-(1, 'テストショップ', 'テスト用のショップです。', '青山一丁目', '03-1234-5678', '日曜日', '９：００〜１９：００', '青山一丁目', '2013-01-19 16:46:16');
+INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_address`, `shop_telephone`, `shop_holiday`, `shop_opening_hour`, `shop_nearest_station`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 'テストショップ', 'テスト用のショップです。', '青山一丁目', '03-1234-5678', '日曜日', '９：００〜１９：００', '青山一丁目', NULL, NULL, NULL, '2013-01-19 16:46:16');
 
 -- --------------------------------------------------------
 
