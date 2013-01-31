@@ -1,0 +1,313 @@
+<?php
+
+$switch = $this->SmartArgs[0];
+
+//フォームの読み込み(フォーム定義の初期化)
+$this->form('mypage.form.php');
+
+$account_id	 = $this->GetSession('account_id');
+if(!$account_id){
+	include('nologin.html');
+	return;
+}
+
+//	Control
+switch( $switch ){
+	case 'mycoupon':
+		$select = array();
+		$select['table'] = 't_buy';
+		$select['where']['account_id'] = $account_id;
+		$select['where']['settle_flag'] = 1;
+		$t_buys = $this->mysql->select($select);
+		//$this->d($t_buys);
+		//$t_buys[i]['coupon_id']
+
+		$coupons = array();
+		foreach ($t_buys as $t_buy){
+			$coupon_id = $t_buy['coupon_id'];
+			$select = array();
+			$select['table'] = 't_coupon';
+			$select['where']['coupon_id'] = $coupon_id;
+			$select['limit'] = 1;
+			$t_coupon = $this->mysql->select($select);
+			$t_coupon['coupon_expire'] = date('Y年m月d日', strtotime($t_coupon['coupon_expire']));
+			$t_coupon['num'] = $t_buy['num'];
+			array_push($coupons, $t_coupon);
+		}
+
+		//$this->d($coupons);
+		include('mycoupon.html');
+		break;
+
+	case 'customer':
+		if( $this->form->Secure('customer') ){
+
+			//customer_idを取得
+			$select = array();
+			$select['table'] = 't_customer';
+			$select['where']['account_id'] = $account_id;
+			$select['limit'] = 1;
+			$t_customer = $this->mysql->select($select);
+			$customer_id = $t_customer['customer_id'];
+
+			/*
+			 //address_idを取得
+			 $select = array();
+			 $select['table'] = 't_address';
+			 $select['where']['customer_id'] = $customer_id;
+			 $select['where']['seq_no'] = 1; //β版は、住所が一つのため
+			 $select['limit'] = 1;
+			 $t_address = $this->mysql->select($select);
+			 $address_id = $t_address['address_id'];
+			 */
+
+			//	t_customer編集
+			$update = array();
+			$update['table'] = 't_customer';
+			// PKEY : customer_id
+			//$update['set']['customer_id']	 = $customer_id;
+			$update['where']['account_id'] = $account_id;
+			//$update['set']['nickname']		 = $nickname;
+			$update['set']['last_name']		 = $this->form->GetInputValue('last_name', 'customer');
+			$update['set']['first_name']	 = $this->form->GetInputValue('first_name', 'customer');
+			$update['set']['gender']		 = $this->form->GetInputValue('gender', 'customer');
+			$update['set']['myarea']		 = $this->form->GetInputValue('myarea', 'customer');
+			$year				= $this->form->GetInputValue('year', 'customer');
+			$month				= $this->form->GetInputValue('month', 'customer');
+			$day				= $this->form->GetInputValue('day', 'customer');
+			$update['set']['birthday']		 = $year.'-'.$month.'-'.$day;
+			$update['set']['address_seq_no'] = 1; //βリリースでは、住所が一つ
+			//$update['update'] = true; // On Duplicate Update（PKEYが重複していたらUPDATEになる）
+			$this->mysql->update($update);
+
+
+			//	t_address編集
+			$update = array();
+			$update['table'] = 't_address';
+			//$update['set']['customer_id'] = $customer_id; //PKEY
+			$update['where']['customer_id'] = $customer_id; //PKEY
+			$update['set']['seq_no'] = 1; //PKEY
+			$update['set']['postal_code'] = $this->form->GetInputValue('postal_code', 'customer');
+			$update['set']['pref'] = $this->form->GetInputValue('pref', 'customer');
+			$update['set']['city'] = $this->form->GetInputValue('city', 'customer');
+			$update['set']['address'] = $this->form->GetInputValue('address', 'customer');
+			$update['set']['building'] = $this->form->GetInputValue('building', 'customer');
+
+			//$update['update'] = true; // On Duplicate Update（PKEYが重複していたらUPDATEになる）
+			$this->mysql->update($update);
+		}
+
+		$select = array();
+		$select['table'] = 't_account';
+		$select['where']['id'] = $account_id;
+		$select['limit'] = 1;
+		$t_account = $this->mysql->select($select);
+		//$this->d($t_account);
+
+		$select = array();
+		$select['table'] = 't_customer';
+		$select['where']['customer_id'] = $account_id;
+		$select['limit'] = 1;
+		$t_customer = $this->mysql->select($select);
+		$customer_id = $t_customer['customer_id'];
+
+		$select = array();
+		$select['table'] = 't_address';
+		$select['where']['customer_id'] = $customer_id;
+		$select['where']['seq_no'] = 1; //β版は、住所が一つのため
+		$select['limit'] = 1;
+		$t_address = $this->mysql->select($select);
+		//$address_id = $t_address['address_id'];
+		//$this->d($t_address);
+
+		//		$chip = $this->Enc('暗号化と暗号の復号化');
+		//		$this->mark('暗号化='.$chip);
+		//		$chip = $this->Dec($chip);
+		//		$this->mark('復号化='.$chip);
+
+		$mailaddr = $this->Dec($t_account['mailaddr']);
+		$this->d($mailaddr);
+
+		$birthday = explode("-", $t_customer['birthday']);
+		$this->d($birthday);
+			
+		$this->form->InitInputValue('last_name',   $t_customer['last_name']);
+		$this->form->InitInputValue('first_name',  $t_customer['first_name']);
+		$this->form->InitInputValue('postal_code', $t_address['postal_code']);
+		$this->form->InitInputValue('pref',		$t_address['pref']);
+		$this->form->InitInputValue('city',        $t_address['city']);
+		$this->form->InitInputValue('address',     $t_address['address']);
+		$this->form->InitInputValue('building',    $t_address['building']);
+		$this->form->InitInputValue('myarea',      $t_customer['myarea']);
+		$this->form->InitInputValue('year',        $birthday[0]);
+		$this->form->InitInputValue('month',       $birthday[1]);
+		$this->form->InitInputValue('day',         $birthday[2]);
+		$this->form->InitInputValue('gender',      $t_customer['gender']);
+		//		$this->d($_SESSION);
+
+		include('customer.html');
+		break;
+
+
+		//メールアドレス変更処理
+		//mailaddr_change ➡ mailaddr_confirm ➡ mailaddr_commit
+	case 'mailaddr_change':
+		include('mailaddr_change.html');
+		/*
+		 if( $this->form->Secure('mailaddr_change') ){
+			include('mailaddr_confirm.html');
+			//$this->Location('/buy/mailaddr_confirm');
+			}
+			//変更画面(メールアドレス、確認用メールアドレス)
+			include('mailaddr_change.html');
+			*/
+		break;
+
+	case 'mailaddr_confirm':
+		if( $this->form->Secure('mailaddr_change') ){
+			$mailaddr = $this->form->GetInputValue('mailaddr', 'mailaddr_change');
+			$mailaddr_confirm = $this->form->GetInputValue('mailaddr_confirm', 'mailaddr_change');
+
+			//バリデーションチェック開始
+			if( $mailaddr != $mailaddr_confirm ){
+				$error = 'メールアドレスが確認用と一致していません。';
+			}
+
+			if($error){
+				//	errorの文字列が表示されています。
+				//	テストには、$this->mark($error); を使いましょう。
+				//	うっかり消し忘れて本番にアップしても（←よくある）エンドユーザーに見えないから。
+				//echo 'error';
+				include('mailaddr_change.html');
+				break;
+			}
+
+			//確認画面
+			include('mailaddr_confirm.html');
+
+		}else{
+			include('mailaddr_change.html');
+		}
+		break;
+
+	case 'mailaddr_change_mail':
+		if( $this->form->Secure('mailaddr_confirm') ){
+			$mailaddr = $this->form->GetInputValue('mailaddr', 'mailaddr_change');
+
+			//	暗号作成
+			$md5 = md5(time());
+
+			//	セッション登録(メールアドレス)
+			//	↓ $this->form->GetInputValue( input名, フォーム名 ); で取得できま
+			$this->SetSession('md5',      $md5);
+			$this->SetSession('mailaddr',      $mailaddr);
+
+			//URL作成
+			$url = 'http://'.$this->GetEnv('fqdn').'/account/mailaddr_change/commit?md5='.$md5;
+			//				$this->d($url);
+
+			//メール本文作成
+			$body = $this->GetTemplate('mail/mailaddr_change.txt',array('url'=>$url));
+			$to = $mailaddr;
+			$subject = 'メールアドレス変更を受け付けました';
+			$io = mb_send_mail( $to, $subject, $body );
+
+			include('mailaddr_change_mail.html');
+		}else{
+			echo 'エラーです。';
+		}
+		break;
+
+		/*
+		 case 'mailaddr_commit':
+		 if( $this->form->Secure('mailaddr_confirm') ){
+			$mailaddr = $this->form->GetInputValue('mailaddr', 'mailaddr_change');
+
+			//	t_account編集
+			$update = array();
+			$update['table'] = 't_account';
+			// PKEY : id
+			$update['where']['id'] = $this->GetSession('account_id');
+			$update['set']['mailaddr_md5'] = md5($mailaddr);
+			$update['set']['mailaddr'] = $this->enc($mailaddr);
+			$update['update'] = true; // On Duplicate Update（PKEYが重複していたらUPDATEになる）
+			$this->mysql->update($update);
+
+			include('customer.html');
+
+			}else{
+			echo 'エラーです。';
+			}
+
+			break;
+			*/
+
+		//パスワード変更処理
+		//password_change ➡ mailaddr_commit ➡ mailaddr_complete
+	case 'password_change':
+		/*
+		 if( $this->form->Secure('password_change') ){
+			$this->Location('/mypage/password_commit');
+			}
+			*/
+		//変更画面(現在のパスワード、新しいパスワード、確認用新しいパスワード)
+		include('password_change.html');
+		break;
+
+	case 'password_commit':
+		if( $this->form->Secure('password_change') ){
+			$old_password = $this->form->GetInputValue('old_password', 'password_change');
+			$new_password = $this->form->GetInputValue('new_password', 'password_change');
+			$new_password_confirm = $this->form->GetInputValue('new_password_confirm', 'password_change');
+
+			//現在のパスワードが正しいかをチェック
+			$account_id = $this->GetSession('account_id');
+			$select = array();
+			$select['table'] = 't_account';
+			$select['where']['id'] = $account_id;
+			$select['limit'] = 1;
+			$t_account = $this->mysql->select($select);
+			if( $t_account['password'] != md5($old_password) ){
+				$error = 'パスワードが異なります。';
+			}
+
+			//確認用の一致チェック
+			if( $new_password != $new_password_confirm ){
+				$error = 'パスワードが確認用と一致していません。';
+			}
+
+			if($error){
+				include('password_change.html');
+				break;
+			}
+
+			//	t_account編集
+			$update = array();
+			$update['table'] = 't_account';
+			// PKEY : id
+			$update['where']['id'] = $this->GetSession('account_id');
+			$update['set']['password'] = md5($new_password);
+			//$update['update'] = true; // On Duplicate Update（PKEYが重複していたらUPDATEになる）
+			$this->mysql->update($update);
+
+			//パスワード変更完了のメッセージ
+			include('password_commit.html');
+			break;
+		}else{
+			include('password_change.html');
+		}
+		break;
+
+	case 'password_complete':
+		if( $this->form->Secure('password_commit') ){
+
+			include('customer.html');
+			break;
+		}else{
+			echo 'エラーです。';
+		}
+		break;
+
+	default:
+		include('index.html');
+}
