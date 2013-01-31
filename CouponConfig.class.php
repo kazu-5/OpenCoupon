@@ -2,6 +2,16 @@
 
 class CouponConfig extends ConfigMgr
 {
+	function __call($name, $args)
+	{
+		$object = CouponApp;
+		$io = method_exists($object, $name);
+		if( $io ){
+			throw new Exception("$name is CouponApp-method.");
+		}
+		
+		parent::__call($name, $args);
+	}
 
 	//===========================================//
 	
@@ -535,6 +545,52 @@ class CouponConfig extends ConfigMgr
 		$config->set->address     = $address;
 		$config->set->building    = $building;
 	
+		return $config;
+	}
+	
+	function insert_buy( $cid, $num, $sid )
+	{
+		//  Check
+		if( !$cid ){
+			$this->StackError('coupon_id is empty.');
+		}else if( !$num ){
+			$this->StackError('num is empty.');
+		}else if( !$sid ){
+			$this->StackError('sid is empty.');
+		}
+		if( !$cid or !$num or !$sid ){
+			return false;
+		}
+		
+		//  Init
+		$config = parent::insert('t_buy');
+		
+		//  table name
+		$config->table = 't_buy';
+		
+		//  Get varlue from form
+		$aid = $this->model('Login')->GetLoginID();
+		$cid = $cid;
+		$num = $num;
+		$sid = $sid;
+		
+		//  Set
+		$config->set->account_id = $aid;
+		$config->set->coupon_id  = $cid;
+		$config->set->num        = $num;
+		$config->set->sid        = $sid;
+		
+		return $config;
+	}
+	
+	function update_uid( $uid )
+	{
+		//  Init
+		$config = parent::update('t_customer');
+		
+		//  Set
+		$config->uid = $uid;
+
 		return $config;
 	}
 }
