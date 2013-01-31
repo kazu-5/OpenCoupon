@@ -6,10 +6,8 @@
  * @author Tomoaki Nagahara
  *
  */
-class Credit_model extends Model_model
+class Model_credit extends Model_Model
 {
-	private $result = null;
-	
 	function __call($name, $args)
 	{
 		if( strtolower($name) == 'const' ){
@@ -20,21 +18,8 @@ class Credit_model extends Model_model
 		}
 	}
 	
-	function Init()
-	{
-		$this->result = new Config();
-	}
-	
 	function _const( $key )
-	{
-		/*
-		if( $con = constant('self::'.$v) ){
-			return $con;
-		}else{
-			$this->StackError("Does not define constant. ($v)");
-		}
-		*/
-		
+	{		
 		switch( $key ){
 			case 'TEST_CARD_NO':
 				$var = '1234567890123456';
@@ -61,12 +46,13 @@ class Credit_model extends Model_model
 		$this->p('![ .bold [OK]]');
 	}
 	
-	function Auth( $config )
+	function Auth( &$config )
 	{
-		$this->result->io      = null;
-		$this->result->status  = null;
-		$this->result->message = null;
-		$this->result->sid     = null;
+		$result = new Config();
+		$result->io      = null;
+		$result->status  = null;
+		$result->message = null;
+		$result->sid     = null;
 		
 		try{
 			//  check
@@ -82,71 +68,78 @@ class Credit_model extends Model_model
 			$this->SetSession('sid',$sid);
 
 			//  result
-			$this->result->io      = true;
-			$this->result->status  = 'OK';
-						
+			$result->io      = true;
+			$result->status  = 'OK';
+			$result->sid	 = $sid;
+			
 		}catch( Exception $e ){
-			$this->result->io      = false;
-			$this->result->status  = 'InputError';
-			$this->result->message = $e->getMessage();
+			$result->io      = false;
+			$result->status  = 'InputError';
+			$result->message = $e->getMessage();
 		}
+		
+		$config->merge($result);
 
-		return $this->result;
+		return true;
 	}
 	
-	function Commit($config)
+	function Commit( &$config )
 	{
-		$this->result->io      = null;
-		$this->result->status  = null;
-		$this->result->message = null;
-		$this->result->sid     = null;
+		$result = new Config();
+		$result->io      = null;
+		$result->status  = null;
+		$result->message = null;
 		
 		try{
 			//  check
 			$this->CheckSid($config);
-
+			
 			//  result
-			$this->result->io      = true;
-			$this->result->status  = 'OK';
+			$result->io      = true;
+			$result->status  = 'OK';
+			$result->uid     = $this->CreateUid($config);
 			
 		}catch( Exception $e ){
-			$this->result->io      = false;
-			$this->result->status  = 'InputError';
-			$this->result->message = $e->getMessage();
+			$result->io      = false;
+			$result->status  = 'InputError';
+			$result->message = $e->getMessage();
 		}
 
-		return $this->result;
+		$config->merge($result);
+		
+		return $result;
 	}
 	
 	function Cancel($config)
 	{
-		$this->result->io      = null;
-		$this->result->status  = null;
-		$this->result->message = null;
-		$this->result->sid     = null;
+		$result = new Config();
+		$result->io      = null;
+		$result->status  = null;
+		$result->message = null;
+		$result->sid     = null;
 		
 		try{
 			//  check
 			$this->CheckSid($config);
 			
 			//  result
-			$this->result->io      = true;
-			$this->result->status  = 'OK';
+			$result->io      = true;
+			$result->status  = 'OK';
 			
 		}catch( Exception $e ){
-			$this->result->io      = false;
-			$this->result->status  = 'InputError';
-			$this->result->message = $e->getMessage();
+			$result->io      = false;
+			$result->status  = 'InputError';
+			$result->message = $e->getMessage();
 		}
 		
-		return $this->result;
+		return $result;
 	}
 
 	//==================================================================//
 	
 	private function CheckEmail( $config )
 	{
-		if(!isset($config->email)){
+		if( empty($config->email) ){
 			throw new Exception('Does not set email.');
 		}
 	}
@@ -155,30 +148,30 @@ class Credit_model extends Model_model
 	{
 		$cardno = $config->cardno;
 		$io = $cardno == $this->const('TEST_CARD_NO') ? true: false;
-		$this->result->io = $io;
+		return $io;
 	}
 	
 	private function CheckCardExp( $config )
 	{	
-		//  get card exp
+		//  Get card exp
 		$exp = $config->cardexp;
 		preg_match('|([0-9]{2,4})[-/]?([0-9]{2,4})|',$exp,$match);
 		//$this->d($match);
 		
-		//  check year
-		if( strlen($match[1]) == 4 or strlen($match[1]) == 4 ){
+		$error = "Does not match card expire($exp). Examle:2018/01";
+		
+		//  Check year
+		if( strlen($match[1]) == 4 or strlen($match[2]) == 4 ){
 			// OK
 		}else{
 			// NG
-			throw new Exception('Does not match card expire. Examle:2014/01'); 
+			throw new Exception($error); 
 		}
 
-		//  check double year
-		if( strlen($match[1]) == 4 and strlen($match[1]) == 4 ){
-			// OK
-		}else{
+		//  Check both year
+		if( strlen($match[1]) == 4 and strlen($match[2]) == 4 ){
 			// NG
-			throw new Exception('Does not match card expire. Examle:2014/01'); 
+			throw new Exception($error); 
 		}
 		
 		//  get
@@ -212,19 +205,37 @@ class Credit_model extends Model_model
 	
 	private function CreateSid( $config )
 	{
-		return $this->result->sid = md5(date('Y-m-d'));
+		return md5(date('Y-m-d'));
 	}
 	
 	private function CheckSid( $config )
 	{
 		$sid = $this->GetSession('sid');
 		
-		//$this->mark( $sid );
-		//$this->mark( $config->sid );
-		
 		//  check
 		if( $sid !== $config->sid ){
 			throw new Exception('Does not match SID.');
+		}
+	}
+	
+	private function CreateUid( $config )
+	{
+		$this->CheckEmail($config);
+		
+		//  TODO
+		
+		return md5($config->email);
+	}
+	
+	private function CheckUid( $config )
+	{
+		$this->CheckEmail($config);
+		
+		//  TODO
+		
+		
+		if( $config->uid !== md5($config->email) ){
+			throw new Exception('Does not match UID.');
 		}
 	}
 }

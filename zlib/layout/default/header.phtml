@@ -1,3 +1,14 @@
 <header id="header">
-<img src="<?=OnePiece5::ConvertUrl('app:/img/coupon_logo.png')?>" title="共同クーポン購入サイト" alt="共同クーポン購入サイト">
+	<img src="<?=OnePiece5::ConvertUrl('app:/img/coupon_logo.png')?>" title="共同クーポン購入サイト" alt="共同クーポン購入サイト">
+	<div style="float:right; color:white; padding:0.5em 1em;">
+		<?php
+		if( $id = $this->model('Login')->GetLoginID() ){
+			$name = $this->pdo()->quick(" nick_name <- t_customer.account_id = $id ");
+		}else{
+			$href = $this->ConvertURL('app:/Login');
+			$name = sprintf('<a href="%s"><span style="color:white;">GUEST</a>',$href); 
+		}	
+		?>
+		<?=$name?>
+	</div>
 </header>
