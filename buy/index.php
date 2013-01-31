@@ -11,7 +11,7 @@ switch( $action ){
 		$record = $this->pdo()->Quick(" t_coupon.coupon_id = $coupon_id ");
 		
 		//  Formの設定
-		$config = $this->config()->form_buy();
+		$config = $this->config()->form_buy($coupon_id);
 		$this->form()->AddForm($config);
 		
 		//  Check secure

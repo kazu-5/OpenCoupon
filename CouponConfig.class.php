@@ -40,14 +40,15 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
-	function form_buy()
+	function form_buy($coupon_id)
 	{
 		// I create form config.
 		$form_config = new Config;
 	
 		// form name
 		$form_config->name = 'form_buy';
-	//	$form_config->action = '/buy/login'; // URL controll by controller
+		$form_config->action = '/buy/'.$coupon_id; // URL controll by controller
+		//$form_config->action = '/buy/login'; // URL controll by controller
 		
 		// input text
 		$input_name = 'coupon_id';
