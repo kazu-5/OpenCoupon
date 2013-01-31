@@ -1,13 +1,13 @@
 <?php
 
-$switch = $this->SmartArgs[0];
+//$switch = $this->SmartArgs[0];
 
 //フォームの読み込み(フォーム定義の初期化)
-$this->form('mypage.form.php');
+//$this->form('mypage.form.php');
 
 $account_id	 = $this->GetSession('account_id');
 if(!$account_id){
-	include('nologin.html');
+	include('nologin.phtml');
 	return;
 }
 
