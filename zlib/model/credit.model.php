@@ -46,7 +46,7 @@ class Model_credit extends Model_Model
 		$this->p('![ .bold [OK]]');
 	}
 	
-	function Auth( $config )
+	function Auth( &$config )
 	{
 		$result = new Config();
 		$result->io      = null;
@@ -70,6 +70,7 @@ class Model_credit extends Model_Model
 			//  result
 			$result->io      = true;
 			$result->status  = 'OK';
+			$result->sid	 = $sid;
 			
 		}catch( Exception $e ){
 			$result->io      = false;
@@ -82,13 +83,12 @@ class Model_credit extends Model_Model
 		return true;
 	}
 	
-	function Commit($config)
+	function Commit( &$config )
 	{
 		$result = new Config();
 		$result->io      = null;
 		$result->status  = null;
 		$result->message = null;
-		$result->sid     = null;
 		
 		try{
 			//  check
@@ -104,6 +104,8 @@ class Model_credit extends Model_Model
 			$result->message = $e->getMessage();
 		}
 
+		$config->merge($result);
+		
 		return $result;
 	}
 	
