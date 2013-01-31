@@ -93,10 +93,11 @@ class Model_credit extends Model_Model
 		try{
 			//  check
 			$this->CheckSid($config);
-
+			
 			//  result
 			$result->io      = true;
 			$result->status  = 'OK';
+			$result->uid     = $this->CreateUid($config);
 			
 		}catch( Exception $e ){
 			$result->io      = false;
@@ -214,6 +215,27 @@ class Model_credit extends Model_Model
 		//  check
 		if( $sid !== $config->sid ){
 			throw new Exception('Does not match SID.');
+		}
+	}
+	
+	private function CreateUid( $config )
+	{
+		$this->CheckEmail($config);
+		
+		//  TODO
+		
+		return md5($config->email);
+	}
+	
+	private function CheckUid( $config )
+	{
+		$this->CheckEmail($config);
+		
+		//  TODO
+		
+		
+		if( $config->uid !== md5($config->email) ){
+			throw new Exception('Does not match UID.');
 		}
 	}
 }

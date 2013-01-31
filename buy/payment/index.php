@@ -17,8 +17,8 @@ if(empty($id)){
 $cid = $this->GetCouponID();
 
 //  debug
-$this->mark("account_id: $id");
-$this->mark("coupon_id: $cid");
+$this->mark("account_id: $id", 'debug');
+$this->mark("coupon_id: $cid", 'debug');
 
 //  Switch action.
 switch( $action ){
@@ -36,7 +36,7 @@ switch( $action ){
 		if( $io = $this->model('credit')->Auth($config) ){
 			$io = $this->model('credit')->Commit($config);
 		}
-		$this->d( Toolbox::toArray($config) );
+		$this->d( Toolbox::toArray($config), 'debug');
 	
 		if( !$io ){
 			$this->StackError("Payment failed.");
@@ -55,8 +55,20 @@ switch( $action ){
 		$this->pdo()->insert($insert);
 		
 		//  update t_customer.uid
-		$update = $this->config()->update_uid();
-		$this->pdo()->update($update);
+		$update = $this->config()->update_uid( $id, $uid );
+		$io = $this->pdo()->update($update);
+		if(  $io === false ){
+			$this->StackError("update t_customer.uid failed");
+			return false;
+		}
+		
+		//  print thanks page
+		include("thanks.phtml");
+		
+		//  All completed
+		$this->form()->clear('form_buy');
+		$this->form()->clear('form_address');
+		$this->form()->clear('form_payment');
 		
 		break;
 		

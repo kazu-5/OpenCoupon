@@ -584,14 +584,16 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_uid( $uid )
+	function update_uid( $aid, $uid )
 	{
 		//  Init
 		$config = parent::update('t_customer');
 		
 		//  Set
-		$config->uid = $uid;
-
+		$config->set->uid = $uid;
+		$config->where->account_id = $aid;
+		$config->limit = 1;
+		
 		return $config;
 	}
 }
