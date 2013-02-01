@@ -1,24 +1,36 @@
 <section>
 <h1>MyShop</h1>
 <div>
-	<h2>お店情報の変更</h2>
+	<h2><?=$t_shop['shop_name']?></h2>
+	<?php
+	//$this->d($t_shop);
+	?>
 	<p>お店の情報を出力</p>
 </div>
 <div>
 	<h2>クーポン一覧</h2>
+	<?php
+	//$this->d($t_list);
+	?>
 	<h3>販売中</h3>
 	<ol>
-		<li>クーポン１
-		<li>クーポン２
-		<li>クーポン３
-		<li>クーポン４
+	<?php
+	if( $t_list['on'] ){
+		foreach( $t_list['on'] as $t_coupon ){
+			$this->template( 'list-coupon.phtml', $t_coupon);
+		}
+	}
+	?>
 	</ol>
 	<h3>販売終了</h3>
 	<ol>
-		<li>クーポン１
-		<li>クーポン２
-		<li>クーポン３
-		<li>クーポン４
+	<?php
+	if( $t_list['off'] ){
+		foreach( $t_list['off'] as $t_coupon ){
+			$this->template( 'list-coupon.phtml', $t_coupon);
+		}
+	}
+	?>
 	</ol>
 </div>
 </section>
