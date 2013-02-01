@@ -1,7 +1,10 @@
 <?php
-
-include('NewWorld5.class.php');
-
+/**
+ * Open Coupon App
+ * 
+ * @author Open Coupon Projects members <open-coupon@gmail.com>
+ *
+ */
 class CouponApp extends App
 {
 	/**
@@ -20,6 +23,22 @@ class CouponApp extends App
 	/***		ACTION		***/
 	
 	function GetAction(){
+		/*
+		$route = $this->GetEnv('route');
+		//$this->d($route);
+		$temp = explode('/', $route['path']);
+		$current_dir = $temp[count($temp)-1];
+		$parent_dir  = isset($temp[count($temp)-2]) ? $temp[count($temp)-2]: null;
+		
+		switch( $current_dir ){
+			case 'myshop':
+				$action = $this->_get_action_myshop();
+				break;
+				
+			default:
+				$action = $this->_get_action_default();
+		}
+		*/
 		$args = $this->GetArgs();
 		$action = isset($args[0]) ? $args[0]: 'index';
 		return $action;
@@ -41,6 +60,49 @@ class CouponApp extends App
 		
 		//  現在のCoupon IDを保存
 		$this->SetSession('current_coupon_id',$coupon_id);
+		
+		return $action;
+	}
+	
+	function GetMyShopAction()
+	{
+		//  Init
+		$action = 'does_not_set';
+		
+		//  Get URL Argument
+		$args = $this->GetArgs();
+		//$this->d($args);
+
+		//  Get Shop ID
+		if(!$shop_id = $this->GetSession('shop_id') ){
+			$id = $this->model('Login')->GetLoginID();
+			$qu = "shop_id <- t_customer.account_id = $id";
+			if( $shop_id = $this->pdo()->quick( $qu ) ){
+				$this->SetSession('shop_id',$shop_id);
+			}else{
+				return 'error-shop-id';
+			}
+		}
+		
+		//  Get Shop flag
+		if(!$shop_flag = $this->GetSession('shop_flag')){
+			$shop_flag = $this->pdo()->quick("shop_flag <- t_customer.shop_id = $shop_id");
+		}
+		
+		//  Check shop flag
+		if( $shop_flag ){
+			$this->SetSession("shop_flag",$shop_flag);
+		}else{
+			return 'error-shop-flag';
+		}
+		
+		//  Standard
+		$action = $args[0];
+		switch( $action ){
+			case '':
+				$action = 'index';
+		}
+		
 		
 		return $action;
 	}

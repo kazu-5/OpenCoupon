@@ -1,5 +1,7 @@
 <?php
 
+include('App.class.php');
+
 include('Coupon.app.php');
 $app = new CouponApp();
 
