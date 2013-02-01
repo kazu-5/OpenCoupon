@@ -1,7 +1,10 @@
 <?php
-
-include('NewWorld5.class.php');
-
+/**
+ * Open Coupon App
+ * 
+ * @author Open Coupon Projects members <open-coupon@gmail.com>
+ *
+ */
 class CouponApp extends App
 {
 	/**
@@ -20,6 +23,22 @@ class CouponApp extends App
 	/***		ACTION		***/
 	
 	function GetAction(){
+		/*
+		$route = $this->GetEnv('route');
+		//$this->d($route);
+		$temp = explode('/', $route['path']);
+		$current_dir = $temp[count($temp)-1];
+		$parent_dir  = isset($temp[count($temp)-2]) ? $temp[count($temp)-2]: null;
+		
+		switch( $current_dir ){
+			case 'myshop':
+				$action = $this->_get_action_myshop();
+				break;
+				
+			default:
+				$action = $this->_get_action_default();
+		}
+		*/
 		$args = $this->GetArgs();
 		$action = isset($args[0]) ? $args[0]: 'index';
 		return $action;
@@ -45,69 +64,62 @@ class CouponApp extends App
 		return $action;
 	}
 	
-	/**
-	 *  General checker
-	 *  汎用的な Checker
-	 *
-	 *  @return  Boolean
-	 */
-	function Check($key){
-		switch(strtolower($key)){
-			
-			case 'login':
-			case 'loggedin':
-				$io = $this->GetSession('isLoggedin');
-				break;
-				
-			case 'shop_flag':
-				$io = $this->GetSession('account_id') == 1 ? true: false;
-				break;
-				
-			default:
-				$io = false;
+	function GetMyShopAction()
+	{
+		//  Init
+		$action = 'does_not_set';
+		
+		//  Get URL Argument
+		$args = $this->GetArgs();
+		//$this->d($args);
+
+		//  Get Shop ID
+		if(!$shop_id = $this->GetSession('shop_id') ){
+			$id = $this->model('Login')->GetLoginID();
+			$qu = "shop_id <- t_customer.account_id = $id";
+			if( $shop_id = $this->pdo()->quick( $qu ) ){
+				$this->SetSession('shop_id',$shop_id);
+			}else{
+				return 'error-shop-id';
+			}
 		}
-		return $io;
+		
+		//  Get Shop flag
+		if(!$shop_flag = $this->GetSession('shop_flag')){
+			$shop_flag = $this->pdo()->quick("shop_flag <- t_customer.shop_id = $shop_id");
+		}
+		
+		//  Check shop flag
+		if( $shop_flag ){
+			$this->SetSession("shop_flag",$shop_flag);
+		}else{
+			return 'error-shop-flag';
+		}
+		
+		//  Standard
+		$action = $args[0];
+		switch( $action ){
+			case '':
+				$action = 'index';
+		}
+		
+		
+		return $action;
 	}
 	
-	function GetMailaddrFromId( $id ){
-
-		//	IDからレコードを取得
-		$select = array();
-		$select['table'] = 't_account';
-		$select['where']['id'] = $id;
-		$select['limit'] = 1;
-		$t_account = $this->mysql->select($select);
-		//		$this->d($t_account);
-
-		$mailaddr = $this->Dec($t_account['mailaddr']);
-		//		$this->d($mailaddr);
-
-		return $mailaddr;
-	}
-
 	/**
-	 *
-	 * メールアドレスからIDを求める（存在しない場合は0を返す）
-	 *
+	 * 
 	 */
-	function GetIdFromMailaddr( $mailaddr ){
-
-		//	メールアドレスからレコードを取得
-		$select = array();
-		$select['table'] = 't_account';
-		$select['where']['mailaddr_md5'] = md5($mailaddr);
-		$select['limit'] = 1;
-		$t_account = $this->mysql->select($select);
-
-		if( count($t_account) ){
-			$id = $t_account['id'];
+	function GetShopID($id=null)
+	{
+		if( $id ){
+			$shop_id = $this->pdo()->quick(" shop_id <- t_customer.account_id = $id ");
 		}else{
-			$id = 0;
+			$shop_id = $this->GetSession('shop_id');
 		}
-
-		return $id;
+		return $shop_id;
 	}
-
+	
 	/**
 	 * URLで指定されたcoupon_idまたはsessionに保存していたcoupon_id
 	 *
@@ -185,14 +197,29 @@ class CouponApp extends App
 			return false;
 		}
 		
-		$config = new Config();
-		$config->table = 't_shop';
-		$config->where->shop_id = $shop_id;
-		$config->limit = 1;
-		$t_shop = $this->pdo()->select($config);
-		//$this->d($t_shop);
+		return $this->pdo()->quick(" t_shop.shop_id = $shop_id ");
+	}
+	
+	function GetCouponListByShopId($shop_id)
+	{
+		if(!$shop_id){
+			$this->StackError("Does not set shop_id.");
+			return false;
+		}
 		
-		return $t_shop;
+		//  On sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_limit = '>  '.date('Y-m-d H:i:s');
+		$list['on']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		//  End of sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_limit = '<=  '.date('Y-m-d H:i:s');
+		$list['off']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		return $list;
 	}
 	
 	/**
