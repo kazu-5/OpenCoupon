@@ -1,66 +1,63 @@
 <?php
 
+
 //$switch = $this->SmartArgs[0];
+//$this->d($switch);
+$action    = $this->GetAction();
+
 
 //フォームの読み込み(フォーム定義の初期化)
 //$this->form('mypage.form.php');
 
-$account_id	 = $this->GetSession('account_id');
-if(!$account_id){
+//$account_id	 = $this->GetSession('account_id');
+
+$id = $this->model('Login')->GetLoginID();
+
+/*
+if( $id = $this->model('Login')->GetLoginID() ){
+	$this->Location("app:/buy/$coupon_id/confirm");
+}else{
+	$this->Location('app:/login');
+}
+*/
+
+if(!$id){
+	$this->Location('app:/login');
 	include('nologin.phtml');
 	return;
 }
 
 //	Control
-switch( $switch ){
+switch( $action ){
 	case 'mycoupon':
-		$select = array();
-		$select['table'] = 't_buy';
-		$select['where']['account_id'] = $account_id;
-		$select['where']['settle_flag'] = 1;
-		$t_buys = $this->mysql->select($select);
-		//$this->d($t_buys);
-		//$t_buys[i]['coupon_id']
-
+		$config = $this->config()->select_my_buy();
+		$t_buys = $this->pdo()->select($config);
+		
 		$coupons = array();
 		foreach ($t_buys as $t_buy){
 			$coupon_id = $t_buy['coupon_id'];
-			$select = array();
-			$select['table'] = 't_coupon';
-			$select['where']['coupon_id'] = $coupon_id;
-			$select['limit'] = 1;
-			$t_coupon = $this->mysql->select($select);
+			
+			$config = $this->config()->select_one_coupon($coupon_id);
+			$t_coupon = $this->pdo()->select($config);
+			
 			$t_coupon['coupon_expire'] = date('Y年m月d日', strtotime($t_coupon['coupon_expire']));
 			$t_coupon['num'] = $t_buy['num'];
 			array_push($coupons, $t_coupon);
 		}
 
 		//$this->d($coupons);
-		include('mycoupon.html');
+		include('mycoupon.phtml');
 		break;
 
 	case 'customer':
-		if( $this->form->Secure('customer') ){
+		if( $this->form()->Secure('customer')  ){
 
 			//customer_idを取得
-			$select = array();
-			$select['table'] = 't_customer';
-			$select['where']['account_id'] = $account_id;
-			$select['limit'] = 1;
-			$t_customer = $this->mysql->select($select);
+			$config = $this->config()->select_my_customer();
+			$t_coupon = $this->pdo()->select($config);
+			
 			$customer_id = $t_customer['customer_id'];
-
-			/*
-			 //address_idを取得
-			 $select = array();
-			 $select['table'] = 't_address';
-			 $select['where']['customer_id'] = $customer_id;
-			 $select['where']['seq_no'] = 1; //β版は、住所が一つのため
-			 $select['limit'] = 1;
-			 $t_address = $this->mysql->select($select);
-			 $address_id = $t_address['address_id'];
-			 */
-
+			
 			//	t_customer編集
 			$update = array();
 			$update['table'] = 't_customer';
@@ -97,26 +94,38 @@ switch( $switch ){
 			$this->mysql->update($update);
 		}
 
+		$config = $this->config()->select_my_account();
+		$t_account = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_account';
 		$select['where']['id'] = $account_id;
 		$select['limit'] = 1;
 		$t_account = $this->mysql->select($select);
-		//$this->d($t_account);
-
+		*/
+		
+		$config = $this->config()->select_my_customer();
+		$t_customer = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_customer';
 		$select['where']['customer_id'] = $account_id;
 		$select['limit'] = 1;
 		$t_customer = $this->mysql->select($select);
+		*/
 		$customer_id = $t_customer['customer_id'];
 
+		$config = $this->config()->select_my_address();
+		$this->d( Toolbox::toArray($config) );
+		$t_address = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_address';
 		$select['where']['customer_id'] = $customer_id;
 		$select['where']['seq_no'] = 1; //β版は、住所が一つのため
 		$select['limit'] = 1;
 		$t_address = $this->mysql->select($select);
+		*/
 		//$address_id = $t_address['address_id'];
 		//$this->d($t_address);
 
@@ -130,7 +139,13 @@ switch( $switch ){
 
 		$birthday = explode("-", $t_customer['birthday']);
 		$this->d($birthday);
-			
+		
+		$this->d( Toolbox::toArray($t_account) );
+		$config = $this->config()->form_customer($t_customer);
+		$this->d( Toolbox::toArray($config) );
+		$this->form()->AddForm($config);
+		
+		/*
 		$this->form->InitInputValue('last_name',   $t_customer['last_name']);
 		$this->form->InitInputValue('first_name',  $t_customer['first_name']);
 		$this->form->InitInputValue('postal_code', $t_address['postal_code']);
@@ -143,16 +158,17 @@ switch( $switch ){
 		$this->form->InitInputValue('month',       $birthday[1]);
 		$this->form->InitInputValue('day',         $birthday[2]);
 		$this->form->InitInputValue('gender',      $t_customer['gender']);
+		*/
 		//		$this->d($_SESSION);
 
-		include('customer.html');
+		include('customer.phtml');
 		break;
 
 
 		//メールアドレス変更処理
 		//mailaddr_change ➡ mailaddr_confirm ➡ mailaddr_commit
 	case 'mailaddr_change':
-		include('mailaddr_change.html');
+		include('mailaddr_change.phtml');
 		/*
 		 if( $this->form->Secure('mailaddr_change') ){
 			include('mailaddr_confirm.html');
@@ -178,15 +194,15 @@ switch( $switch ){
 				//	テストには、$this->mark($error); を使いましょう。
 				//	うっかり消し忘れて本番にアップしても（←よくある）エンドユーザーに見えないから。
 				//echo 'error';
-				include('mailaddr_change.html');
+				include('mailaddr_change.phtml');
 				break;
 			}
 
 			//確認画面
-			include('mailaddr_confirm.html');
+			include('mailaddr_confirm.phtml');
 
 		}else{
-			include('mailaddr_change.html');
+			include('mailaddr_change.phtml');
 		}
 		break;
 
@@ -212,7 +228,7 @@ switch( $switch ){
 			$subject = 'メールアドレス変更を受け付けました';
 			$io = mb_send_mail( $to, $subject, $body );
 
-			include('mailaddr_change_mail.html');
+			include('mailaddr_change_mail.phtml');
 		}else{
 			echo 'エラーです。';
 		}
@@ -251,7 +267,7 @@ switch( $switch ){
 			}
 			*/
 		//変更画面(現在のパスワード、新しいパスワード、確認用新しいパスワード)
-		include('password_change.html');
+		include('password_change.phtml');
 		break;
 
 	case 'password_commit':
@@ -277,7 +293,7 @@ switch( $switch ){
 			}
 
 			if($error){
-				include('password_change.html');
+				include('password_change.phtml');
 				break;
 			}
 
@@ -291,17 +307,17 @@ switch( $switch ){
 			$this->mysql->update($update);
 
 			//パスワード変更完了のメッセージ
-			include('password_commit.html');
+			include('password_commit.phtml');
 			break;
 		}else{
-			include('password_change.html');
+			include('password_change.phtml');
 		}
 		break;
 
 	case 'password_complete':
 		if( $this->form->Secure('password_commit') ){
 
-			include('customer.html');
+			include('customer.phtml');
 			break;
 		}else{
 			echo 'エラーです。';
@@ -309,5 +325,5 @@ switch( $switch ){
 		break;
 
 	default:
-		include('index.html');
+		include('index.phtml');
 }
