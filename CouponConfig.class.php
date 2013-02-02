@@ -468,6 +468,17 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
+	function select_my_buy($id)
+	{
+		$config = $this->select();
+		$config->table = 't_buy';
+		$config->account_id = $id;
+		$config->settle_flag = 1;
+		$config->table = 't_buy';
+		
+		return $config;
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
