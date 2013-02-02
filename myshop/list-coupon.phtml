@@ -1,4 +1,17 @@
+<?php
+$href_coupon = $this->ConvertURL("app:/coupon/$coupon_id");
+$href_edit   = $this->ConvertURL("ctrl:/coupon/edit/$coupon_id");
+$href_delete = $this->ConvertURL("ctrl:/coupon/delete/$coupon_id");
+?>
 <li>
-	<?=$coupon_title?>: 
-	<?=$coupon_description?>
+	<a href="<?=$href_coupon?>">
+		<?=$coupon_title?>: 
+		<?=$coupon_description?>
+	</a>
+	<span style="">
+		[
+		  <a href="<?=$href_edit?>">編集</a> | 
+		  <a href="<?=$href_delete?>">削除</a>
+		]
+	</span>
 </li>
