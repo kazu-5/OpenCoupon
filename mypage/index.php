@@ -50,16 +50,14 @@ switch( $action ){
 		break;
 
 	case 'customer':
-		if( $this->form->Secure('customer') ){
+		if( $this->form()->Secure('customer')  ){
 
 			//customer_idを取得
-			$select = array();
-			$select['table'] = 't_customer';
-			$select['where']['account_id'] = $account_id;
-			$select['limit'] = 1;
-			$t_customer = $this->mysql->select($select);
+			$config = $this->config()->select_my_customer();
+			$t_coupon = $this->pdo()->select($config);
+			
 			$customer_id = $t_customer['customer_id'];
-
+			
 			//	t_customer編集
 			$update = array();
 			$update['table'] = 't_customer';
@@ -96,26 +94,37 @@ switch( $action ){
 			$this->mysql->update($update);
 		}
 
+		$config = $this->config()->select_my_account();
+		$t_account = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_account';
 		$select['where']['id'] = $account_id;
 		$select['limit'] = 1;
 		$t_account = $this->mysql->select($select);
-		//$this->d($t_account);
-
+		*/
+		
+		$config = $this->config()->select_my_customer();
+		$t_customer = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_customer';
 		$select['where']['customer_id'] = $account_id;
 		$select['limit'] = 1;
 		$t_customer = $this->mysql->select($select);
+		*/
 		$customer_id = $t_customer['customer_id'];
 
+		$config = $this->config()->select_my_address();
+		$t_address = $this->pdo()->select($config);
+		/*
 		$select = array();
 		$select['table'] = 't_address';
 		$select['where']['customer_id'] = $customer_id;
 		$select['where']['seq_no'] = 1; //β版は、住所が一つのため
 		$select['limit'] = 1;
 		$t_address = $this->mysql->select($select);
+		*/
 		//$address_id = $t_address['address_id'];
 		//$this->d($t_address);
 

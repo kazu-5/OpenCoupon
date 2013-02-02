@@ -475,7 +475,6 @@ class CouponConfig extends ConfigMgr
 		$config->table = 't_buy';
 		$config->account_id = $id;
 		$config->settle_flag = 1;
-		//$config->table = 't_buy';
 		
 		return $config;
 	}
@@ -489,25 +488,48 @@ class CouponConfig extends ConfigMgr
 		
 		return $config;
 	}
-	/*
-	function select_coupon($coupon_id)
+	
+	function select_my_customer()
 	{
-		
+		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
-		$config->table = 't_coupon';
-		//$config->coupon_id = $coupon_id;
-		//$config->limit = 1;
+		$config->table = 't_customer';
+		$config->account_id = $id;
+		$config->limit = 1;
 		
 		return $config;
 		
-		//$select = array();
-		//$select['table'] = 't_coupon';
-		//$select['where']['coupon_id'] = $coupon_id;
-		//$select['limit'] = 1;
-		//$t_coupon = $this->mysql->select($select);
-		
+		/*
+		$select = array();
+		$select['table'] = 't_customer';
+		$select['where']['account_id'] = $account_id;
+		$select['limit'] = 1;
+		$t_customer = $this->mysql->select($select);
+		$customer_id = $t_customer['customer_id'];
+		*/
 	}
-	*/
+	
+	function select_my_account()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		$config = $this->select();
+		$config->table = 't_account';
+		$config->account_id = $id;
+		$config->limit = 1;
+		
+		return $config;
+	}
+	
+	function select_my_address()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		$config = $this->select();
+		$config->table = 't_address';
+		$config->account_id = $id;
+		$config->limit = 1;
+	
+		return $config;
+	}
 	
 	function insert_account()
 	{
