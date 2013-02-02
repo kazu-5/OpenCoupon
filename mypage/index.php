@@ -37,20 +37,24 @@ switch( $action ){
 		$select['where']['settle_flag'] = 1;
 		*/
 		
-		//$config = $this->mysql->select($select);
-		$config = $this->config()->select_my_buy($id);
-		$this->d($config);
+		$config = $this->config()->select_my_buy();
 		$t_buys = $this->pdo()->select($config);
-		$this->d($t_buys);
 		
 		$coupons = array();
 		foreach ($t_buys as $t_buy){
 			$coupon_id = $t_buy['coupon_id'];
+			
+			$config = $this->config()->select_one_coupon($coupon_id);
+			$t_coupon = $this->pdo()->select($config);
+			
+			/*
 			$select = array();
 			$select['table'] = 't_coupon';
 			$select['where']['coupon_id'] = $coupon_id;
 			$select['limit'] = 1;
 			$t_coupon = $this->mysql->select($select);
+			*/
+			
 			$t_coupon['coupon_expire'] = date('Y年m月d日', strtotime($t_coupon['coupon_expire']));
 			$t_coupon['num'] = $t_buy['num'];
 			array_push($coupons, $t_coupon);

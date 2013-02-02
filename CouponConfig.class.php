@@ -468,16 +468,46 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_my_buy($id)
+	function select_my_buy()
 	{
+		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
 		$config->table = 't_buy';
 		$config->account_id = $id;
 		$config->settle_flag = 1;
-		$config->table = 't_buy';
+		//$config->table = 't_buy';
 		
 		return $config;
 	}
+	
+	function select_one_coupon($coupon_id)
+	{
+		$config = $this->select();
+		$config->table = 't_coupon';
+		$config->coupon_id = $coupon_id;
+		$config->limit = 1;
+		
+		return $config;
+	}
+	/*
+	function select_coupon($coupon_id)
+	{
+		
+		$config = $this->select();
+		$config->table = 't_coupon';
+		//$config->coupon_id = $coupon_id;
+		//$config->limit = 1;
+		
+		return $config;
+		
+		//$select = array();
+		//$select['table'] = 't_coupon';
+		//$select['where']['coupon_id'] = $coupon_id;
+		//$select['limit'] = 1;
+		//$t_coupon = $this->mysql->select($select);
+		
+	}
+	*/
 	
 	function insert_account()
 	{
