@@ -44,7 +44,7 @@
 	}
 </style>
 
-<?=$this->form->Start('customer');?>
+<?=$this->form()->Start('form_customer');?>
 
 <div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
@@ -56,10 +56,10 @@
 				<th style="width:5px;">名前</th>
 				<td style="width:400px;">
 					<span>
-						姓：<?php $this->form->Input('last_name');?>
-						名：<?php $this->form->Input('first_name');?>
-						<p class="red"><?=$this->form->InputError('last_name')?></p>
-						<p class="red"><?=$this->form->InputError('first_name')?></p>
+						姓：<?php $this->form()->Input('last_name');?>
+						名：<?php $this->form()->Input('first_name');?>
+						<p class="red"><?php $this->form()->InputError('last_name')?></p>
+						<p class="red"><?php $this->form()->InputError('first_name')?></p>
 					</span>
 				</td>
 			</tr>
@@ -143,4 +143,4 @@
 </div>
 <p class="red"><?=$error?></p>
 
-<?php $this->form->Finish('customer'); ?>
+<?php $this->form()->Finish('form_customer'); ?>

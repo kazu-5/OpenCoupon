@@ -116,6 +116,7 @@ switch( $action ){
 		$customer_id = $t_customer['customer_id'];
 
 		$config = $this->config()->select_my_address();
+		$this->d( Toolbox::toArray($config) );
 		$t_address = $this->pdo()->select($config);
 		/*
 		$select = array();
@@ -138,7 +139,13 @@ switch( $action ){
 
 		$birthday = explode("-", $t_customer['birthday']);
 		$this->d($birthday);
-			
+		
+		$this->d( Toolbox::toArray($t_account) );
+		$config = $this->config()->form_customer($t_customer);
+		$this->d( Toolbox::toArray($config) );
+		$this->form()->AddForm($config);
+		
+		/*
 		$this->form->InitInputValue('last_name',   $t_customer['last_name']);
 		$this->form->InitInputValue('first_name',  $t_customer['first_name']);
 		$this->form->InitInputValue('postal_code', $t_address['postal_code']);
@@ -151,6 +158,7 @@ switch( $action ){
 		$this->form->InitInputValue('month',       $birthday[1]);
 		$this->form->InitInputValue('day',         $birthday[2]);
 		$this->form->InitInputValue('gender',      $t_customer['gender']);
+		*/
 		//		$this->d($_SESSION);
 
 		include('customer.phtml');

@@ -391,6 +391,44 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 
+	function form_customer($t_account){
+		$form_config = new Config;
+		
+		//  form name
+		$form_config->name   = 'form_customer';
+		$form_config->action = '';
+		
+		//  First name
+		$input_name = 'first_name';
+		$form_config->input->$input_name->type = 'text';
+		$form_config->input->$input_name->label = '名';
+		$form_config->input->$input_name->value = $t_account['first_name'];
+		$form_config->input->$input_name->required = true;
+		
+		//  Last name
+		$input_name = 'last_name';
+		$form_config->input->$input_name->label = '姓';
+		$form_config->input->$input_name->type = 'text';
+		$form_config->input->$input_name->value = $t_account['last_name'];
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		//$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = ' 決済 ';
+		
+		/*
+		$form_config->input->last_name->type = 'text';
+		$form_config->input->last_name->value = $record['last_name'];
+		
+		$form_config->input->first_name->type = 'text';
+		$form_config->input->first_name->value = $record['first_name'];
+		*/
+		return $form_config;
+	}
 	//===========================================//
 	
 	function credit( $id, $amount )
