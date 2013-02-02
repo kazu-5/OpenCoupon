@@ -30,13 +30,6 @@ if(!$id){
 //	Control
 switch( $action ){
 	case 'mycoupon':
-		/*
-		$select = array();
-		$select['table'] = 't_buy';
-		$select['where']['account_id'] = $id;
-		$select['where']['settle_flag'] = 1;
-		*/
-		
 		$config = $this->config()->select_my_buy();
 		$t_buys = $this->pdo()->select($config);
 		
@@ -46,14 +39,6 @@ switch( $action ){
 			
 			$config = $this->config()->select_one_coupon($coupon_id);
 			$t_coupon = $this->pdo()->select($config);
-			
-			/*
-			$select = array();
-			$select['table'] = 't_coupon';
-			$select['where']['coupon_id'] = $coupon_id;
-			$select['limit'] = 1;
-			$t_coupon = $this->mysql->select($select);
-			*/
 			
 			$t_coupon['coupon_expire'] = date('Y年m月d日', strtotime($t_coupon['coupon_expire']));
 			$t_coupon['num'] = $t_buy['num'];
