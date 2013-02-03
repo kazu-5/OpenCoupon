@@ -13,6 +13,16 @@ class CouponConfig extends ConfigMgr
 		parent::__call($name, $args);
 	}
 
+	function GenerateFormFromDatabase( $table, $record )
+	{
+		$config = new Config();
+		$config->table = $table;
+		$struct = $this->pdo()->GetTableStruct($config);
+		$config = parent::GenerateFormFromDatabase($struct,$record);
+		$config->input->submit->type = 'submit';
+		return $config;
+	}
+	
 	//===========================================//
 	
 	function form_test()
@@ -429,6 +439,19 @@ class CouponConfig extends ConfigMgr
 		*/
 		return $form_config;
 	}
+
+	function form_shop( $shop_id )
+	{
+		//  t_shop record
+		$record = $this->pdo()->quick("t_shop.shop_id = $shop_id");
+		//  t_shop struct
+		$config = $this->GenerateFormFromDatabase('t_shop',$record);
+		//  Added form name
+		$config->name = 'form_shop';
+	
+		return $config;
+	}
+	
 	//===========================================//
 	
 	function credit( $id, $amount )
@@ -693,6 +716,24 @@ class CouponConfig extends ConfigMgr
 		//  Set
 		$config->set->uid = $uid;
 		$config->where->account_id = $aid;
+		$config->limit = 1;
+		
+		return $config;
+	}
+	
+	function update_shop( $shop_id )
+	{
+		//  Init
+		$config = parent::update('t_shop');
+		
+		//  Get submitted form value
+		$value = $this->form()->GetInputValueRawAll('form_shop');
+		unset($value->submit);
+		unset($value->submit_button);
+		
+		//  Set
+		$config->set = $value;
+		$config->where->shop_id = $shop_id;
 		$config->limit = 1;
 		
 		return $config;

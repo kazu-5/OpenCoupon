@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 1 月 31 日 14:51
+-- 生成時間: 2013 年 2 月 02 日 16:16
 -- サーバのバージョン: 5.1.44
 -- PHP のバージョン: 5.3.1
 
@@ -158,10 +158,11 @@ CREATE TABLE IF NOT EXISTS `t_coupon` (
   `coupon_sales_price` int(11) NOT NULL COMMENT 'クーポンの販売価格',
   `coupon_sales_num_top` int(11) NOT NULL COMMENT '販売枚数の上限',
   `coupon_sales_num_bottom` int(11) NOT NULL COMMENT '販売間数の下限',
-  `coupon_sales_limit` datetime NOT NULL COMMENT 'クーポンの終了時間',
+  `coupon_sales_limit` datetime NOT NULL COMMENT 'クーポンの販売終了時間',
   `coupon_expire` datetime NOT NULL COMMENT 'クーポンの有効期限',
   `coupon_person_num` int(11) NOT NULL DEFAULT '9' COMMENT '一人が購入できる枚数',
-  `shop_id` int(11) NOT NULL COMMENT 'ショップID（現在はt_account.idと同一）',
+  `coupon_hidden` datetime DEFAULT NULL COMMENT 'クーポンを非表示にした日付',
+  `shop_id` int(11) NOT NULL COMMENT 't_customer.shop_id',
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
@@ -173,8 +174,8 @@ CREATE TABLE IF NOT EXISTS `t_coupon` (
 -- テーブルのデータをダンプしています `t_coupon`
 --
 
-INSERT INTO `t_coupon` (`coupon_id`, `coupon_title`, `coupon_description`, `coupon_normal_price`, `coupon_sales_price`, `coupon_sales_num_top`, `coupon_sales_num_bottom`, `coupon_sales_limit`, `coupon_expire`, `coupon_person_num`, `shop_id`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 'テスト', 'テスト用のクーポン', 1000, 500, 100, 50, '2013-01-31 21:56:44', '0000-00-00 00:00:00', 9, 1, NULL, NULL, NULL, '2013-01-12 21:57:07');
+INSERT INTO `t_coupon` (`coupon_id`, `coupon_title`, `coupon_description`, `coupon_normal_price`, `coupon_sales_price`, `coupon_sales_num_top`, `coupon_sales_num_bottom`, `coupon_sales_limit`, `coupon_expire`, `coupon_person_num`, `coupon_hidden`, `shop_id`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 'テスト', 'テスト用のクーポン', 1000, 500, 100, 50, '2013-02-28 21:56:44', '0000-00-00 00:00:00', 9, NULL, 1, NULL, NULL, NULL, '2013-02-02 00:02:04');
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,8 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
   `updated` datetime DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`account_id`)
+  PRIMARY KEY (`account_id`),
+  UNIQUE KEY `shop_id` (`shop_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -208,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
 --
 
 INSERT INTO `t_customer` (`account_id`, `shop_id`, `shop_flag`, `memo`, `nick_name`, `last_name`, `first_name`, `gender`, `pref`, `city`, `birthday`, `address_seq_no`, `uid`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, NULL, NULL, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;山田', 'M', '13', '', '1980-01-02', 1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '2013-01-29 04:18:11', '2013-01-31 13:25:19', NULL, '2013-01-31 22:25:19');
+(1, 1, 1, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;山田', 'M', '13', '', '1980-01-02', 1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '2013-01-29 04:18:11', '2013-01-31 13:25:19', NULL, '2013-02-01 13:45:26');
 
 -- --------------------------------------------------------
 
@@ -220,11 +222,16 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
   `shop_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ショップID',
   `shop_name` varchar(200) NOT NULL COMMENT '店名',
   `shop_description` text NOT NULL COMMENT 'お店の説明',
+  `shop_pref` varchar(100) NOT NULL,
+  `shop_city` varchar(100) NOT NULL,
   `shop_address` text NOT NULL,
-  `shop_telephone` text NOT NULL,
-  `shop_holiday` text NOT NULL,
-  `shop_opening_hour` text NOT NULL,
-  `shop_nearest_station` text NOT NULL,
+  `shop_building` varchar(100) NOT NULL,
+  `shop_tel` varchar(100) NOT NULL,
+  `shop_holiday` varchar(100) NOT NULL,
+  `shop_open` time NOT NULL,
+  `shop_close` time NOT NULL,
+  `shop_railway` varchar(100) NOT NULL,
+  `shop_station` varchar(100) NOT NULL,
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
   `deleted` datetime DEFAULT NULL,
@@ -236,8 +243,8 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
 -- テーブルのデータをダンプしています `t_shop`
 --
 
-INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_address`, `shop_telephone`, `shop_holiday`, `shop_opening_hour`, `shop_nearest_station`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 'テストショップ', 'テスト用のショップです。', '青山一丁目', '03-1234-5678', '日曜日', '９：００〜１９：００', '青山一丁目', NULL, NULL, NULL, '2013-01-19 16:46:16');
+INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_pref`, `shop_city`, `shop_address`, `shop_building`, `shop_tel`, `shop_holiday`, `shop_open`, `shop_close`, `shop_railway`, `shop_station`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 'ルノアール銀座', 'ルノアール銀座です。', '東京', '豊島区', '池袋１丁目', '豊島ビル', '03-1234-1234', '年中無休（年末年始を除く）', '07:00:00', '22:00:00', '山手線', 'ＪＲ池袋駅', NULL, NULL, NULL, '2013-02-03 00:43:15');
 
 -- --------------------------------------------------------
 

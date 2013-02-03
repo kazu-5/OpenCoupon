@@ -1,0 +1,125 @@
+<?php if( isset($message) ): ?>
+	<p class="blue" style="margin: 1em; font-size: 125%;"><?=$message?></p>
+<?php endif; ?>
+<div>
+	<?php $this->form()->Start('form_shop','confirm') ?>
+		<table>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_name') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_name') ?>
+					<?php $this->form()->Error('shop_name') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_description') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_description') ?>
+					<?php $this->form()->Error('shop_description') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_pref') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_pref') ?>
+					<?php $this->form()->Error('shop_pref') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_city') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_city') ?>
+					<?php $this->form()->Error('shop_city') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_address') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_address') ?>
+					<?php $this->form()->Error('shop_address') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_building') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_building') ?>
+					<?php $this->form()->Error('shop_building') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_tel') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_tel') ?>
+					<?php $this->form()->Error('shop_tel') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_holiday') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_holiday') ?>
+					<?php $this->form()->Error('shop_holiday') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_open') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_open') ?>
+					<?php $this->form()->Error('shop_open') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_close') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_close') ?>
+					<?php $this->form()->Error('shop_close') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_railway') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_railway') ?>
+					<?php $this->form()->Error('shop_railway') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php $this->form()->Label('shop_station') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('shop_station') ?>
+					<?php $this->form()->Error('shop_station') ?>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				
+				</td>
+				<td>
+					<?php $this->form()->Input('submit',' confirm ') ?>
+				</td>
+			</tr>
+		</table>
+	<?php $this->form()->Finish('form_shop') ?>
+</div>
