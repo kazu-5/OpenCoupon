@@ -21,28 +21,31 @@ switch( $action ){
 		break;
 		
 	case 'confirm':
-		if(!$this->form()->Secure('form_shop') ){
-			$this->template('form.phtml');
+		if(!$this->form()->Secure('form_coupon') ){
+			$args['message'] = '入力内容を確かめて下さい。';
+			$this->template('form.phtml',$args);
 		}else{
 			$this->template('confirm.phtml');
 		}
 		break;
 		
 	case 'commit':
-		if(!$this->form()->Secure('form_shop') ){
-			$this->template('form.phtml');
-		}else{
+		if( $this->form()->Secure('form_coupon') ){
 			
-			//  Do update
-			$update = $this->config()->update_shop($shop_id);
-			$result = $this->pdo()->update($update);
+			//  Do Insert
+			$config = $this->config()->insert_shop($shop_id);
+			$result = $this->pdo()->insert($config);
 			
 			//  View result
-			if( $result !== false ){
-				$this->template('form.phtml',array('message'=>'更新しました'));
+			if( $result === false ){
+				$args['message'] = '新規レコードの作成に失敗しました。';
 			}else{
-				$this->template('error-update.phtml');
+				$args['message'] = '新規クーポンを作成しました。';
 			}
+		}else{
+			$args = null;
 		}
+		
+		$this->template('form.phtml',$args);
 		break;
 }
