@@ -444,10 +444,43 @@ class CouponConfig extends ConfigMgr
 	{
 		//  t_shop record
 		$record = $this->pdo()->quick("t_shop.shop_id = $shop_id");
+		
 		//  t_shop struct
 		$config = $this->GenerateFormFromDatabase('t_shop',$record);
+		
 		//  Added form name
 		$config->name = 'form_shop';
+	
+		return $config;
+	}
+
+	function form_coupon( $shop_id, $coupon_id=null )
+	{
+		if(!$shop_id ){
+			$this->StackError('Empty shop_id.');
+			return false;
+		}
+		
+		if( $coupon_id ){
+			//  t_coupon record
+			$record = $this->pdo()->quick("t_coupon.shop_id = $shop_id");
+		}else{
+			$record = null;
+		}
+		
+		//  t_coupon struct
+		$config = $this->GenerateFormFromDatabase('t_coupon',$record);
+		
+		//  Init shop_id
+		$config->input->shop_id->value = $shop_id;
+		
+		//  Remove new coupon required value.
+		if( $coupon_id ){
+			unset($config->coupon_id);
+		}
+		
+		//  Added form name
+		$config->name = 'form_coupon' . $coupon_id;
 	
 		return $config;
 	}
@@ -705,6 +738,18 @@ class CouponConfig extends ConfigMgr
 		$config->set->num        = $num;
 		$config->set->sid        = $sid;
 		
+		return $config;
+	}
+	
+	function insert_coupon( $shop_id )
+	{
+		$value = $this->form()->GetInputValueRawAll('form_coupon');
+		unset($value->submit);
+		unset($value->submit_button);
+		
+		$config = parent::insert('t_coupon');
+		$config->set->shop_id = $shop_id;
+		$config->set = $value;
 		return $config;
 	}
 	
