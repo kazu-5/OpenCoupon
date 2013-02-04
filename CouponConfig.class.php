@@ -640,13 +640,6 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_buy()
-	{
-		$config = $this->select();
-		$config->table = 't_buy';
-		return $config;
-	}
-	
 	function select_shop()
 	{
 		$config = $this->select();
@@ -661,16 +654,47 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
+	 function select_buy( $id=null )
+	 {
+		if(!$id){
+		$id = $this->model('Login')->GetLoginID();
+		}
+		
+		$config = parent::select();
+		$config->table = 't_buy';
+		
+		if( $id ){
+		$config->where->account_id = $id;
+		}
+		
+		return $config;
+	}
+	
+	//  ↓これは本来不要ですが、ラッパーの作り方の勉強として残しました。
+	//   こうしておけば、仕様を変更しても互換性を維持できます。
+	//  （この規模のサイトだと不要ですが、大きいサイトだと影響の範囲が予想できないため）
+	function select_my_buy()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		if(!$id){
+			$this->StackError("Login ID is empty.");
+			return false;
+		}
+		return $this->select_buy($id);
+	}
+	
+	/*
 	function select_my_buy()
 	{
 		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
 		$config->table = 't_buy';
-		$config->account_id = $id;
+		$config->account_id = $id; // where が指定されていません
 		$config->settle_flag = 1;
 		
 		return $config;
 	}
+	*/
 	
 	function select_one_coupon($coupon_id)
 	{

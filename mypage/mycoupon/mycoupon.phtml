@@ -26,27 +26,22 @@
 		vertical-align: middle;
 	}
 </style>
-
-
 <div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
 		<h1 style="font-size: 20px;">マイクーポン</h1>
 	</div>
 	<div id="coupon_content" style="padding-top:8px;">
-		<?php
-			if(empty($coupons)){
-				echo 'クーポンがありません。';
-			}else{
-		?>
+		<?php if(empty($coupons)): ?> 
+				<p>クーポンがありません。</p>
+		<?php else: ?>
 		<table style="border-collapse: collapse; width:100%;">
 			<tr style="background-color: #DEEDCE;">
 				<th style="border: 1px solid #CCCCCC; width:60%;">クーポン内容</th>
 				<th>購入枚数</th>
 				<th>有効期限</th>
+				<th>購入日</th>
 			</tr>
-			<?php
-				foreach($coupons as $coupon):
-			?>
+			<?php foreach($coupons as $coupon): ?>
 				<tr>
 					<td>
 						<p style="font-weight: bold; font-size:13px;"><?php echo $coupon['coupon_title']; ?></p>
@@ -60,43 +55,12 @@
 					<td style="font-size:13px; text-align: center; vertical-align: middle;">
 						<?php echo $coupon['coupon_expire']; ?>
 					</td>
+					<td>
+						
+					</td>
 				</tr>
-			<?php
-				endforeach;
-			?>
+			<?php endforeach; ?>
 		</table>
-		<?php
-			}
-		?>
+		<?php endif; ?>
 	</div>
 </div>
-
-
-<?php
-/*
-
-<?php $this->mark(); ?>
-
-<h3>クーポン一覧</h3>
-
-<?php
-//	$this->d($t_coupons);
-?>
-<table>
-	<tr>
-		<th>タイトル</th>
-		<th>説明</th>
-		<th>価格</th>
-	</tr>
-<?php foreach($t_coupons as $t_coupon): ?>
-	<tr>
-		<td><?php echo $t_coupon['coupon_title']; ?></td>
-		<td><?php echo $t_coupon['coupon_description']; ?></td>
-		<td><?php echo $t_coupon['coupon_normal_price']; ?></td>
-	</tr>
-<?php endforeach; ?>
-</table>
-
-*/
-
-?>
