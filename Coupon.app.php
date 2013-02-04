@@ -181,9 +181,10 @@ class CouponApp extends App
 		}
 		
 		//  Init
-		$list['wait'] = null;
-		$list['on']   = null;
-		$list['off']  = null;
+		$list['wait']   = null;
+		$list['on']     = null;
+		$list['off']    = null;
+		$list['delete'] = null;
 		
 		//  Wait sale
 		$config = $this->config()->select_coupon();
@@ -205,6 +206,12 @@ class CouponApp extends App
 		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
 		$list['off']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
+		
+		//  Delete
+		$config = $this->config()->select_coupon();
+		$config->where->deleted = '! null';
+		$list['delete']  = $this->pdo()->select($config);
+		$this->mark( $this->pdo()->qu() );
 		
 		return $list;
 	}

@@ -839,6 +839,11 @@ class CouponConfig extends ConfigMgr
 	
 	function insert_coupon( $shop_id )
 	{
+		if(!$shop_id){
+			$this->StackError("shop_id is empty.");
+			return false;
+		}
+		
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
 		unset($value->submit);
 		unset($value->submit_button);
@@ -851,6 +856,16 @@ class CouponConfig extends ConfigMgr
 	
 	function update_uid( $aid, $uid )
 	{
+		if(!$aid){
+			$this->StackError("account_id is empty.");
+			return false;
+		}
+		
+		if(!$uid){
+			$this->StackError("uid is empty.");
+			return false;
+		}
+		
 		//  Init
 		$config = parent::update('t_customer');
 		
@@ -864,6 +879,16 @@ class CouponConfig extends ConfigMgr
 	
 	function update_shop( $shop_id, $form_name )
 	{
+		if(!$coupon_id){
+			$this->StackError("coupon_id is empty.");
+			return false;
+		}
+		
+		if(!$form_name){
+			$this->StackError("form_name is empty.");
+			return false;
+		}
+		
 		//  Init
 		$config = parent::update('t_shop');
 		
@@ -880,17 +905,43 @@ class CouponConfig extends ConfigMgr
 	
 	function update_coupon( $coupon_id, $form_name )
 	{
+		if(!$coupon_id){
+			$this->StackError("coupon_id is empty.");
+			return false;
+		}
+
+		if(!$form_name){
+			$this->StackError("form_name is empty.");
+			return false;
+		}
+				
 		$config = parent::update('t_coupon');
 		
 		//  Get submitted form value
 		$value = $this->form()->GetInputValueRawAll($form_name);
 		unset($value->coupon_id);
 		
-		//  Set
+		//  Setting
 		$config->set = $value;
 		$config->where->coupon_id = $coupon_id;
 		$config->limit = 1;
 		$config->update = true;
+		
+		return $config;
+	}
+	
+	function delete_coupon( $coupon_id )
+	{
+		if(!$coupon_id){
+			$this->StackError("coupon_id is empty.");
+			return false;
+		}
+		
+		$config = parent::delete('t_coupon');
+
+		//  Setting
+		$config->where->coupon_id = $coupon_id;
+		$config->limit = 1;
 		
 		return $config;
 	}

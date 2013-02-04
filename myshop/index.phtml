@@ -56,6 +56,17 @@
 		}
 		?>
 		</ol>
+		
+		<h3>削除済み</h3>
+		<ol style="margin-bottom:1em;">
+		<?php
+		if( $t_list['delete'] ){
+			foreach( $t_list['delete'] as $t_coupon ){
+				$this->template( 'list-coupon.phtml', $t_coupon);
+			}
+		}
+		?>
+		</ol>
 	</div>
 </div>
 </section>
