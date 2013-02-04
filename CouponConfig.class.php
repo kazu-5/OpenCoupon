@@ -682,15 +682,20 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_my_customer()
+	function select_customer( $id )
 	{
-		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
 		$config->table = 't_customer';
 		$config->account_id = $id;
 		$config->limit = 1;
 		
 		return $config;
+	}
+	
+	function select_my_customer()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		return $this->select_customer($id);
 	}
 	
 	function select_my_account()

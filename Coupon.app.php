@@ -71,30 +71,6 @@ class CouponApp extends App
 		
 		//  Get URL Argument
 		$args = $this->GetArgs();
-		//$this->d($args);
-
-		//  Get Shop ID
-		if(!$shop_id = $this->GetSession('shop_id') ){
-			$id = $this->model('Login')->GetLoginID();
-			$qu = "shop_id <- t_customer.account_id = $id";
-			if( $shop_id = $this->pdo()->quick( $qu ) ){
-				$this->SetSession('shop_id',$shop_id);
-			}else{
-				return 'error-shop-id';
-			}
-		}
-		
-		//  Get Shop flag
-		if(!$shop_flag = $this->GetSession('shop_flag')){
-			$shop_flag = $this->pdo()->quick("shop_flag <- t_customer.shop_id = $shop_id");
-		}
-		
-		//  Check shop flag
-		if( $shop_flag ){
-			$this->SetSession("shop_flag",$shop_flag);
-		}else{
-			return 'error-shop-flag';
-		}
 		
 		//  Standard
 		$action = $args[0];
@@ -102,7 +78,6 @@ class CouponApp extends App
 			case '':
 				$action = 'index';
 		}
-		
 		
 		return $action;
 	}
@@ -112,10 +87,8 @@ class CouponApp extends App
 	 */
 	function GetShopID($id=null)
 	{
-		if( $id ){
-			$shop_id = $this->pdo()->quick(" shop_id <- t_customer.account_id = $id ");
-		}else{
-			$shop_id = $this->GetSession('shop_id');
+		if(!$shop_id = $this->GetSession('myshop_id') ){
+			$this->Location('app:/myshop/error/GetShopID');
 		}
 		return $shop_id;
 	}
@@ -207,15 +180,29 @@ class CouponApp extends App
 			return false;
 		}
 		
+		//  Init
+		$list['wait'] = null;
+		$list['on']   = null;
+		$list['off']  = null;
+		
+		//  Wait sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_start  = '> '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s');
+		$list['wait']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
 		//  On sale
 		$config = $this->config()->select_coupon();
-		$config->where->coupon_sales_limit = '>  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_start  = '<  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '>  '.date('Y-m-d H:i:s');
 		$list['on']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  End of sale
 		$config = $this->config()->select_coupon();
-		$config->where->coupon_sales_limit = '<=  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
 		$list['off']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
