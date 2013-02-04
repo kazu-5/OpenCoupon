@@ -24,6 +24,17 @@
 			<li><a href="<?=$this->ConvertURL('ctrl:/coupon/new')?>">新しいクーポンを作成</a></li>
 		</ol>
 		
+		<h3>販売待機中</h3>
+		<ol style="margin-bottom:1em;">
+		<?php
+		if( $t_list['wait'] ){
+			foreach( $t_list['wait'] as $t_coupon ){
+				$this->template( 'list-coupon.phtml', $t_coupon);
+			}
+		}
+		?>
+		</ol>
+		
 		<h3>販売中</h3>
 		<ol style="margin-bottom:1em;">
 		<?php
