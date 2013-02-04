@@ -23,22 +23,6 @@ class CouponApp extends App
 	/***		ACTION		***/
 	
 	function GetAction(){
-		/*
-		$route = $this->GetEnv('route');
-		//$this->d($route);
-		$temp = explode('/', $route['path']);
-		$current_dir = $temp[count($temp)-1];
-		$parent_dir  = isset($temp[count($temp)-2]) ? $temp[count($temp)-2]: null;
-		
-		switch( $current_dir ){
-			case 'myshop':
-				$action = $this->_get_action_myshop();
-				break;
-				
-			default:
-				$action = $this->_get_action_default();
-		}
-		*/
 		$args = $this->GetArgs();
 		$action = isset($args[0]) ? $args[0]: 'index';
 		return $action;
@@ -211,7 +195,7 @@ class CouponApp extends App
 		$config = $this->config()->select_coupon();
 		$config->where->deleted = '! null';
 		$list['delete']  = $this->pdo()->select($config);
-		$this->mark( $this->pdo()->qu() );
+	//	$this->mark( $this->pdo()->qu() );
 		
 		return $list;
 	}

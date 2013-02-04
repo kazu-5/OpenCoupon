@@ -879,11 +879,6 @@ class CouponConfig extends ConfigMgr
 	
 	function update_shop( $shop_id, $form_name )
 	{
-		if(!$coupon_id){
-			$this->StackError("coupon_id is empty.");
-			return false;
-		}
-		
 		if(!$form_name){
 			$this->StackError("form_name is empty.");
 			return false;
