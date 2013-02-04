@@ -5,57 +5,59 @@
 <?php
 /* @var $this CouponApp */
 
-//  Action
-$action = $this->GetAction();
-$this->mark($action,'controller');
-
 //  URL Arguments
 $args = $this->GetArgs();
+$coupon_id = $args[0];
+$action    = isset($args[1]) ? $args[1]: 'index';
 
 //  My shop ID.
 $shop_id = $this->GetShopID();
 
-//  Edit coupon id
-$coupon_id = $args[0];
-$this->mark("coupon_id=$coupon_id",'controller');
-
 //  Form
-$config = $this->config()->form_shop($shop_id,$coupon_id);
+$config = $this->config()->form_coupon($shop_id,$coupon_id);
 $this->form()->AddForm( $config );
 
+//  Get form_name
+$form_name = $config->name;
+$data['coupon_id'] = $coupon_id;
+$data['form_name'] = $form_name;
+
+//  Do action
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('form.phtml', $data);
 		break;
 		
 	case 'confirm':
-		if(!$this->form()->Secure('form_coupon') ){
-			$args['message'] = '入力内容を確かめて下さい。';
-			$this->template('form.phtml',$args);
+		if(!$this->form()->Secure($form_name) ){
+			$args['message']   = '入力内容を確かめて下さい。';
+			$this->template('form.phtml',$data);
 		}else{
-			$this->template('confirm.phtml');
+			$this->template('confirm.phtml',$data);
 		}
 		break;
-		
+
 	case 'commit':
-		if( $this->form()->Secure('form_coupon') ){
+		if( $this->form()->Secure($form_name) ){
 				
-			//  Do Insert
-			$config = $this->config()->insert_shop($shop_id);
-			$result = $this->pdo()->insert($config);
+			//  Do Update
+			$config = $this->config()->update_coupon( $coupon_id, $form_name );
+			$result = $this->pdo()->update($config);
 				
 			//  View result
 			if( $result === false ){
-				$args['message'] = '新規レコードの作成に失敗しました。';
+				$args['message'] = 'Couponレコードの更新に失敗しました。';
 			}else{
-				$args['message'] = '新規クーポンを作成しました。';
+				$args['message'] = '更新にしました。';
 			}
-		}else{
-			$args = null;
 		}
-
-		$this->template('form.phtml',$args);
+		
+		$this->template('form.phtml',$data);
 		break;
+
 	default:
 		$this->mark("undefined action=$action");
 }
+
+//  debug
+//$this->form()->debug($form_name);

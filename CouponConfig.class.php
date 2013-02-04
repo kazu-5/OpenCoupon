@@ -580,7 +580,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  Added form name
 		$config->name = 'form_coupon' . $coupon_id;
-	
+		
 		return $config;
 	}
 	
@@ -862,20 +862,35 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_shop( $shop_id )
+	function update_shop( $shop_id, $form_name )
 	{
 		//  Init
 		$config = parent::update('t_shop');
 		
 		//  Get submitted form value
-		$value = $this->form()->GetInputValueRawAll('form_shop');
-		unset($value->submit);
-		unset($value->submit_button);
+		$value = $this->form()->GetInputValueRawAll($form_name);
 		
 		//  Set
 		$config->set = $value;
 		$config->where->shop_id = $shop_id;
 		$config->limit = 1;
+		
+		return $config;
+	}
+	
+	function update_coupon( $coupon_id, $form_name )
+	{
+		$config = parent::update('t_coupon');
+		
+		//  Get submitted form value
+		$value = $this->form()->GetInputValueRawAll($form_name);
+		unset($value->coupon_id);
+		
+		//  Set
+		$config->set = $value;
+		$config->where->coupon_id = $coupon_id;
+		$config->limit = 1;
+		$config->update = true;
 		
 		return $config;
 	}
