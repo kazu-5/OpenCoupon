@@ -562,7 +562,7 @@ class CouponConfig extends ConfigMgr
 		
 		if( $coupon_id ){
 			//  t_coupon record
-			$record = $this->pdo()->quick("t_coupon.shop_id = $shop_id");
+			$record = $this->pdo()->quick("t_coupon.coupon_id = $coupon_id");
 		}else{
 			$record = null;
 		}
