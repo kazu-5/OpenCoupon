@@ -23,22 +23,6 @@ class CouponApp extends App
 	/***		ACTION		***/
 	
 	function GetAction(){
-		/*
-		$route = $this->GetEnv('route');
-		//$this->d($route);
-		$temp = explode('/', $route['path']);
-		$current_dir = $temp[count($temp)-1];
-		$parent_dir  = isset($temp[count($temp)-2]) ? $temp[count($temp)-2]: null;
-		
-		switch( $current_dir ){
-			case 'myshop':
-				$action = $this->_get_action_myshop();
-				break;
-				
-			default:
-				$action = $this->_get_action_default();
-		}
-		*/
 		$args = $this->GetArgs();
 		$action = isset($args[0]) ? $args[0]: 'index';
 		return $action;
@@ -71,30 +55,6 @@ class CouponApp extends App
 		
 		//  Get URL Argument
 		$args = $this->GetArgs();
-		//$this->d($args);
-
-		//  Get Shop ID
-		if(!$shop_id = $this->GetSession('shop_id') ){
-			$id = $this->model('Login')->GetLoginID();
-			$qu = "shop_id <- t_customer.account_id = $id";
-			if( $shop_id = $this->pdo()->quick( $qu ) ){
-				$this->SetSession('shop_id',$shop_id);
-			}else{
-				return 'error-shop-id';
-			}
-		}
-		
-		//  Get Shop flag
-		if(!$shop_flag = $this->GetSession('shop_flag')){
-			$shop_flag = $this->pdo()->quick("shop_flag <- t_customer.shop_id = $shop_id");
-		}
-		
-		//  Check shop flag
-		if( $shop_flag ){
-			$this->SetSession("shop_flag",$shop_flag);
-		}else{
-			return 'error-shop-flag';
-		}
 		
 		//  Standard
 		$action = $args[0];
@@ -102,7 +62,6 @@ class CouponApp extends App
 			case '':
 				$action = 'index';
 		}
-		
 		
 		return $action;
 	}
@@ -112,10 +71,8 @@ class CouponApp extends App
 	 */
 	function GetShopID($id=null)
 	{
-		if( $id ){
-			$shop_id = $this->pdo()->quick(" shop_id <- t_customer.account_id = $id ");
-		}else{
-			$shop_id = $this->GetSession('shop_id');
+		if(!$shop_id = $this->GetSession('myshop_id') ){
+			$this->Location('app:/myshop/error/GetShopID');
 		}
 		return $shop_id;
 	}
@@ -179,7 +136,7 @@ class CouponApp extends App
 		$t_coupon['coupon_discount_rate'] = 100 - (($t_coupon['coupon_sales_price'] / $t_coupon['coupon_normal_price']) * 100);
 
 		//	残り時間を計算
-		$rest_time = strtotime($t_coupon['coupon_sales_limit']) - time();
+		$rest_time = strtotime($t_coupon['coupon_sales_finish']) - time();
 
 		//	レコードに残り時間を追加
 		$t_coupon['rest_time_day']    = floor($rest_time / (86400));
@@ -207,16 +164,37 @@ class CouponApp extends App
 			return false;
 		}
 		
+		//  Init
+		$list['wait']   = null;
+		$list['on']     = null;
+		$list['off']    = null;
+		$list['delete'] = null;
+		
+		//  Wait sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_start  = '> '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s');
+		$list['wait']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
 		//  On sale
 		$config = $this->config()->select_coupon();
-		$config->where->coupon_sales_limit = '>  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_start  = '<  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '>  '.date('Y-m-d H:i:s');
 		$list['on']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  End of sale
 		$config = $this->config()->select_coupon();
-		$config->where->coupon_sales_limit = '<=  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
 		$list['off']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		//  Delete
+		$config = $this->config()->select_coupon();
+		$config->where->deleted = '! null';
+		$list['delete']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		return $list;
@@ -237,11 +215,11 @@ class CouponApp extends App
 		
 		//  SELECTの定義を作成
 		$config = new Config();
-		$config->table = 't_buy';
+		$config->table    = 't_buy';
 		$config->where->coupon_id = $coupon_id;
 		$config->agg->sum = 'coupon_id';
-		$config->group = 'coupon_id';
-		$config->limit = 1;
+		$config->group    = 'coupon_id';
+		$config->limit    = 1;
 		
 		//  Selectの実行
 		$t_buy = $this->pdo()->select($config);
@@ -249,6 +227,7 @@ class CouponApp extends App
 		if(!count($t_buy)){
 			return 0;
 		}
+		
 		
 		return $t_buy['SUM(coupon_id)'];
 	}

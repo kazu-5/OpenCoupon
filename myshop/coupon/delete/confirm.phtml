@@ -1,4 +1,4 @@
-<?php $this->form()->Start('form_coupon','commit') ?>
+<?php $this->form()->Start($form_name, $this->ConvertURL("ctrl:/$coupon_id/commit")) ?>
 <table>
 	<tr>
 		<td>
@@ -93,8 +93,8 @@
 		
 		</td>
 		<td>
-			<?php $this->form()->Input('submit',' Create ') ?>
+			<?php $this->form()->Input('submit',' Delete ') ?>
 		</td>
 	</tr>
 </table>
-<?php $this->form()->Finish('form_coupon') ?>
+<?php $this->form()->Finish($form_name) ?>
