@@ -1,8 +1,3 @@
-<?php
-//$this->mark();
-//$this->d($t_coupon);
-?>
-
 <style>
 
 #coupon_buy_area{
@@ -76,8 +71,9 @@
 			<span style="font-size:40px;"><?=number_format($t_coupon['coupon_sales_price'])?></span><span style="font-size:25px;">円</span>
 		</div>
 		<div>
-			<?php if( strtotime($t_coupon['coupon_sales_limit']) > time() ): ?>
-				<a href="/buy/<?=$t_coupon['coupon_id']?>"><img src="/img/buy_button.png"></a>
+			<?php if( strtotime($t_coupon['coupon_sales_finish']) > time() ): ?>
+				<?php $href = $this->ConvertURL("app:/buy/{$t_coupon['coupon_id']}"); ?>
+				<a href="<?=$href?>"><img src="/img/buy_button.png"></a>
 			<?php else: ?>
 				（販売終了ボタンの表示）
 			<?php endif; ?>
@@ -98,7 +94,7 @@
 		</table>
 	</div>
 	<div>
-		<?php if( strtotime($t_coupon['coupon_sales_limit']) > time() ): ?>
+		<?php if( strtotime($t_coupon['coupon_sales_finish']) > time() ): ?>
 			<div id="coupon_buy_area_countdown" style="">
 			<?php if($t_coupon['rest_time_day']): ?>
 			<span id="rest_time_day" class="count_big"><?=$t_coupon['rest_time_day']?></span>
@@ -117,7 +113,7 @@
 		<?php endif; ?>
 		
 		<!--
-		<p>終了時刻：<?=date('Y年m月d日 H時i分',strtotime($t_coupon['coupon_sales_limit']))?></p>
+		<p>終了時刻：<?=date('Y年m月d日 H時i分',strtotime($t_coupon['coupon_sales_finish']))?></p>
 		<p>上限：<?=$t_coupon['coupon_sales_num_top']?>枚</p>
 		<p>下限：<?=$t_coupon['coupon_sales_num_bottom']?>枚</p>
 		-->
@@ -157,7 +153,7 @@ function printf2d(i){
 $(document).ready(function(){
 	
 	var current_time = <?=time()?>;
-	var time_limit = <?=strtotime($t_coupon['coupon_sales_limit'])?>;
+	var time_limit = <?=strtotime($t_coupon['coupon_sales_finish'])?>;
 	
 	//	定期実行（１秒毎）
 	var timer_id = setInterval(function(){

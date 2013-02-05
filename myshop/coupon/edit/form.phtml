@@ -1,7 +1,7 @@
 <?php if( isset($message) ): ?>
 	<p class="blue" style="margin: 1em; font-size: 125%;"><?=$message?></p>
 <?php endif; ?>
-<?php $this->form()->Start('form_coupon','confirm') ?>
+<?php $this->form()->Start($form_name, $this->ConvertURL("ctrl:/$coupon_id/confirm")) ?>
 <table>
 	<tr>
 		<td>
@@ -111,4 +111,4 @@
 		</td>
 	</tr>
 </table>
-<?php $this->form()->Finish('form_coupon') ?>
+<?php $this->form()->Finish($form_name) ?>
