@@ -558,11 +558,44 @@ class CouponConfig extends ConfigMgr
 	{
 		//  t_shop record
 		$record = $this->pdo()->quick("t_shop.shop_id = $shop_id");
+		
 		//  t_shop struct
 		$config = $this->GenerateFormFromDatabase('t_shop',$record);
+		
 		//  Added form name
 		$config->name = 'form_shop';
 	
+		return $config;
+	}
+
+	function form_coupon( $shop_id, $coupon_id=null )
+	{
+		if(!$shop_id ){
+			$this->StackError('Empty shop_id.');
+			return false;
+		}
+		
+		if( $coupon_id ){
+			//  t_coupon record
+			$record = $this->pdo()->quick("t_coupon.coupon_id = $coupon_id");
+		}else{
+			$record = null;
+		}
+		
+		//  t_coupon struct
+		$config = $this->GenerateFormFromDatabase('t_coupon',$record);
+		
+		//  Init shop_id
+		$config->input->shop_id->value = $shop_id;
+		
+		//  Remove new coupon required value.
+		if( $coupon_id ){
+			unset($config->coupon_id);
+		}
+		
+		//  Added form name
+		$config->name = 'form_coupon' . $coupon_id;
+		
 		return $config;
 	}
 	
@@ -622,13 +655,6 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_buy()
-	{
-		$config = $this->select();
-		$config->table = 't_buy';
-		return $config;
-	}
-	
 	function select_shop()
 	{
 		$config = $this->select();
@@ -642,17 +668,48 @@ class CouponConfig extends ConfigMgr
 		$config->table = 't_account';
 		return $config;
 	}
+
+	function select_buy( $id=null )
+	{
+		if(!$id){
+			$id = $this->model('Login')->GetLoginID();
+		}
+		
+		$config = parent::select();
+		$config->table = 't_buy';
+		
+		if( $id ){
+			$config->where->account_id = $id;
+		}
+		
+		return $config;
+	}
+
+	//  ↓これは本来不要ですが、ラッパーの作り方の勉強として残しました。
+	//   こうしておけば、仕様を変更しても互換性を維持できます。
+	//  （この規模のサイトだと不要ですが、大きいサイトだと影響の範囲が予想できないため）
+	function select_my_buy()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		if(!$id){
+			$this->StackError("Login ID is empty.");
+			return false;
+		}
+		return $this->select_buy($id);
+	}
 	
+	/*
 	function select_my_buy()
 	{
 		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
 		$config->table = 't_buy';
-		$config->account_id = $id;
+		$config->account_id = $id; // where が指定されていません
 		$config->settle_flag = 1;
 		
 		return $config;
 	}
+	*/
 	
 	function select_one_coupon($coupon_id)
 	{
@@ -664,15 +721,20 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_my_customer()
+	function select_customer( $id )
 	{
-		$id = $this->model('Login')->GetLoginID();
 		$config = $this->select();
 		$config->table = 't_customer';
 		$config->account_id = $id;
 		$config->limit = 1;
 		
 		return $config;
+	}
+	
+	function select_my_customer()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		return $this->select_customer($id);
 	}
 	
 	function select_my_account()
@@ -814,8 +876,35 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
+	function insert_coupon( $shop_id )
+	{
+		if(!$shop_id){
+			$this->StackError("shop_id is empty.");
+			return false;
+		}
+		
+		$value = $this->form()->GetInputValueRawAll('form_coupon');
+		unset($value->submit);
+		unset($value->submit_button);
+		
+		$config = parent::insert('t_coupon');
+		$config->set->shop_id = $shop_id;
+		$config->set = $value;
+		return $config;
+	}
+	
 	function update_uid( $aid, $uid )
 	{
+		if(!$aid){
+			$this->StackError("account_id is empty.");
+			return false;
+		}
+		
+		if(!$uid){
+			$this->StackError("uid is empty.");
+			return false;
+		}
+		
 		//  Init
 		$config = parent::update('t_customer');
 		
@@ -827,19 +916,65 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_shop( $shop_id )
+	function update_shop( $shop_id, $form_name )
 	{
+		if(!$form_name){
+			$this->StackError("form_name is empty.");
+			return false;
+		}
+		
 		//  Init
 		$config = parent::update('t_shop');
 		
 		//  Get submitted form value
-		$value = $this->form()->GetInputValueRawAll('form_shop');
-		unset($value->submit);
-		unset($value->submit_button);
+		$value = $this->form()->GetInputValueRawAll($form_name);
 		
 		//  Set
 		$config->set = $value;
 		$config->where->shop_id = $shop_id;
+		$config->limit = 1;
+		
+		return $config;
+	}
+	
+	function update_coupon( $coupon_id, $form_name )
+	{
+		if(!$coupon_id){
+			$this->StackError("coupon_id is empty.");
+			return false;
+		}
+
+		if(!$form_name){
+			$this->StackError("form_name is empty.");
+			return false;
+		}
+				
+		$config = parent::update('t_coupon');
+		
+		//  Get submitted form value
+		$value = $this->form()->GetInputValueRawAll($form_name);
+		unset($value->coupon_id);
+		
+		//  Setting
+		$config->set = $value;
+		$config->where->coupon_id = $coupon_id;
+		$config->limit = 1;
+		$config->update = true;
+		
+		return $config;
+	}
+	
+	function delete_coupon( $coupon_id )
+	{
+		if(!$coupon_id){
+			$this->StackError("coupon_id is empty.");
+			return false;
+		}
+		
+		$config = parent::delete('t_coupon');
+
+		//  Setting
+		$config->where->coupon_id = $coupon_id;
 		$config->limit = 1;
 		
 		return $config;

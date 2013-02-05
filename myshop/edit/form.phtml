@@ -2,7 +2,7 @@
 	<p class="blue" style="margin: 1em; font-size: 125%;"><?=$message?></p>
 <?php endif; ?>
 <div>
-	<?php $this->form()->Start('form_shop','confirm') ?>
+	<?php $this->form()->Start($form_name,'confirm') ?>
 		<table>
 			<tr>
 				<td>
@@ -121,5 +121,5 @@
 				</td>
 			</tr>
 		</table>
-	<?php $this->form()->Finish('form_shop') ?>
+	<?php $this->form()->Finish($form_name) ?>
 </div>

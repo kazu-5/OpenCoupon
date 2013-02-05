@@ -4,45 +4,55 @@
 <?php
 /* @var $this CouponApp */
 
+//  Action
+$action = $this->GetAction();
+$this->mark("action: $action",'controller');
+
 //  My shop ID.
 $shop_id = $this->GetShopID();
+$this->mark("shop_id: $shop_id",'controller');
+
+//  data to form
+$data = null;
 
 //  Form
 $config = $this->config()->form_shop($shop_id);
 $this->form()->AddForm( $config );
 
-//  Action
-$action = $this->GetAction();
-$this->mark($action,'controller');
+//  form name
+$form_name = $config->name;
+$data['form_name'] = $form_name;
+$this->mark("form_name: $form_name",'controller');
 
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('form.phtml',$data);
 		break;
 		
 	case 'confirm':
-		if(!$this->form()->Secure('form_shop') ){
-			$this->template('form.phtml');
+		if(!$this->form()->Secure($form_name) ){
+			$args['message'] = '入力内容を確かめて下さい。';
+			$this->template('form.phtml',$data);
 		}else{
-			$this->template('confirm.phtml');
+			$this->template('confirm.phtml',$data);
 		}
 		break;
 		
 	case 'commit':
-		if(!$this->form()->Secure('form_shop') ){
-			$this->template('form.phtml');
-		}else{
+		if( $this->form()->Secure($form_name) ){
 			
-			//  Do update
-			$update = $this->config()->update_shop($shop_id);
-			$result = $this->pdo()->update($update);
+			//  Do Update
+			$config = $this->config()->update_shop( $shop_id, $form_name );
+			$result = $this->pdo()->update($config);
 			
 			//  View result
-			if( $result !== false ){
-				$this->template('form.phtml',array('message'=>'更新しました'));
+			if( $result === false ){
+				$data['message'] = 'お店情報の更新に失敗しました。';
 			}else{
-				$this->template('error-update.phtml');
+				$data['message'] = 'お店情報を更新しました。';
 			}
 		}
+		
+		$this->template('form.phtml',$data);
 		break;
 }

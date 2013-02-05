@@ -1,7 +1,9 @@
 <?php 
+/* @var $this CouponApp */
 $config = $this->config()->select_my_buy();
 $t_buys = $this->pdo()->select($config);
-		
+//$this->d($t_buys);
+
 $coupons = array();
 foreach ($t_buys as $t_buy){
 	$coupon_id = $t_buy['coupon_id'];
