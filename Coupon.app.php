@@ -136,7 +136,7 @@ class CouponApp extends App
 		$t_coupon['coupon_discount_rate'] = 100 - (($t_coupon['coupon_sales_price'] / $t_coupon['coupon_normal_price']) * 100);
 
 		//	残り時間を計算
-		$rest_time = strtotime($t_coupon['coupon_sales_limit']) - time();
+		$rest_time = strtotime($t_coupon['coupon_sales_finish']) - time();
 
 		//	レコードに残り時間を追加
 		$t_coupon['rest_time_day']    = floor($rest_time / (86400));
@@ -215,11 +215,11 @@ class CouponApp extends App
 		
 		//  SELECTの定義を作成
 		$config = new Config();
-		$config->table = 't_buy';
+		$config->table    = 't_buy';
 		$config->where->coupon_id = $coupon_id;
 		$config->agg->sum = 'coupon_id';
-		$config->group = 'coupon_id';
-		$config->limit = 1;
+		$config->group    = 'coupon_id';
+		$config->limit    = 1;
 		
 		//  Selectの実行
 		$t_buy = $this->pdo()->select($config);
@@ -227,6 +227,7 @@ class CouponApp extends App
 		if(!count($t_buy)){
 			return 0;
 		}
+		
 		
 		return $t_buy['SUM(coupon_id)'];
 	}

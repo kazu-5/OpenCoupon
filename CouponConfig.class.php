@@ -653,23 +653,23 @@ class CouponConfig extends ConfigMgr
 		$config->table = 't_account';
 		return $config;
 	}
-	
-	 function select_buy( $id=null )
-	 {
+
+	function select_buy( $id=null )
+	{
 		if(!$id){
-		$id = $this->model('Login')->GetLoginID();
+			$id = $this->model('Login')->GetLoginID();
 		}
 		
 		$config = parent::select();
 		$config->table = 't_buy';
 		
 		if( $id ){
-		$config->where->account_id = $id;
+			$config->where->account_id = $id;
 		}
 		
 		return $config;
 	}
-	
+
 	//  ↓これは本来不要ですが、ラッパーの作り方の勉強として残しました。
 	//   こうしておけば、仕様を変更しても互換性を維持できます。
 	//  （この規模のサイトだと不要ですが、大きいサイトだと影響の範囲が予想できないため）
