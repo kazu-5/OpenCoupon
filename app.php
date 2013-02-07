@@ -1,5 +1,7 @@
 <?php
 
+$st = microtime(true);
+
 include('App.class.php');
 
 include('Coupon.app.php');
@@ -40,3 +42,7 @@ if(!$io){
 
 //  Do dispatch
 $app->Dispatch();
+
+$en = microtime(true);
+
+printf('<div>Execute time is %s seconds.</div>', $en - $st );
