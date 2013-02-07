@@ -401,7 +401,9 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 
-	function form_customer($t_account){
+	function form_customer($t_customer, $t_address){
+		$this->d($t_customer);
+		$this->d($t_address);
 		$form_config = new Config;
 		
 		$pref = $this->model('JapanesePref')->GetName($pref);
@@ -417,20 +419,21 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'first_name';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = '名';
-		$form_config->input->$input_name->value = $t_account['first_name'];
+		$form_config->input->$input_name->value = $t_customer['first_name'];
 		$form_config->input->$input_name->required = true;
 		
 		//  Last name
 		$input_name = 'last_name';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = '姓';
-		$form_config->input->$input_name->value = $t_account['last_name'];
+		$form_config->input->$input_name->value = $t_customer['last_name'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  postcode
 		$input_name = 'postcode';
 		$form_config->input->$input_name->label = '郵便番号';
+		$form_config->input->$input_name->value = $t_address['postcode'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -438,6 +441,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'pref';
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->label = '都道府県';
+		$form_config->input->$input_name->value = $t_address['pref'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
@@ -446,6 +450,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'city';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = '市区町村';
+		$form_config->input->$input_name->value = $t_address['city'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -453,6 +458,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'address';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = '丁目番地';
+		$form_config->input->$input_name->value = $t_address['address'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -460,6 +466,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'building';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = '建物名';
+		$form_config->input->$input_name->value = $t_address['building'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -473,14 +480,18 @@ class CouponConfig extends ConfigMgr
 		//  birthday
 		$input_name = 'birthday';
 		$form_config->input->$input_name->label  = '生年月日';
+		//$form_config->input->$input_name->value = $t_customer['birthday'];
 		$form_config->input->$input_name->joint  = '-';
 		$form_config->input->$input_name->cookie = true;
 		$form_config->input->$input_name->validate->permit = 'date';
+		$birthday = explode('-', $t_customer['birthday']);
 		
 		$i = 'year';
 		$form_config->input->$input_name->options->$i->type  = 'select';
 		$form_config->input->$input_name->options->$i->tail  = '-';
 		$form_config->input->$input_name->options->$i->value = '1980';
+		$form_config->input->$input_name->options->$i->value = '1984';
+		$form_config->input->$input_name->options->$i->value = $birthday[0];
 		
 		for( $n=1; $n<=80; $n++){
 			$v = date('Y') - $n;
@@ -491,6 +502,8 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->options->$i->type  = 'select';
 		$form_config->input->$input_name->options->$i->tail  = '-';
 		$form_config->input->$input_name->options->$i->validate->required  = true;
+		$form_config->input->$input_name->options->$i->value = '10';
+		$form_config->input->$input_name->options->$i->value = $birthday[1];
 			
 		for( $n=0; $n<=12; $n++){
 			$form_config->input->$input_name->options->$i->options->$n->value = $n ? $n: '';
@@ -499,6 +512,7 @@ class CouponConfig extends ConfigMgr
 		$i = 'day';
 		$form_config->input->$input_name->options->$i->type  = 'select';
 		$form_config->input->$input_name->options->$i->validate->required  = true;
+		$form_config->input->$input_name->options->$i->value = $birthday[2];
 		for( $n=0; $n<=31; $n++){
 			$form_config->input->$input_name->options->$i->options->$n->value = $n ? $n: '';
 		}
@@ -509,6 +523,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->value = $t_customer['gender'];
 		//  Empty
 		$form_config->input->$input_name->options->e->value = '';
 		//  Male
