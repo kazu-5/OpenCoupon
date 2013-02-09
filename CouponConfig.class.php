@@ -406,7 +406,8 @@ class CouponConfig extends ConfigMgr
 		$this->d($t_address);
 		$form_config = new Config;
 		
-		$pref = $this->model('JapanesePref')->GetName($pref);
+		//$pref = $this->model('JapanesePref')->GetName($pref);
+		//$city = $this->model('JapanesePref')->GetName($city);
 		
 		//  form name
 		$form_config->name   = 'form_customer';
@@ -442,6 +443,11 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->label = '都道府県';
 		$form_config->input->$input_name->value = $t_address['pref'];
+		//$form_config->input->$input_name->value = 13;
+		//$pref = $this->model('JapanesePref')->GetName( $t_customer['pref'] );
+		$this->d($pref);
+		$this->d($t_address['pref']);
+		//$form_config->input->$input_name->value = $t_address['pref'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
@@ -476,6 +482,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->label = 'マイエリア';
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
+		//$this->d($pref);
 		
 		//  birthday
 		$input_name = 'birthday';

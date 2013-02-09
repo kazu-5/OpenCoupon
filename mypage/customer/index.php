@@ -263,7 +263,7 @@ switch( $action ){
 	
 	$config = $this->config()->form_customer($t_customer, $t_address);
 	$this->form()->AddForm($config);
-	
+		
 	/*
 	$this->form->InitInputValue('last_name',   $t_customer['last_name']);
 	$this->form->InitInputValue('first_name',  $t_customer['first_name']);
