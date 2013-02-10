@@ -565,13 +565,36 @@ class CouponConfig extends ConfigMgr
 		$config->where->shop_id = $shop_id;
 		$config->limit = 1;
 		$record = $this->pdo()->select( $config );
+	//	$this->d($record);
 		
 		//  t_shop struct
 		$config = $this->GenerateFormFromDatabase('t_shop',$record);
 		
 		//  Added form name
 		$config->name = 'form_shop';
+	//	$this->d( Toolbox::toArray($config) );
 	
+		return $config;
+	}
+
+	function form_shop_photo( $shop_id )
+	{
+		if( empty($shop_id) ){
+			return false;
+		}
+		
+		$config = new Config();
+		$config->name   = 'shop_photo';
+		$config->action = 'shop-photo';
+		$config->input->submit->type  = 'submit';
+		$config->input->submit->value = ' Submit ';
+		
+		for( $i=1; $i<10; $i++ ){
+			$name = 'shop_photo_' . $i;
+			$config->input->$name->type = 'file';
+			$config->input->$name->save->path = $this->ConvertPath("app:/shop/$shop_id/$i");
+		}
+		
 		return $config;
 	}
 	

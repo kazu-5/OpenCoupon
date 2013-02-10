@@ -1,0 +1,35 @@
+<?php
+/* @var $this CouponApp */
+/**
+ * app:/shop/photo1.jpg
+ *          /photo2.png
+ *          /{$coupon_id}/photo1.jpg
+ *          /{$coupon_id}/photo2.png
+ * 
+ * 
+ */
+
+$form_name = 'shop_photo';
+
+?>
+<?php $this->form()->Start($form_name) ?>
+<table>
+	<tr>
+		<td>
+			Shop's photo 
+		</td>
+		<td>
+			<?php for( $i=1; $i<10; $i++): ?>
+				<?php $this->form()->Input('shop_photo_'.$i) ?>
+			<?php endfor; ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<?php $this->form()->Input('submit') ?>
+		</td>
+	</tr>
+</table>
+<?php $this->form()->Finish($form_name) ?>

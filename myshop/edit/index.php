@@ -15,18 +15,42 @@ $this->mark("shop_id: $shop_id",'controller');
 //  data to form
 $data = null;
 
-//  Form
-$config = $this->config()->form_shop($shop_id);
-$this->form()->AddForm( $config );
+//  Form (shop information)
+if( $config = $this->config()->form_shop($shop_id) ){
+	$form_name_shop = $config->name;
+	$this->form()->AddForm( $config );
+}else{
+	$this->d( Toolbox::toArray($config) );
+}
+
+//  Form (shop photo)
+if( $config = $this->config()->form_shop_photo($shop_id) ){
+	$form_name_photo = $config->name;
+	$this->form()->AddForm( $config );
+}else{
+	$this->d( Toolbox::toArray($config) );
+}
 
 //  form name
 $form_name = $config->name;
-$data['form_name'] = $form_name;
 $this->mark("form_name: $form_name",'controller');
 
 switch( $action ){
+	case 'shop-photo':
+		
+		if( $this->form()->Secure($form_name_photo) ){
+			
+		}
+		
+	//	break;
+		
 	case 'index':
+		//  form shop 
+		$data['form_name'] = $form_name_shop;
 		$this->template('form.phtml',$data);
+		//  form shop photo
+		$data['form_name'] = $form_name_photo;
+		$this->template('form_photo.phtml');
 		break;
 		
 	case 'confirm':
