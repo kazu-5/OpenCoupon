@@ -556,8 +556,15 @@ class CouponConfig extends ConfigMgr
 
 	function form_shop( $shop_id )
 	{
+		if( empty($shop_id) ){
+			return false;
+		}
+		
 		//  t_shop record
-		$record = $this->pdo()->quick("t_shop.shop_id = $shop_id");
+		$config = parent::select('t_shop');
+		$config->where->shop_id = $shop_id;
+		$config->limit = 1;
+		$record = $this->pdo()->select( $config );
 		
 		//  t_shop struct
 		$config = $this->GenerateFormFromDatabase('t_shop',$record);
@@ -567,7 +574,7 @@ class CouponConfig extends ConfigMgr
 	
 		return $config;
 	}
-
+	
 	function form_coupon( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){
