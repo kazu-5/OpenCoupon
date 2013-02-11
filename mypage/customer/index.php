@@ -67,7 +67,6 @@ switch( $action ){
 			include('mailaddr_confirm.phtml');
 
 		}else{
-			echo 'test';
 			include('mailaddr_change.phtml');
 		}
 		break;
