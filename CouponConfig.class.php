@@ -554,15 +554,12 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'mailaddr';
 		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = 'メールアドレス';
-		$form_config->input->$input_name->value = 'test';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  mailaddr
 		$input_name = 'mailaddr_confirm';
 		$form_config->input->$input_name->type = 'text';
-		//$form_config->input->$input_name->label = '丁目番地';
-		//$form_config->input->$input_name->value = $t_address['address'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
