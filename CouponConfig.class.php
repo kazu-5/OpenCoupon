@@ -102,14 +102,11 @@ class CouponConfig extends ConfigMgr
 	 * @param  integer $coupon_id
 	 * @return  Config
 	 */
-	function form_buy_confirm( $aid, $cid )
+	function form_buy_confirm( $account_id, $coupon_id )
 	{
-		$config = $this->form_buy();
-		$config->merge( $this->form_address($aid,$cid) );
-		
-		$config->name = 'form_buy_confirm';	
-//		$this->d( Toolbox::toArray($config) );
-		
+		$config = $this->form_buy($coupon_id);
+		$config->merge( $this->form_address($account_id,$coupon_id) );
+		$config->name = 'form_buy_confirm';
 		return $config;	
 	}
 	
@@ -400,8 +397,20 @@ class CouponConfig extends ConfigMgr
 		
 		return $form_config;
 	}
-
-	function form_customer($t_customer, $t_address){
+	
+	function form_customer( $id )
+	{
+		//  customer table
+		$config = $this->select_customer($id);
+		$t_customer = $this->pdo()->select($config);
+	//	$this->d($t_customer);
+		
+		//  address table
+		$config = $this->select_address($id);
+		$t_address = $this->pdo()->select($config);
+	//	$this->d($t_address);
+		
+		//  Init form_config
 		$form_config = new Config;
 		
 		//  form name
@@ -437,7 +446,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'pref';
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->label = '都道府県';
-		$form_config->input->$input_name->value = $t_address['pref'];
+		$form_config->input->$input_name->value = $this->model('JapanesePref')->GetIndex($t_address['pref']);
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
@@ -477,10 +486,12 @@ class CouponConfig extends ConfigMgr
 		//  birthday
 		$input_name = 'birthday';
 		$form_config->input->$input_name->label  = '生年月日';
-		//$form_config->input->$input_name->value = $t_customer['birthday'];
+		//$form_config->input->$input_name->value = $t_customer['birthday']; // TODO: Auto recovery
 		$form_config->input->$input_name->joint  = '-';
 		$form_config->input->$input_name->cookie = true;
 		$form_config->input->$input_name->validate->permit = 'date';
+		
+		//  TODO: 元に戻すのも自動化する
 		$birthday = explode('-', $t_customer['birthday']);
 		
 		$i = 'year';
@@ -494,7 +505,7 @@ class CouponConfig extends ConfigMgr
 			$v = date('Y') - $n;
 			$form_config->input->$input_name->options->$i->options->$v->value = $v;
 		}
-			
+		
 		$i = 'month';
 		$form_config->input->$input_name->options->$i->type  = 'select';
 		$form_config->input->$input_name->options->$i->tail  = '-';
@@ -766,18 +777,28 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_my_address()
+	function select_address( $id )
 	{
-		$id = $this->model('Login')->GetLoginID();
-		$config = $this->select();
+		$config = parent::select('t_address');
 		$config->table = 't_address';
 		$config->account_id = $id;
 		$config->seq_no = 1;
 		$config->limit = 1;
-		
 		return $config;
 	}
 	
+	function select_my_address()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		/*
+			$config = $this->select();
+		$config->table = 't_address';
+		$config->account_id = $id;
+		$config->seq_no = 1;
+		$config->limit = 1;
+		*/
+		return self::select_address($id);
+	}
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
