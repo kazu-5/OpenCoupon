@@ -20,7 +20,15 @@ class CouponApp extends App
 		return parent::Config( $cmgr );
 	}
 	
-	/***		ACTION		***/
+	function Path2URL($path)
+	{
+		//  rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR) is fail.
+		$app_root = $this->GetEnv('app_root');
+		$app_root = rtrim( $app_root, DIRECTORY_SEPARATOR );
+		return str_replace( $app_root, '', $path );
+	}
+	
+	/***    ACTION    ***/
 	
 	function GetAction(){
 		$args = $this->GetArgs();

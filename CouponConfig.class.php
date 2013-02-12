@@ -592,7 +592,9 @@ class CouponConfig extends ConfigMgr
 		for( $i=1; $i<10; $i++ ){
 			$name = 'shop_photo_' . $i;
 			$config->input->$name->type = 'file';
-			$config->input->$name->save->path = $this->ConvertPath("app:/shop/$shop_id/$i");
+		//	$config->input->$name->tail = '<br/>';
+			$config->input->$name->save->dir  = "app:/shop/$shop_id";
+			$config->input->$name->save->name = $i;
 		}
 		
 		return $config;
