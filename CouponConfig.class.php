@@ -402,11 +402,7 @@ class CouponConfig extends ConfigMgr
 	}
 
 	function form_customer($t_customer, $t_address){
-		$this->d($t_customer);
-		$this->d($t_address);
 		$form_config = new Config;
-		
-		$pref = $this->model('JapanesePref')->GetName($pref);
 		
 		//  form name
 		$form_config->name   = 'form_customer';
@@ -474,6 +470,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'myarea';
 		$form_config->input->$input_name->type = 'select';
 		$form_config->input->$input_name->label = 'マイエリア';
+		$form_config->input->$input_name->value = $t_customer['pref'];
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
 		
@@ -540,20 +537,41 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
 		$form_config->input->$input_name->value  = '変更を保存する';
 		
-		/*
-		$input['class'] = 'input_button';
-		$input['value'] = '変更を保存する';
-		 */
-		/*
-		$form_config->input->last_name->type = 'text';
-		$form_config->input->last_name->value = $record['last_name'];
-		
-		$form_config->input->first_name->type = 'text';
-		$form_config->input->first_name->value = $record['first_name'];
-		*/
 		return $form_config;
 	}
 
+	function form_mailaddr_change(){
+		$form_config = new Config;
+		
+		//  form name
+		$form_config->name   = 'form_mailaddr_change';
+		$form_config->action = "app:/mypage/customer/mailaddr_confirm";
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->errors->permit = '%sに不正な値が入力されています。(%s)';
+		
+		//  mailaddr
+		$input_name = 'mailaddr';
+		$form_config->input->$input_name->type = 'text';
+		$form_config->input->$input_name->label = 'メールアドレス';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  mailaddr
+		$input_name = 'mailaddr_confirm';
+		$form_config->input->$input_name->type = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = '入力内容を確認する';
+		
+		return $form_config;
+	}
 	function form_shop( $shop_id )
 	{
 		//  t_shop record

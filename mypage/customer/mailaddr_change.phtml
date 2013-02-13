@@ -12,7 +12,7 @@
 		margin-bottom: 10px;
 		margin-left: 40px;
 	}
-	.input_button{
+	.submit{
 		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
 		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
 		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
@@ -30,7 +30,7 @@
 	}
 </style>
 
-<?php $this->form->Start('mailaddr_change'); ?>
+<?php $this->form()->Start('form_mailaddr_change'); ?>
 
 <div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
 	<div style="margin-left:30px;">
@@ -40,18 +40,18 @@
 		<div class="mailaddr_change" style="margin-top:10px;">
 			<p class="red"><?=@$error?></p>
 			<p class="message">新しいメールアドレスを入力してください。</p>
-			<?php $this->form->Input('mailaddr');?>
-			<p class="red"><?php $this->form->InputError('mailaddr');?></p>
+			<?php $this->form()->Input('mailaddr');?>
+			<p class="red"><?php $this->form()->InputError('mailaddr');?></p>
 
 			<p class="message">新しいメールアドレスを入力してください。(確認用)</p>
-			<?php $this->form->Input('mailaddr_confirm');?>
-			<p class="red"><?php $this->form->InputError('mailaddr_confirm');?></p>
+			<?php $this->form()->Input('mailaddr_confirm');?>
+			<p class="red"><?php $this->form()->InputError('mailaddr_confirm');?></p>
 		</div>
 	</div>
 	
 	<div style="text-align:center">
-		<?=$this->form->Input('submit_button')?>
+		<?php $this->form()->Input('submit') ?>
 	</div>
 </div>
 
-<?php $this->form->Finish('mailaddr_change'); ?>
+<?php $this->form()->Finish('form_mailaddr_change'); ?>
