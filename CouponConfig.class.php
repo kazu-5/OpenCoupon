@@ -406,9 +406,11 @@ class CouponConfig extends ConfigMgr
 	//	$this->d($t_customer);
 		
 		//  address table
+		/*
 		$config = $this->select_address($id);
 		$t_address = $this->pdo()->select($config);
 	//	$this->d($t_address);
+		*/
 		
 		//  Init form_config
 		$form_config = new Config;
@@ -435,10 +437,11 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
-		//  postcode
-		$input_name = 'postcode';
+		/*
+		//  zipcode
+		$input_name = 'zipcode';
 		$form_config->input->$input_name->label = '郵便番号';
-		$form_config->input->$input_name->value = $t_address['postcode'];
+		$form_config->input->$input_name->value = $t_address['zipcode'];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
@@ -483,7 +486,10 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
 		
+		*/
+		
 		//  birthday
+		/*
 		$input_name = 'birthday';
 		$form_config->input->$input_name->label  = '生年月日';
 		//$form_config->input->$input_name->value = $t_customer['birthday']; // TODO: Auto recovery
@@ -523,6 +529,36 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->options->$i->value = $birthday[2];
 		for( $n=0; $n<=31; $n++){
 			$form_config->input->$input_name->options->$i->options->$n->value = $n ? $n: '';
+		}
+		*/
+		
+		$input_name = 'birthday';
+		$form_config->input->$input_name->label  = '生年月日';
+		$form_config->input->$input_name->joint  = '-';
+		$form_config->input->$input_name->cookie = true;
+		$form_config->input->$input_name->validate->permit = 'date';
+		
+		$i = 'year';
+		$form_config->input->$input_name->options->$i->type  = 'text';
+		$form_config->input->$input_name->options->$i->tail  = '-';
+		$form_config->input->$input_name->options->$i->size  = '4';
+		$form_config->input->$input_name->options->$i->value = $birthday[0];
+		$form_config->input->$input_name->options->$i->placeholder = 'Year';
+		//$form_config->input->$input_name->options->$i->validate->range = '1900-'.date('Y');
+		
+		$i = 'month';
+		$form_config->input->$input_name->options->$i->type  = 'select';
+		$form_config->input->$input_name->options->$i->tail  = '-';
+		//$form_config->input->$input_name->options->$i->validate->range = '1-12';
+		for( $n=0; $n<=12; $n++){
+			$form_config->input->$input_name->options->$i->options->$n->value = $n ? $n : '';
+		}
+		
+		$i = 'day';
+		$form_config->input->$input_name->options->$i->type    = 'select';
+		//$form_config->input->$input_name->options->$i->validate->range = '1-31';//$t;
+		for( $n=0; $n<=31; $n++){
+			$form_config->input->$input_name->options->$i->options->$n->value = $n ? $n : '';
 		}
 		
 		//  Gender
@@ -646,6 +682,30 @@ class CouponConfig extends ConfigMgr
 		$config->name = 'form_coupon' . $coupon_id;
 		
 		return $config;
+	}
+	
+	function form_password( $account_id )
+	{
+		$form_config = new Config();
+		
+		$form_config->name = 'form_password';
+		
+		$input_name = 'password';
+		$form_config->input->$input_name->label = 'パスワード';
+		$form_config->input->$input_name->type  = 'password';
+		$form_config->input->$input_name->validate->required = true;
+		
+		$input_name = 'password_confirm';
+		$form_config->input->$input_name->label = 'パスワード（確認用）';
+		$form_config->input->$input_name->type = 'password';
+		$form_config->input->$input_name->validate->required = true;
+		$form_config->input->$input_name->validate->compare = 'password';
+		$form_config->input->$input_name->error->compare = 'パスワードが一致しません';
+		
+		$input_name = 'submit';
+		$form_config->input->$input_name->type = 'submit';
+		
+		return $form_config;
 	}
 	
 	//===========================================//
@@ -1019,6 +1079,37 @@ class CouponConfig extends ConfigMgr
 		$config->where->coupon_id = $coupon_id;
 		$config->limit = 1;
 		$config->update = true;
+		
+		return $config;
+	}
+	
+	function update_customer( $account_id )
+	{
+		$set = $this->form()->GetInputValueAll('form_customer');
+		unset($set->submit);
+		
+		$config = parent::update('t_customer');
+		$config->where->account_id = $account_id;
+		$config->limit = 1;
+		$config->set = $set;
+		
+		return $config;
+	}
+	
+	function update_password( $account_id )
+	{
+		//  Get submit value from form.
+		$password = $this->form()->GetValue('password','form_password');
+		
+		//  Encrypt
+		$browfish = new Blowfish();
+		$password = $browfish->Encrypt($password);
+		
+		//  Create config
+		$config = parent::update('t_account');
+		$config->where->id = $account_id;
+		$config->limit = 1;
+		$config->set->password = $password;
 		
 		return $config;
 	}

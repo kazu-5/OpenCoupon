@@ -1,0 +1,14 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start( $data->form_name, 'confirm' ) ?>
+	<?php $this->form()->Label('password') ?>
+	<?php $this->form()->Input('password') ?>
+	<?php $this->form()->Error('password') ?>
+	<br>
+	<?php $this->form()->Label('password_confirm') ?>
+	<?php $this->form()->Input('password_confirm') ?>
+	<?php $this->form()->Error('password_confirm') ?>
+	<br>
+	<?php $this->form()->Input('submit','　確認　') ?>
+<?php $this->form()->Finish($data->form_name) ?>

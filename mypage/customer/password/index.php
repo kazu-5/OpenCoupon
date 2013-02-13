@@ -10,38 +10,43 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$config = $this->config()->form_customer( $id );
-$this->form()->AddForm($config);
+$form_config = $this->config()->form_password( $id );
+$this->form()->AddForm($form_config);
+
+//  form name
+$form_name = $form_config->name;
+
+//  data
+$data = new Config();
+$data->form_name = $form_name;
 
 //	Action
 $this->mark("action: $action");
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('form.phtml',$data);
 		break;
 		
 	case 'confirm':
-		if( $this->form()->Secure('form_customer') ){
+		if( $this->form()->Secure($form_name) ){
 			//  OK
-			$this->template('confirm.phtml');
+			$this->template('confirm.phtml',$data);
 		}else{
 			//  NG
-			$this->template('form.phtml');
+			$this->template('form.phtml',$data);
 		}
 		break;
 		
 	case 'commit':
-		if( $this->form()->Secure('form_customer') ){
+		if( $this->form()->Secure($form_name) ){
 			//  OK
 			
 			//  Update
-			$update = $this->config()->update_customer( $id );
+			$update = $this->config()->update_password( $id );
 			$num = $this->pdo()->update($update);
 			
 			if( $num !== false ){
-			
 				$this->template('commit.phtml');
-				
 			}else{
 				$data = new Config();
 				$data->message = 'エラーが発生しました。';
@@ -49,7 +54,7 @@ switch( $action ){
 			}
 		}else{
 			//  NG
-			$this->template('form.phtml');
+			$this->template('form.phtml',$data);
 		}
 		break;
 		
