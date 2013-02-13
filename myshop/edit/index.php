@@ -18,15 +18,22 @@ $data = null;
 //  Form
 $config = $this->config()->form_shop($shop_id);
 $this->form()->AddForm( $config );
+$form_name_shop = $config->name;
 
-//  form name
-$form_name = $config->name;
-$data['form_name'] = $form_name;
-$this->mark("form_name: $form_name",'controller');
+//  form shop photo
+$config = $this->config()->form_shop_photo($shop_id);
+$this->form()->AddForm( $config );
+$form_name_shop_photo = $config->name; 
 
 switch( $action ){
 	case 'index':
+		//  form shop
+		$data['form_name'] = $form_name_shop;
 		$this->template('form.phtml',$data);
+
+		//  form shop
+		$data['form_name'] = $form_name_shop_photo;
+		$this->template('shop_photo.phtml',$data);
 		break;
 		
 	case 'confirm':

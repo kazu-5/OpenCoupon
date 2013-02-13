@@ -583,6 +583,7 @@ class CouponConfig extends ConfigMgr
 		
 		return $form_config;
 	}
+	
 	function form_shop( $shop_id )
 	{
 		//  t_shop record
@@ -596,7 +597,26 @@ class CouponConfig extends ConfigMgr
 	
 		return $config;
 	}
+	
+	function form_shop_photo( $shop_id )
+	{
+		$config = new Config();
+		
+		//  form setting
+		$config->name = 'shop_photo';
+		
+		//  input setting
+		$input_name = 'shop_photo_1';
+		$config->input->$input_name->type = 'file';
+		$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
+		$config->input->$input_name->save->name = '1';
 
+		$input_name = 'submit';
+		$config->input->$input_name->type = 'submit';
+		
+		return $config;
+	}
+	
 	function form_coupon( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){
