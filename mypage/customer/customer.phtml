@@ -55,50 +55,44 @@
 			<tr style="height:50px; padding: 25px 0;" align="left">
 				<th style="width:5px;">名前</th>
 				<td style="width:400px;">
-					<span>
-						姓：<?php $this->form()->Input('last_name');?>
-						名：<?php $this->form()->Input('first_name');?>
-						<p class="red"><?php $this->form()->InputError('last_name')?></p>
-						<p class="red"><?php $this->form()->InputError('first_name')?></p>
-					</span>
+					姓：<?php $this->form()->Input('last_name');?>
+					名：<?php $this->form()->Input('first_name');?>
+					<p class="red"><?php $this->form()->InputError('last_name')?></p>
+					<p class="red"><?php $this->form()->InputError('first_name')?></p>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>都道府県</th>
-				<td><?php $this->form()->Input('pref'); ?></td>
+				<td>
+					<?php $this->form()->Input('pref'); ?>
 					<p class="red"><?php $this->form()->InputError('pref');?></p>
+				</td>
 			</tr>
 
 			<tr align="left">
 				<th>市区町村</th>
 				<td>
-					<span>
-						<?php $this->form()->Input('city'); ?>
-						<p class="red"><?php $this->form()->InputError('city');?></p>
-						<p>例：新宿区</p>
-					</span>
+					<?php $this->form()->Input('city'); ?>
+					<p class="red"><?php $this->form()->InputError('city');?></p>
+					<p>例：新宿区</p>
 				</td>
 			</tr>
 
 			<tr align="left">
 				<th>丁目番地</th>
 				<td>
-					<span>
-						<?php $this->form()->Input('address'); ?>
-						<p class="red"><?php $this->form()->InputError('address');?></p>
-						<p>例：新宿1-1-1</p>
-					</span>
+					<?php $this->form()->Input('address'); ?>
+					<p class="red"><?php $this->form()->InputError('address');?></p>
+					<p>例：新宿1-1-1</p>
 				</td>
 			</tr>
 
 			<tr align="left">
 				<th>建物名</th>
 				<td>
-					<span>
-						<?php $this->form()->Input('building'); ?>
-						<p class="red"><?php $this->form()->InputError('building');?></p>
-						<p>例：新宿ビル5F</p>
-					</span>
+					<?php $this->form()->Input('building'); ?>
+					<p class="red"><?php $this->form()->InputError('building');?></p>
+					<p>例：新宿ビル5F</p>
 				</td>
 			</tr>
 
@@ -114,22 +108,26 @@
 
 			<tr align="left">
 				<th>myエリア</th>
-				<td><?php $this->form()->Input('myarea'); ?></td>
+				<td>
+					<?php $this->form()->Input('myarea'); ?>
 					<p class="red"><?php $this->form()->InputError('myarea');?></p>
+				</td>
 			</tr>
 
 			<tr align="left">
 				<th>生年月日</th>
 				<td>
 					<?php $this->form()->Input('birthday') ?>
-				</td>
 					<p class="red"><?php $this->form()->InputError('birthday') ?></p>
+				</td>
 			</tr>
 
 			<tr align="left">
 				<th>性別</th>
-				<td><?php $this->form()->Input('gender'); ?></td>
+				<td>
+					<?php $this->form()->Input('gender'); ?>
 					<p class="red"><?php $this->form()->InputError('gender');?></p>
+				</td>
 			</tr>
 		</table>
 		<div style="text-align:center">

@@ -10,7 +10,7 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$form_config = $this->config()->form_email( $id );
+$form_config = $this->config()->form_password( $id );
 $this->form()->AddForm($form_config);
 
 //  form name
