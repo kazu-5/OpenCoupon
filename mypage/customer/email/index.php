@@ -10,7 +10,7 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$form_config = $this->config()->form_password( $id );
+$form_config = $this->config()->form_email( $id );
 $this->form()->AddForm($form_config);
 
 //  form name
@@ -36,18 +36,36 @@ switch( $action ){
 		}
 		break;
 		
+	case 'sendmail':
+		if( $this->form()->Secure($form_name) ){
+			//  OK
+			$mail_config = $this->config()->mail_identification();
+			$this->Mail($mail_config);
+			$this->template('sendmail.phtml',$data);
+		}else{
+			//  NG
+			$this->template('form.phtml',$data);
+		}
+		break;
+		
 	case 'commit':
 		if( $this->form()->Secure($form_name) ){
 			//  OK
 			
 			//  Update
-			$update = $this->config()->update_password( $id );
+			$update = $this->config()->update_email( $id );
 			$num = $this->pdo()->update($update);
 			
+			//  Print template
 			if( $num !== false ){
+
+				//  Clear of saved form value.
+				$this->form()->Clear($form_name);
+					
+				//  All done.
 				$this->template('commit.phtml');
 			}else{
-				$data = new Config();
+				//  No good.
 				$data->message = 'エラーが発生しました。';
 				$this->template('form.phtml',$data);
 			}

@@ -44,10 +44,16 @@ switch( $action ){
 			$update = $this->config()->update_password( $id );
 			$num = $this->pdo()->update($update);
 			
+			//  Print template
 			if( $num !== false ){
+
+				//  Clear of saved form value.
+				$this->form()->Clear($form_name);
+					
+				//  All done.
 				$this->template('commit.phtml');
 			}else{
-				$data = new Config();
+				//  No good.
 				$data->message = 'エラーが発生しました。';
 				$this->template('form.phtml',$data);
 			}
