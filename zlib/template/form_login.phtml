@@ -1,5 +1,7 @@
 <?php
 /* @var $this CouponApp */
+$message      = isset($data->message)      ? $data->message      : null;
+$submit_label = isset($data->submit_label) ? $data->submit_label : null;
 ?>
 <style>
 #member_content {
@@ -39,6 +41,10 @@
 
 <h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">会員の方</h2>
 
+<?php if( $message ): ?>
+	<p class="red"><?=$message?></p>
+<?php endif; ?>
+
 <?php $this->form()->Start('form_login'); ?>
 <div id="member_content">
 <table>
@@ -47,7 +53,7 @@
 			<?php $this->form()->Label('email'); ?>
 		</td>
 		<td>
-			<?php $this->form()->Input('email'); ?>
+			<?php $this->form()->Input('email'); ?><br/>
 			<?php $this->form()->Error('email'); ?>
 		</td>
 	</tr>
@@ -56,7 +62,7 @@
 			<?php $this->form()->Label('password'); ?>
 		</td>
 		<td>
-			<?php $this->form()->Input('password'); ?>
+			<?php $this->form()->Input('password'); ?><br/>
 			<?php $this->form()->Error('password'); ?>
 			<p><a href="/account/login_forget" style="color: #0981BE;">パスワードを忘れた方はコチラ</a></p>
 		</td>
@@ -65,7 +71,7 @@
 		<td>
 		</td>
 		<td>
-			<?php $this->form()->Input('submit'); ?>
+			<?php $this->form()->Input('submit',$submit_label); ?>
 		</td>
 	</tr>
 </table>
