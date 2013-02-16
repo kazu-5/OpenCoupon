@@ -102,9 +102,12 @@ class CouponConfig extends ConfigMgr
 	 * @param  integer $coupon_id
 	 * @return  Config
 	 */
-	function form_buy_confirm( $account_id, $coupon_id )
+//	function form_buy_confirm( $account_id, $coupon_id )
+	function form_buy_confirm( $account_id, $coupon_id, $quantity=null )
 	{
 		$config = $this->form_buy($coupon_id);
+		//$this->d(Toolbox::toArray($config));//show values このツール使うとオブジェクトをアレイで表示できる。
+		//$config->input->quantity->placeholder = $quantity ;//added
 		$config->merge( $this->form_address($account_id,$coupon_id) );
 		$config->name = 'form_buy_confirm';
 		return $config;	

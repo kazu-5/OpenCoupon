@@ -11,9 +11,6 @@ $config = $this->config()->form_register();
 $this->form()->AddForm($config);
 
 //  Check login
-
-$this->d( $this->model('Login')->GetLoginId() );
-
 if( $id = $this->model('Login')->GetLoginId() ){
 	$this->p('既にログインしています。');
 }else{
