@@ -296,11 +296,11 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
-	function form_address( $account_id )
+	function form_address( $account_id, $seq_no=1 )
 	{
 		$form_config = self::_get_form_default();
 		
-		$select = $this->select_address($account_id);
+		$select = $this->select_address( $account_id, $seq_no );
 		$record = $this->pdo()->select($select);
 		
 		//  form name
@@ -864,13 +864,15 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_address( $id )
+	function select_address( $id, $seq_no=null )
 	{
 		$config = parent::select('t_address');
 		$config->table = 't_address';
 		$config->account_id = $id;
-		$config->seq_no = 1;
-		$config->limit = 1;
+		if( $seq_no ){
+			$config->seq_no = $seq_no;
+			$config->limit = 1;
+		}
 		return $config;
 	}
 	
@@ -884,7 +886,7 @@ class CouponConfig extends ConfigMgr
 		$config->seq_no = 1;
 		$config->limit = 1;
 		*/
-		return self::select_address($id);
+		return self::select_address( $id, 1 );
 	}
 	function insert_account()
 	{
@@ -941,10 +943,10 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
-		$_post = $this->form()->GetInputValueAll('form_buy_confirm');
+		$_post = $this->form()->GetInputValueAll('form_address');
 		$_post = $this->Decode($_post);
 	//	$this->d($_post);
-
+		
 		$last_name  = $_post->last_name;
 		$first_name = $_post->first_name;
 		$postcode   = $_post->postcode;
