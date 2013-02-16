@@ -1,8 +1,7 @@
 <?php
 /* @var $this CouponApp */
-$coupon_id = $this->GetCouponID();
-$record = $this->pdo()->quick(" t_coupon.coupon_id = $coupon_id ");
-$register_flag = false; // TODO
+$coupon_id = $data->coupon_id;
+$record    = $data->record;
 ?>
 
 <div class="arc" style="background-color:white; margin:5px; padding:13px;">
@@ -30,14 +29,15 @@ $register_flag = false; // TODO
 			</tr>
 			<tr>
 				<td>
-					<img style="float:left; margin: 5px;" height="75px" src="../img/dummy.jpg">
+					クーポンの写真を掲載する
+					<img style="float:left; margin: 5px;" height="75px" src="">
 					<p style="font-size:13px;"><?=$record['coupon_description']?></p>
 				</td>
 				<td colspan="3" style="font-size: 40px; text-align:center;">
 					<nobr>
 						<span class="coupon_price">
 							<span class="coupon_price">
-							<?php $this->form()->Input('quantity');?>
+							<?php $this->form()->Value('quantity');?>
 							</span>
 							×
 							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
@@ -129,34 +129,3 @@ $register_flag = false; // TODO
 </div>
 
 <?php $this->form()->Finish('form_address') ?>
-
-<script>
-function change_quantity(){
-	var price = $('#coupon_normal_price').text();
-	var quantity = $('#quantity').val();
-		
-	price = price * quantity;
-	
-	$('#price').text(price);
-}
-
-//	ドキュメントが読み込まれたら実行
-$(document).ready(function(){
-	var price = $('#price').text();
-	var quantity = $('#quantity').val();
-	
-	if(0){
-		$('#console').css('border','1px dotted blue');
-		$('#console').css('margin','5px');
-		$('#console').append('<h2>Console</h2><hr>');
-		$('#console').append('<p>price='+price+'</p>');
-		$('#console').append('<p>quantity='+quantity+'</p>');
-	}
-});
-
-function log(str){
-	$('#console').append('<p>'+str+'</p>');
-}
-</script>
-<div id="console"></div>
-
