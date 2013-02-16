@@ -9,12 +9,18 @@ $this->mark("coupon_id=$coupon_id",'debug');
 $config = $this->config()->form_buy($coupon_id);
 $this->form()->AddForm($config);
 
+//  クーポンのrecord
+$select = $this->config()->select_coupon($coupon_id);
+$record = $this->pdo()->select($select);
+
+//  templateに渡すdata
+$data = new Config();
+$data->coupon_id = $coupon_id;
+$data->record    = $record;
+
 //  Action
 switch( $action ){
 	case 'index':
-		//  クーポンのrecord
-		$select = $this->config()->select_coupon($coupon_id);
-		$record = $this->pdo()->select($select);
 		
 		//  Check secure
 		if( $this->form()->Secure('form_buy') ){
@@ -35,6 +41,7 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
+			//  住所フォーム
 			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
 			include('buy_confirm.phtml');
@@ -48,10 +55,10 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
+			//  住所フォーム
 			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
-			
-			include('buy_reconfirm.phtml');
+			$this->Template('reconfirm.phtml',$data);
 		}else{
 			//  NG
 			include('buy_login_error.phtml');
@@ -62,13 +69,15 @@ switch( $action ){
 		//  Check login
 		if($id = $this->model('Login')->GetLoginID()){
 			//  OK
-			//  Init form config
-			$config = $this->config()->form_buy_confirm( $id, $coupon_id );
+			
+			//  住所フォーム
+			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
 			
 			//  Check secure
-			if( $this->form()->Secure('form_buy_confirm') ){
+			if( $this->form()->Secure('form_buy') and $this->form()->Secure('form_address') ){
 				//  OK
+				
 				//  Insert Address
 				$config = $this->config()->insert_address( $id );
 				$id = $this->pdo()->insert($config);
@@ -82,6 +91,8 @@ switch( $action ){
 				
 			}else{
 				//  NG
+				$this->form()->debug('form_buy');
+				$this->form()->debug('form_address');
 				include('buy_confirm.phtml');
 			}
 		}else{
