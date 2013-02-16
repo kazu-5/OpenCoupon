@@ -2,6 +2,7 @@
 /* @var $this CouponApp */
 $action    = $this->GetBuyAction();
 $coupon_id = $this->GetCouponId();
+//$quantity  = $this->GetInputValueRaw('form_buy', 'quantity');
 $this->mark("action=$action",'debug');
 $this->mark("coupon_id=$coupon_id",'debug');
 
@@ -33,6 +34,10 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
+			//$config = $this->config()->form_buy();
+			//$i_name = $this->form()->config->
+			//$quantity  = $this->GetInputValueRaw($i_name, $f_name);//added by akioys
+			//$config = $this->config()->form_buy_confirm( $id, $coupon_id, $quantity );//modified
 			$config = $this->config()->form_buy_confirm( $id, $coupon_id );
 			$this->form()->AddForm($config);
 			include('buy_confirm.phtml');
