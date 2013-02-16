@@ -2,18 +2,19 @@
 /* @var $this CouponApp */
 $action    = $this->GetBuyAction();
 $coupon_id = $this->GetCouponId();
-//$quantity  = $this->GetInputValueRaw('form_buy', 'quantity');
 $this->mark("action=$action",'debug');
 $this->mark("coupon_id=$coupon_id",'debug');
 
+//  Formの設定
+$config = $this->config()->form_buy($coupon_id);
+$this->form()->AddForm($config);
+
+//  Action
 switch( $action ){
 	case 'index':
 		//  クーポンのrecord
-		$record = $this->pdo()->Quick(" t_coupon.coupon_id = $coupon_id ");
-		
-		//  Formの設定
-		$config = $this->config()->form_buy($coupon_id);
-		$this->form()->AddForm($config);
+		$select = $this->config()->select_coupon($coupon_id);
+		$record = $this->pdo()->select($select);
 		
 		//  Check secure
 		if( $this->form()->Secure('form_buy') ){
@@ -34,20 +35,29 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
-			//$config = $this->config()->form_buy();
-			//$i_name = $this->form()->config->
-			//$quantity  = $this->GetInputValueRaw($i_name, $f_name);//added by akioys
-			//$config = $this->config()->form_buy_confirm( $id, $coupon_id, $quantity );//modified
-			$config = $this->config()->form_buy_confirm( $id, $coupon_id );
+			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
 			include('buy_confirm.phtml');
 		}else{
 			//  NG
 			include('buy_login_error.phtml');
-			include('buy.phtml');
 		}
 		break;
-		
+
+	case 'reconfirm':
+		//  Check login
+		if( $id = $this->model('Login')->GetLoginID() ){
+			//  OK
+			$config = $this->config()->form_address( $id );
+			$this->form()->AddForm($config);
+			
+			include('buy_reconfirm.phtml');
+		}else{
+			//  NG
+			include('buy_login_error.phtml');
+		}
+		break;
+	
 	case 'commit':
 		//  Check login
 		if($id = $this->model('Login')->GetLoginID()){
