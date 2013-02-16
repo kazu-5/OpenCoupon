@@ -25,19 +25,42 @@ class CouponConfig extends ConfigMgr
 	
 	//===========================================//
 	
-	function form_test()
+	/**
+	 * キーからフォーム名を取得する。
+	 * 
+	 * これは、将来フォーム名が変わっても、このメソッドを通して取得しておけば
+	 * フォーム名の変更によるバグが発生しないようにできる。
+	 * 
+	 * @param  string $key 取得するキーの
+	 * @return string $form_name
+	 */
+	private function _get_form_name( $key )
 	{
-		// I create form config.
+		switch( $key ){
+			
+			//  登録しようとしているメールアドレスが本人か確認する
+			case 'mail_identification':
+				$form_name = 'email_identification';
+				break;
+				
+			default:
+				$this->StackError("Undefined key. ($key)");
+		}
+		return $form_name;
+	}
+	
+	/**
+	 * Form Config のテンプレート
+	 * 
+	 * @return Config
+	 */
+	private function _get_form_default($key)
+	{
+		//  Create the config for form.
 		$form_config = new Config;
 		
 		// form name
-		$form_config->name = 'form_test';
-		
-		// input text
-		$input_name = 'test';
-		$form_config->input->$input_name->name  = 'test';
-		$form_config->input->$input_name->type  = 'text';
-		$form_config->input->$input_name->value = 'default';
+		$form_config->name = self::_get_form_name($key);
 		
 		// input submit
 		$input_name = 'submit';
@@ -45,7 +68,20 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'submit';
 		$form_config->input->$input_name->value = 'submit';
 		
-	//	$this->d( Toolbox::toArray($form_config) );
+		return $form_config;
+	}
+
+	/**
+	 * 登録しようとしているメールアドレスが本人かキーコードを送信し、入力して貰って本人確認を行う。
+	 *
+	 */
+	function mail_identification()
+	{
+		$form_config = self::_get_form_default($key);
+		
+		//  key code
+		$input_name = 'identification';
+		$form_config->input->$input_name->label = '確認コード';
 		
 		return $form_config;
 	}
@@ -582,14 +618,15 @@ class CouponConfig extends ConfigMgr
 		
 		//  email
 		$input_name = 'email';
-		$form_config->input->$input_name->type = 'text';
 		$form_config->input->$input_name->label = 'メールアドレス';
+		$form_config->input->$input_name->type  = 'text';
 		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->validate->permit   = 'email';
 		
 		//  email confirm
 		$input_name = 'email_confirm';
-		$form_config->input->$input_name->type = 'text';
+		$form_config->input->$input_name->label = 'メールアドレス（確認用）';
+		$form_config->input->$input_name->type  = 'text';
 		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->validate->compare  = 'email';
 		
@@ -628,6 +665,7 @@ class CouponConfig extends ConfigMgr
 		$config->input->$input_name->type = 'file';
 		$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
 		$config->input->$input_name->save->name = '1';
+		$config->input->$input_name->validate->permit = 'image';
 
 		$input_name = 'submit';
 		$config->input->$input_name->type = 'submit';

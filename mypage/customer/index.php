@@ -14,7 +14,6 @@ $config = $this->config()->form_customer( $id );
 $this->form()->AddForm($config);
 
 //	Action
-$this->mark("action: $action");
 switch( $action ){
 	case 'index':
 		$this->template('form.phtml');
