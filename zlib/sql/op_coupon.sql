@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 2 月 04 日 08:59
+-- 生成時間: 2013 年 2 月 13 日 13:18
 -- サーバのバージョン: 5.1.44
 -- PHP のバージョン: 5.3.1
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `t_account` (
 --
 
 INSERT INTO `t_account` (`id`, `email_md5`, `email`, `password`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '35e8256af74c38835baecc77fca138edba1563425f64ac25e47727ca099bcc92ee492789dd60ee9e', 'e10adc3949ba59abbe56e057f20f883e', '2013-01-28 18:17:55', '2013-01-29 04:36:38', NULL, '2013-01-29 13:36:38');
+(1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '35e8256af74c38835baecc77fca138edba1563425f64ac25e47727ca099bcc92ee492789dd60ee9e', '643033e6f47cc449b5ffabfd328a7400', '2013-01-28 18:17:55', '2013-02-13 12:03:11', NULL, '2013-02-13 21:03:11');
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `t_address` (
   `seq_no` int(11) NOT NULL DEFAULT '1' COMMENT '順番号',
   `last_name` varchar(20) CHARACTER SET utf8 NOT NULL,
   `first_name` varchar(20) CHARACTER SET utf8 NOT NULL,
-  `postcode` int(11) NOT NULL,
+  `zipcode` varchar(100) CHARACTER SET utf8 NOT NULL,
   `pref` varchar(10) CHARACTER SET utf8 NOT NULL,
   `city` varchar(10) CHARACTER SET utf8 NOT NULL,
   `address` varchar(30) CHARACTER SET utf8 NOT NULL,
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `t_address` (
 -- テーブルのデータをダンプしています `t_address`
 --
 
-INSERT INTO `t_address` (`account_id`, `seq_no`, `last_name`, `first_name`, `postcode`, `pref`, `city`, `address`, `building`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 1, '太郎', '<h1>山田', 177, '東京都', '練馬区', '石神井町５−２−１２', '', '2013-01-29 16:34:02', '2013-01-31 04:36:13', NULL, '2013-01-31 13:36:13');
+INSERT INTO `t_address` (`account_id`, `seq_no`, `last_name`, `first_name`, `zipcode`, `pref`, `city`, `address`, `building`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 1, '太郎', '<h1>山田', '177', '東京都', '練馬区', '石神井町５−２−１２', '建物名', '2013-01-29 16:34:02', '2013-01-31 04:36:13', NULL, '2013-02-13 02:06:08');
 
 -- --------------------------------------------------------
 
@@ -180,9 +180,9 @@ INSERT INTO `t_coupon` (`coupon_id`, `coupon_title`, `coupon_description`, `coup
 (1, 'テスト（販売中）', 'テスト用のクーポン', 1000, 500, 100, 50, '2013-02-01 21:56:44', '2013-03-01 21:56:44', '2013-03-01 21:56:44', 9, NULL, 1, '', NULL, NULL, NULL, '2013-02-04 14:42:26'),
 (2, 'テスト（販売待機中）', 'クーポンの説明', 1000, 500, 100, 50, '2021-01-01 19:00:00', '2021-03-30 19:00:00', '2021-03-30 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-04 14:43:08'),
 (3, 'テスト（販売終了）', 'クーポンの説明', 1000, 500, 100, 50, '2012-01-30 19:00:00', '2012-01-30 19:00:00', '2012-01-30 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-04 14:43:35'),
-(4, '新しいクーポン', 'クーポンの説明', 1000, 500, 100, 50, '2021-01-30 19:00:00', '0000-00-00 00:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-03 11:43:15'),
-(5, '新しいクーポン', 'クーポンの説明', 1000, 500, 100, 50, '2021-01-30 19:00:00', '0000-00-00 00:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-03 11:43:47'),
-(6, '新しいクーポン', 'クーポンの説明', 1000, 500, 100, 50, '2021-01-30 19:00:00', '0000-00-00 00:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-03 11:45:59'),
+(4, 'パパパパパイン', 'パイン味のラーメンです。', 1200, 600, 100, 50, '2021-01-30 19:00:00', '2021-01-30 19:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-05 01:50:40'),
+(5, 'クククククーポン', 'クーポン味のクーポンです。', 1000, 500, 100, 50, '2021-01-30 19:00:00', '2021-01-30 19:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-05 03:02:04'),
+(6, '削除済みクーポン', 'このクーポンは削除されました。', 1000, 500, 100, 50, '2021-01-30 19:00:00', '2021-01-30 19:00:00', '2021-01-31 19:00:00', 100, '0000-00-00 00:00:00', 1, '', NULL, NULL, '2013-02-04 16:20:38', '2013-02-05 01:25:08'),
 (7, 'テスト（販売中）', '販売中のクーポン', 2000, 1000, 100, 50, '2013-02-01 21:56:44', '2013-03-01 21:56:44', '2013-03-01 21:56:44', 7, '0000-00-00 00:00:00', 1, '', NULL, NULL, NULL, '2013-02-04 17:55:28');
 
 -- --------------------------------------------------------
@@ -200,8 +200,8 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
   `last_name` varchar(20) NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `gender` enum('M','F') NOT NULL COMMENT '性別',
-  `pref` varchar(100) NOT NULL,
-  `city` varchar(100) NOT NULL,
+  `favorite_pref` int(11) DEFAULT NULL,
+  `favorite_city` int(11) DEFAULT NULL,
   `birthday` date NOT NULL,
   `address_seq_no` int(11) NOT NULL DEFAULT '1' COMMENT 't_addressの主たる所在地',
   `uid` varchar(32) NOT NULL COMMENT 'For credit card',
@@ -217,8 +217,8 @@ CREATE TABLE IF NOT EXISTS `t_customer` (
 -- テーブルのデータをダンプしています `t_customer`
 --
 
-INSERT INTO `t_customer` (`account_id`, `shop_id`, `shop_flag`, `memo`, `nick_name`, `last_name`, `first_name`, `gender`, `pref`, `city`, `birthday`, `address_seq_no`, `uid`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 1, 1, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;山田', 'M', '13', '', '1980-01-02', 1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '2013-01-29 04:18:11', '2013-01-31 13:25:19', NULL, '2013-02-04 00:14:48');
+INSERT INTO `t_customer` (`account_id`, `shop_id`, `shop_flag`, `memo`, `nick_name`, `last_name`, `first_name`, `gender`, `favorite_pref`, `favorite_city`, `birthday`, `address_seq_no`, `uid`, `created`, `updated`, `deleted`, `timestamp`) VALUES
+(1, 1, 1, NULL, 'たろうちゃん', '太郎', '&lt;h1&gt;ほげほげ', 'M', 13, 0, '1980-01-02', 1, '7bae8d59595b54f5f41a4e7a8a55d3f8', '2013-01-29 04:18:11', '2013-01-31 13:25:19', NULL, '2013-02-13 21:09:09');
 
 -- --------------------------------------------------------
 
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
 --
 
 INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_pref`, `shop_city`, `shop_address`, `shop_building`, `shop_tel`, `shop_holiday`, `shop_open`, `shop_close`, `shop_railway`, `shop_station`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 'ルノアール銀座', 'ルノアール銀座です。', '東京', '豊島区', '池袋１丁目', '豊島ビル', '03-1234-1234', '年中無休（年末年始を除く）', '07:00:00', '22:00:00', '山手線', 'ＪＲ池袋駅', NULL, NULL, NULL, '2013-02-03 00:43:15');
+(1, '株式会社オープンクーポン', '株式会社オープンクーポンが発行するオープンなクーポンです。\r\n色々なクーポンを発行しています。', '東京', '豊島区', '池袋１丁目', '豊島ビル', '03-1234-1234', '年中無休（年末年始を除く）', '07:00:00', '22:00:00', 'JR山手線線・西武池袋線', 'ＪＲ池袋駅', NULL, NULL, NULL, '2013-02-13 09:04:34');
 
 -- --------------------------------------------------------
 

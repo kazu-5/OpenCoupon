@@ -1,4 +1,8 @@
 <?php
+/* @var $this CouponApp */
+
+//  Change layout
+$this->SetLayoutName('myshop');
 
 //  Check Login
 if( !$id = $this->model('Login')->GetLoginID() ){

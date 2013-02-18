@@ -1,0 +1,26 @@
+<?php
+/* @var $this CouponApp */
+
+$this->d( $_SESSION['OnePiece5']['Form5'] );
+
+?>
+<?php $this->form()->Start($form_name); ?>
+	<table>
+		<tr>
+			<td>
+				<nobr>Shop's photo</nobr>
+			</td>
+			<td>
+				<?php $this->form()->Input('shop_photo_1'); ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			
+			</td>
+			<td>
+				<?php $this->form()->Input('submit',' Upload '); ?>
+			</td>
+		</tr>
+	</table>
+<?php $this->form()->Finish($form_name); ?>

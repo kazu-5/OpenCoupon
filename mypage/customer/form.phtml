@@ -1,4 +1,6 @@
-<?php $this->mark(); ?>
+<?php
+/* @var $this CouponApp */
+?>
 <style>
 	#customer_informartion p{
 		font-size: 14px;
@@ -44,7 +46,11 @@
 	}
 </style>
 
-<?=$this->form()->Start('form_customer');?>
+<?php if( isset($data->message) ): ?>
+	<p class="red"><?=$data->message?></p>
+<?php endif; ?>
+
+<?=$this->form()->Start('form_customer','confirm');?>
 
 <div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
@@ -61,6 +67,15 @@
 					<p class="red"><?php $this->form()->InputError('first_name')?></p>
 				</td>
 			</tr>
+			<?php
+			/*
+			<tr align="left">
+				<th>郵便番号</th>
+				<td>
+					<?php $this->form()->Input('zipcode'); ?>
+					<p class="red"><?php $this->form()->InputError('zipcode');?></p>
+				</td>
+			</tr>
 			<tr align="left">
 				<th>都道府県</th>
 				<td>
@@ -68,7 +83,6 @@
 					<p class="red"><?php $this->form()->InputError('pref');?></p>
 				</td>
 			</tr>
-
 			<tr align="left">
 				<th>市区町村</th>
 				<td>
@@ -77,7 +91,6 @@
 					<p>例：新宿区</p>
 				</td>
 			</tr>
-
 			<tr align="left">
 				<th>丁目番地</th>
 				<td>
@@ -86,7 +99,6 @@
 					<p>例：新宿1-1-1</p>
 				</td>
 			</tr>
-
 			<tr align="left">
 				<th>建物名</th>
 				<td>
@@ -95,17 +107,7 @@
 					<p>例：新宿ビル5F</p>
 				</td>
 			</tr>
-
-			<tr align="left">
-				<th>メールアドレス</th>
-				<td><?php echo $mailaddr; ?><a href="/mypage/customer/mailaddr_change">変更する</a></td>
-			</tr>
-
-			<tr align="left">
-				<th>パスワード</th>
-				<td><?php echo '******'; ?><a href="/mypage/customer/password_change">変更する</a></td>
-			</tr>
-
+			
 			<tr align="left">
 				<th>myエリア</th>
 				<td>
@@ -113,15 +115,28 @@
 					<p class="red"><?php $this->form()->InputError('myarea');?></p>
 				</td>
 			</tr>
-
+			
+			*/
+			?>
+			<tr align="left">
+				<th>メールアドレス</th>
+				<td>
+					<a href="/mypage/customer/email">変更する</a>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>パスワード</th>
+				<td>
+					<a href="/mypage/customer/password">変更する</a>
+				</td>
+			</tr>
 			<tr align="left">
 				<th>生年月日</th>
 				<td>
 					<?php $this->form()->Input('birthday') ?>
-					<p class="red"><?php $this->form()->InputError('birthday') ?></p>
+					<p class="red"><?php $this->form()->Error('birthday') ?></p>
 				</td>
 			</tr>
-
 			<tr align="left">
 				<th>性別</th>
 				<td>
@@ -135,6 +150,4 @@
 		</div>
 	</div>
 </div>
-<p class="red"><?=$error?></p>
-
 <?php $this->form()->Finish('form_customer'); ?>

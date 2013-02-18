@@ -1,0 +1,30 @@
+<?php
+/* @var $this CouponApp */
+?>
+<style>
+div.header_login{
+	float: right;
+	padding: 0.5em 1em;
+	color: white;
+}
+div.header_login a{
+	color: white;
+	text-decoration: none;
+}
+</style>
+<header id="header">
+	<img src="<?=OnePiece5::ConvertUrl('app:/img/coupon_logo.png')?>" title="共同クーポン購入サイト" alt="共同クーポン購入サイト">
+	<div class="header_login">
+		<?php
+		if( $id = $this->model('Login')->GetLoginID() ){
+			$href = $this->ConvertURL('app:/mypage');
+			$name = $this->pdo()->quick(" nick_name <- t_customer.account_id = $id ");
+			$name = sprintf('<a href="%s">%s</a>',$href,$name);
+		}else{
+			$href = $this->ConvertURL('app:/Login');
+			$name = sprintf('<a href="%s">GUEST</a>',$href); 
+		}	
+		?>
+		<?=$name?>
+	</div>
+</header>

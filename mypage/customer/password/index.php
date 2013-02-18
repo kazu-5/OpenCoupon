@@ -10,45 +10,56 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$config = $this->config()->form_customer( $id );
-$this->form()->AddForm($config);
+$form_config = $this->config()->form_email( $id );
+$this->form()->AddForm($form_config);
+
+//  form name
+$form_name = $form_config->name;
+
+//  data
+$data = new Config();
+$data->form_name = $form_name;
 
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('form.phtml',$data);
 		break;
 		
 	case 'confirm':
-		if( $this->form()->Secure('form_customer') ){
+		if( $this->form()->Secure($form_name) ){
 			//  OK
-			$this->template('confirm.phtml');
+			$this->template('confirm.phtml',$data);
 		}else{
 			//  NG
-			$this->template('form.phtml');
+			$this->template('form.phtml',$data);
 		}
 		break;
 		
 	case 'commit':
-		if( $this->form()->Secure('form_customer') ){
+		if( $this->form()->Secure($form_name) ){
 			//  OK
 			
 			//  Update
-			$update = $this->config()->update_customer( $id );
+			$update = $this->config()->update_password( $id );
 			$num = $this->pdo()->update($update);
 			
+			//  Print template
 			if( $num !== false ){
-			
+
+				//  Clear of saved form value.
+				$this->form()->Clear($form_name);
+					
+				//  All done.
 				$this->template('commit.phtml');
-				
 			}else{
-				$data = new Config();
+				//  No good.
 				$data->message = 'エラーが発生しました。';
 				$this->template('form.phtml',$data);
 			}
 		}else{
 			//  NG
-			$this->template('form.phtml');
+			$this->template('form.phtml',$data);
 		}
 		break;
 		
