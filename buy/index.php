@@ -1,13 +1,14 @@
 <?php
 /* @var $this CouponApp */
+
 $action    = $this->GetBuyAction();
 $coupon_id = $this->GetCouponId();
 $this->mark("action=$action",'debug');
 $this->mark("coupon_id=$coupon_id",'debug');
 
 //  Formの設定
-$config = $this->config()->form_buy($coupon_id);
-$this->form()->AddForm($config);
+$form_config = $this->config()->form_buy($coupon_id);
+$this->form()->AddForm($form_config);
 
 //  クーポンのrecord
 $select = $this->config()->select_coupon($coupon_id);
@@ -17,13 +18,13 @@ $record = $this->pdo()->select($select);
 $data = new Config();
 $data->coupon_id = $coupon_id;
 $data->record    = $record;
+$data->form_name = $form_config->name;
 
 //  Action
 switch( $action ){
 	case 'index':
-		
-		//  Check secure
-		if( $this->form()->Secure('form_buy') ){
+		//  Check secures
+		if( $this->form()->Secure($form_config->name) ){
 			//  OK
 			//  Login Check
 			if( $id = $this->model('Login')->GetLoginID() ){
@@ -33,7 +34,7 @@ switch( $action ){
 			}
 		}else{
 			//  NG
-			include('buy.phtml');
+			include('form_buy.phtml');
 		}
 		break;
 		
@@ -75,7 +76,7 @@ switch( $action ){
 			$this->form()->AddForm($config);
 			
 			//  Check secure
-			if( $this->form()->Secure('form_buy') and $this->form()->Secure('form_address') ){
+			if( /* $this->form()->Secure('form_buy') and $this->form()->Secure('form_address') */ true ){
 				//  OK
 				
 				//  Insert Address

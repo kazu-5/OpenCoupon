@@ -63,14 +63,12 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function form_buy($coupon_id)
+	function form_buy( $coupon_id )
 	{
 		$form_config = self::_get_form_default();
 	
 		// form name
-		$form_config->name = 'form_buy';
-		$form_config->action = '/buy/'.$coupon_id; // URL controll by controller
-		//$form_config->action = '/buy/login'; // URL controll by controller
+		$form_config->name = 'form_buy_'.$coupon_id;
 		
 		// input text
 		$input_name = 'coupon_id';
@@ -82,17 +80,14 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'quantity';
 		$form_config->input->$input_name->name  = $input_name;
 		$form_config->input->$input_name->type  = 'select';
-		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->style  = 'font-size:1em; height:1.5em;';
-		$form_config->input->$input_name->id  = 'quantity';
-		//$input['onchange'] = 'change_quantity();';
+		$form_config->input->$input_name->id     = 'quantity';
+		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->onchange  = 'change_quantity();';
-		//$form_config->input->$input_name->option->none->value = '';
 		
 		for( $i=1; $i<10; $i++){
 			$form_config->input->$input_name->option->$i->label   = $i;
 			$form_config->input->$input_name->option->$i->value   = $i;
-			//$option['style'] = 'text-align:center;';
 			$form_config->input->$input_name->option->$i->style   = 'text-align:center;';
 		}
 		
@@ -235,7 +230,7 @@ class CouponConfig extends ConfigMgr
 			$form_config->input->$input_name->options->f->value = 'F';
 			
 		//  Pref
-		$input_name = 'pref';
+		$input_name = 'favorite_pref';
 		$form_config->input->$input_name->label = '都道府県';
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->required = true;

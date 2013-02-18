@@ -44,8 +44,8 @@ $register_flag = false; // TODO
 							＝
 							<span id="price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
 						</span>
-						<p style="font-size:13px; color: #FF9800;">▲数量の変更はこちらから</p>
 					</nobr>
+					<p style="font-size:13px; color: #FF9800;">▲数量の変更はこちらから</p>
 				</td>
 			</tr>
 		</table>
@@ -56,11 +56,11 @@ $register_flag = false; // TODO
 <?=$this->form()->Finish('form_buy');?>
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 40px; font-size: 20px;">お客様情報</h2>
-	
-<?=$this->form()->Start('form_address',"app:/buy/$coupon_id/reconfirm");?>
 
 	<div id="customer_informartion" style="padding-top:8px;">
-		<p style="padding: 0 0 8px;">▼以下にてお支払いに関する情報をご記入ください。</p>
+		<p style="padding: 0 0 8px;">▼以下にてお支払いに関する情報をご記入ください。</p>	
+		
+		<?=$this->form()->Start('form_address',"app:/buy/$coupon_id/reconfirm");?>		
 		<table style="border-collapse: collapse;">
 			<tr style="height:50px; padding: 25px 0;" align="left">
 				<th>お名前</th>
@@ -94,41 +94,34 @@ $register_flag = false; // TODO
 			<tr align="left">
 				<th>市区町村</th>
 				<td>
-					<span>
-						<p>例：新宿区</p>
-						<?php $this->form()->Input('city') ?>
-						<?php $this->form()->Error('city') ?>
-					</span>
+					<p>例：新宿区</p>
+					<?php $this->form()->Input('city') ?>
+					<?php $this->form()->Error('city') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>丁目番地</th>
 				<td>
-					<span>
-						<p>例：新宿1-1-1</p>
-						<?php $this->form()->Input('address') ?>
-						<?php $this->form()->Error('address') ?>
-					</span>
+					<p>例：新宿1-1-1</p>
+					<?php $this->form()->Input('address') ?>
+					<?php $this->form()->Error('address') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>建物名</th>
 				<td>
-					<span>
-						<p>例：新宿ビル5F</p>
-						<?php $this->form()->Input('building') ?>
-						<?php $this->form()->Error('building') ?>
-					</span>
+					<p>例：新宿ビル5F</p>
+					<?php $this->form()->Input('building') ?>
+					<?php $this->form()->Error('building') ?>
 				</td>
 			</tr>
 		</table>
 		<div style="text-align:center">
-			<?php $this->form()->Input('submit',' この内容で購入 ') ?>
+			<?php $this->form()->Input('submit',' 入力内容を確認する ') ?>
 		</div>
+		<?php $this->form()->Finish('form_address') ?>
 	</div>
 </div>
-
-<?php $this->form()->Finish('form_address') ?>
 
 <script>
 function change_quantity(){

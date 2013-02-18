@@ -8,17 +8,9 @@ $record    = $data->record;
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
 		<h1 style="font-size: 20px;">クーポン購入</h1>
 	</div>
-
-	<?php if($register_flag): ?>
-	<div class ="register_message" style="text-align:center; padding-top:10px;">
-		<p><strong style="font-size:22px;">会員登録が完了しました。</strong></p>
-		<p style="font-size:14px;">これよりクーポンをご購入いただけます。</p>
-	</div>
-	<?php endif; ?>
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">購入内容</h2>
 	
-<?=$this->form()->Start('form_buy');?>
 	<div id="coupon_content" style="padding-top:8px;">
 		<table style="border-collapse: collapse; width:100%;">
 			<tr style="background-color: #DEEDCE;">
@@ -37,28 +29,24 @@ $record    = $data->record;
 					<nobr>
 						<span class="coupon_price">
 							<span class="coupon_price">
-							<?php $this->form()->Value('quantity');?>
+							<?php $quantity = $this->form()->GetValue('quantity','form_buy');?>
+							<?php print $quantity ?>
 							</span>
 							×
 							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
 							＝
-							<span id="price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
+							<span id="price" class="coupon_price">
+								<?php print number_format( $quantity * $record['coupon_normal_price'] ) ?>
+							</span>円
 						</span>
-						<p style="font-size:13px; color: #FF9800;">▲数量の変更はこちらから</p>
 					</nobr>
 				</td>
 			</tr>
 		</table>
-		<div style="text-align:center">
-			<?php $this->form()->Input('submit',' 数量を変更 ') ?>
-		</div>
 	</div>
-<?=$this->form()->Finish('form_buy');?>
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 40px; font-size: 20px;">お客様情報</h2>
 	
-<?=$this->form()->Start('form_address',"app:/buy/$coupon_id/reconfirm");?>
-
 	<div id="customer_informartion" style="padding-top:8px;">
 		<p style="padding: 0 0 8px;">▼以下にてお支払いに関する情報をご記入ください。</p>
 		<table style="border-collapse: collapse;">
@@ -66,66 +54,56 @@ $record    = $data->record;
 				<th>お名前</th>
 				<td>
 					<span>
-						姓：<?php $this->form()->Input('last_name') ?>
-						名：<?php $this->form()->Input('first_name') ?>
-						<?php $this->form()->Error('last_name') ?>
-						<?php $this->form()->Error('first_name') ?>
+						姓：<?php $this->form()->Value('last_name','form_address') ?>
+						名：<?php $this->form()->Value('first_name','form_address') ?>
 					</span>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>郵便番号</th>
 				<td>
-					<span>
-						<?php $this->form()->Input('zipcode') ?>
-						<?php $this->form()->Error('zipcode') ?>
-					</span>
+					<?php $this->form()->Value('zipcode','form_address') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>都道府県</th>
 				<td>
-					<span>
-						<?php $this->form()->Input('pref') ?>
-						<?php $this->form()->Error('pref') ?>
-					</span>
+					<?php $this->form()->Value('pref','form_address') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>市区町村</th>
 				<td>
-					<span>
-						<p>例：新宿区</p>
-						<?php $this->form()->Input('city') ?>
-						<?php $this->form()->Error('city') ?>
-					</span>
+					<?php $this->form()->Value('city','form_address') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>丁目番地</th>
 				<td>
-					<span>
-						<p>例：新宿1-1-1</p>
-						<?php $this->form()->Input('address') ?>
-						<?php $this->form()->Error('address') ?>
-					</span>
+					<?php $this->form()->Value('address','form_address') ?>
 				</td>
 			</tr>
 			<tr align="left">
 				<th>建物名</th>
 				<td>
-					<span>
-						<p>例：新宿ビル5F</p>
-						<?php $this->form()->Input('building') ?>
-						<?php $this->form()->Error('building') ?>
-					</span>
+					<?php $this->form()->Value('building','form_address') ?>
 				</td>
 			</tr>
 		</table>
-		<div style="text-align:center">
-			<?php $this->form()->Input('submit',' この内容で購入 ') ?>
-		</div>
+		
+		<!-- 確定ボタン -->
+		<form action="<?=$this->ConvertURL("app:/buy/$coupon_id/commit")?>" method="post">
+			<div style="text-align:center">
+				<input type="submit" class="submit" value=" この内容で購入する ">
+			</div>
+		</form>
+		
+		<!-- 戻るボタン -->
+		<form action="<?=$this->ConvertURL("app:/buy/$coupon_id/confirm")?>" method="post">
+			<div style="text-align:center">
+				<input type="submit" class="submit" value=" 入力内容を修正する ">
+			</div>
+		</form>
 	</div>
 </div>
 
-<?php $this->form()->Finish('form_address') ?>
