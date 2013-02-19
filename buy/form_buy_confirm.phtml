@@ -1,0 +1,34 @@
+
+	<div id="coupon_content" style="padding-top:8px;">
+		<table style="border-collapse: collapse; width:100%;">
+			<tr style="background-color: #DEEDCE;">
+				<th style="border: 1px solid #CCCCCC; width:50%; height:">購入クーポン</th>
+				<th>数量</th>
+				<th>単価</th>
+				<th>合計</th>
+			</tr>
+			<tr>
+				<td>
+					クーポンの写真を掲載する
+					<img style="float:left; margin: 5px;" height="75px" src="">
+					<p style="font-size:13px;"><?=$record['coupon_description']?></p>
+				</td>
+				<td colspan="3" style="font-size: 40px; text-align:center;">
+					<nobr>
+						<span class="coupon_price">
+							<span class="coupon_price">
+							<?php $quantity = $this->form()->GetValue('quantity',$data->form_name);?>
+							<?php print $quantity ?>
+							</span>
+							×
+							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
+							＝
+							<span id="price" class="coupon_price">
+								<?php print number_format( $quantity * $record['coupon_normal_price'] ) ?>
+							</span>円
+						</span>
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</div>

@@ -1,0 +1,51 @@
+
+	<div id="customer_informartion" style="padding-top:8px;">
+		<p style="padding: 0 0 8px;">▼以下にてお支払いに関する情報をご記入ください。</p>
+		<table style="border-collapse: collapse;">
+			<tr style="height:50px; padding: 25px 0;" align="left">
+				<th>お名前</th>
+				<td>
+					<span>
+						姓：<?php $this->form()->Value('last_name','form_address') ?>
+						名：<?php $this->form()->Value('first_name','form_address') ?>
+					</span>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>郵便番号</th>
+				<td>
+					<?php $this->form()->Value('zipcode','form_address') ?>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>都道府県</th>
+				<td>
+					<?php $this->form()->Value('pref','form_address') ?>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>市区町村</th>
+				<td>
+					<?php $this->form()->Value('city','form_address') ?>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>丁目番地</th>
+				<td>
+					<?php $this->form()->Value('address','form_address') ?>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>建物名</th>
+				<td>
+					<?php $this->form()->Value('building','form_address') ?>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- 確定ボタン -->
+		<form action="<?=$this->ConvertURL("app:/buy/$coupon_id/commit")?>" method="post">
+			<div style="text-align:center">
+				<input type="submit" class="submit" value="<?=$data->submit_label?>">
+			</div>
+		</form>
