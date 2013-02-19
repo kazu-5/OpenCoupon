@@ -1,17 +1,18 @@
 <?php
 /* @var $this CouponApp */
-
-$this->d( $_SESSION['OnePiece5']['Form5'] );
-
 ?>
-<?php $this->form()->Start($form_name); ?>
+<?php $this->form()->Start($data->form_name); ?>
 	<table>
 		<tr>
 			<td>
 				<nobr>Shop's photo</nobr>
 			</td>
 			<td>
+				<?php if( $path = $this->form()->GetValue('shop_photo_1') ): ?>
+					<img src="<?= $this->Path2URL($path) ?>"><br/>
+				<?php endif; ?>
 				<?php $this->form()->Input('shop_photo_1'); ?>
+				<?php $this->form()->Error('shop_photo_1'); ?>
 			</td>
 		</tr>
 		<tr>
@@ -19,8 +20,8 @@ $this->d( $_SESSION['OnePiece5']['Form5'] );
 			
 			</td>
 			<td>
-				<?php $this->form()->Input('submit',' Upload '); ?>
+				<?php $this->form()->Input('submit',' Upload photo '); ?>
 			</td>
 		</tr>
 	</table>
-<?php $this->form()->Finish($form_name); ?>
+<?php $this->form()->Finish($data->form_name); ?>

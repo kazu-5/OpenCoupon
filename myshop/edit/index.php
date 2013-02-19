@@ -28,11 +28,11 @@ $form_name_shop_photo = $config->name;
 switch( $action ){
 	case 'index':
 		//  form shop
-		$data['form_name'] = $form_name_shop;
+		$data->form_name = $form_name_shop;
 		$this->template('form.phtml',$data);
 
 		//  form shop
-		$data['form_name'] = $form_name_shop_photo;
+		$data->form_name = $form_name_shop_photo;
 		$this->template('shop_photo.phtml',$data);
 		break;
 		
