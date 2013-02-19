@@ -1,45 +1,46 @@
-<?php $this->form()->Start($data->form_name); ?>
-	<?php $this->form()->Input('coupon_id'); ?>
-<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
-	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
-		<h1 style="font-size: 20px;">クーポン購入</h1>
-	</div>
-	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">購入内容</h2>
-	<div id="coupon_content" style="padding-top:8px;">
-		<table style="border-collapse: collapse; width:100%;">
-			<tr style="background-color: #DEEDCE;">
-				<th style="border: 1px solid #CCCCCC; width:50%; height:">購入クーポン</th>
-				<th>数量</th>
-				<th>単価</th>
-				<th>合計</th>
-			</tr>
-			<tr>
-				<td>
-					<img style="float:left; margin: 5px;" height="75px" src="../img/dummy.jpg">
-					<p style="font-size:13px;"><?=$record['coupon_description']?></p>
-				</td>
-				<td colspan="3" style="font-size: 40px; text-align:center;">
-					<nobr>
-						<span class="coupon_price">
+<?php $this->form()->Start( $data->form_name, $data->form_action ); ?>
+	<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
+		<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+			<h1 style="font-size: 20px;">クーポン購入</h1>
+		</div>
+		
+		<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">購入内容</h2>
+		
+		<div id="coupon_content" style="padding-top:8px;">
+			<table style="border-collapse: collapse; width:100%;">
+				<tr style="background-color: #DEEDCE;">
+					<th style="border: 1px solid #CCCCCC; width:50%; height:">購入クーポン</th>
+					<th>数量</th>
+					<th>単価</th>
+					<th>合計</th>
+				</tr>
+				<tr>
+					<td>
+						<img style="float:left; margin: 5px;" height="75px" src="../img/dummy.jpg">
+						<p style="font-size:13px;"><?=$record['coupon_description']?></p>
+					</td>
+					<td colspan="3" style="font-size: 40px; text-align:center;">
+						<nobr>
 							<span class="coupon_price">
-							<?php $quantity = $this->form()->GetValue('quantity'); ?>
-							<?php $this->form()->Input('quantity'); ?>
+								<span class="coupon_price">
+								<?php $quantity = $this->form()->GetValue('quantity'); ?>
+								<?php $this->form()->Input('quantity'); ?>
+								</span>
+								×
+								<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
+								＝
+								<span id="price" class="coupon_price"><?= $quantity * $record['coupon_normal_price']?></span>円
 							</span>
-							×
-							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
-							＝
-							<span id="price" class="coupon_price"><?= $quantity * $record['coupon_normal_price']?></span>円
-						</span>
+						</nobr>
 						<p style="font-size:13px; color: #FF9800;">▲数量の変更はこちらから</p>
-					</nobr>
-				</td>
-			</tr>
-		</table>
-		<div style="text-align:center">
-		<?php $this->form()->Input('submit'); ?>
+					</td>
+				</tr>
+			</table>
+			<div style="text-align:center">
+				<?php $this->form()->Input( 'submit', $data->submit_label ); ?>
+			</div>
 		</div>
 	</div>
-</div>
 <?php $this->form()->Finish($data->form_name); ?>
 
 <script>

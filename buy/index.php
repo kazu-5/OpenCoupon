@@ -28,7 +28,7 @@ switch( $action ){
 			//  OK
 			//  Login Check
 			if( $id = $this->model('Login')->GetLoginID() ){
-				$this->Location("app:/buy/$coupon_id/confirm");
+				$this->Location("app:/buy/$coupon_id/address");
 			}else{
 				$this->Location('app:/login');
 			}
@@ -38,6 +38,20 @@ switch( $action ){
 		}
 		break;
 		
+	case 'address':
+		//  Check login
+		if( $id = $this->model('Login')->GetLoginID() ){
+			//  OK
+			//  住所フォーム
+			$config = $this->config()->form_address( $id );
+			$this->form()->AddForm($config);
+			include('address.phtml');
+		}else{
+			//  NG
+			include('error_login.phtml');
+		}
+		break;
+
 	case 'confirm':
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
@@ -45,21 +59,7 @@ switch( $action ){
 			//  住所フォーム
 			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
-			include('buy_confirm.phtml');
-		}else{
-			//  NG
-			include('buy_login_error.phtml');
-		}
-		break;
-
-	case 'reconfirm':
-		//  Check login
-		if( $id = $this->model('Login')->GetLoginID() ){
-			//  OK
-			//  住所フォーム
-			$config = $this->config()->form_address( $id );
-			$this->form()->AddForm($config);
-			$this->Template('reconfirm.phtml',$data);
+			$this->Template('confirm.phtml',$data);
 		}else{
 			//  NG
 			include('buy_login_error.phtml');
