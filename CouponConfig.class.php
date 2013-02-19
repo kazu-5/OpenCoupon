@@ -944,7 +944,7 @@ class CouponConfig extends ConfigMgr
 		
 		$last_name  = $_post->last_name;
 		$first_name = $_post->first_name;
-		$postcode   = $_post->postcode;
+		$zipcode    = $_post->zipcode;
 		$pref       = $_post->pref;
 		$city       = $_post->city;
 		$address    = $_post->address;
@@ -955,7 +955,7 @@ class CouponConfig extends ConfigMgr
 		$config->set->account_id  = $account_id;
 		$config->set->first_name  = $first_name;
 		$config->set->last_name   = $last_name;
-		$config->set->postcode    = $postcode;
+		$config->set->zipcode     = $zipcode;
 		$config->set->pref        = $pref;
 		$config->set->city        = $city;
 		$config->set->address     = $address;
