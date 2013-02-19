@@ -52,14 +52,14 @@ switch( $action ){
 		}
 		break;
 
-	case 'reconfirm':
+	case 'confirm':
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
 			//  住所フォーム
 			$config = $this->config()->form_address( $id );
 			$this->form()->AddForm($config);
-			$this->Template('reconfirm.phtml',$data);
+			$this->Template('confirm.phtml',$data);
 		}else{
 			//  NG
 			include('buy_login_error.phtml');

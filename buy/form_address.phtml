@@ -1,7 +1,7 @@
 <?php
 /* @var $this CouponApp */
 ?>
-		<?=$this->form()->Start('form_address',"app:/buy/$coupon_id/reconfirm");?>		
+		<?=$this->form()->Start( $data->form_name, $data->form_action );?>
 		<table style="border-collapse: collapse;">
 			<tr style="height:50px; padding: 25px 0;" align="left">
 				<th>お名前</th>
@@ -58,7 +58,7 @@
 			</tr>
 		</table>
 		<div style="text-align:center">
-			<?php $this->form()->Input('submit',' 入力内容を確認する ') ?>
+			<?php $this->form()->Input( 'submit', $data->submit_label ) ?>
 		</div>
 		<?php $this->form()->Finish('form_address') ?>
 		
