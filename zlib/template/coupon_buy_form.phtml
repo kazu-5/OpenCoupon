@@ -78,7 +78,7 @@
 				（販売終了ボタンの表示）
 			<?php endif; ?>
 		</div>
-		<table id="coupon_top_buy_price_info" class="collapse" width="90%" style="border-width:0px;">
+		<table id="coupon_top_buy_price_info" class="collapse" style="border-width:0px;">
 			<tr>
 				<td class="td1">通常価格
 				<td class="td2"><?=number_format($t_coupon['coupon_normal_price'])?>
@@ -97,9 +97,9 @@
 		<?php if( strtotime($t_coupon['coupon_sales_finish']) > time() ): ?>
 			<div id="coupon_buy_area_countdown" style="">
 			<?php if($t_coupon['rest_time_day']): ?>
-			<span id="rest_time_day" class="count_big"><?=$t_coupon['rest_time_day']?></span>
-			<span class="count_small">日</span>
-			<span><?php endif; ?>
+				<span id="rest_time_day" class="count_big"><?=$t_coupon['rest_time_day']?></span>
+				<span class="count_small">日</span>
+			<?php endif; ?>
 			<span id="rest_time_hour" class="count_big"><?=$t_coupon['rest_time_hour']?></span>
 			<span class="count_small">時間</span>
 			<span id="rest_time_minute" class="count_big"><?=$t_coupon['rest_time_minute']?></span>
