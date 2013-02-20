@@ -747,14 +747,34 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
+	function select_coupon_list()
+	{
+		//  Init.
+		$limit  = 10;
+		$page   = isset($_GET['page']) ? $_GET['page'] : 0;
+		$offset = $limit * $page;
+		
+		//  Create select config.
+		$config = self::select_coupon();
+		$config->limit  = $limit;
+		$config->offset = $offset;
+		return $config;
+	}
+	
 	function select_coupon( $coupon_id=null )
 	{
-		$config = $this->select();
-		$config->table = 't_coupon';
+		$config = parent::select('t_coupon');
 		if( $coupon_id ){
 			$config->where->coupon_id = $coupon_id;
+		}else{
+			//  TODO: Convert to GMT
+			$config->where->coupon_sales_start = '> '.date('Y-m-d H:i:s');
+		//	$config->order = '';
 		}
 		$config->limit = 1;
+		
+		$this->d( Toolbox::toArray($config) );
+		
 		return $config;
 	}
 
