@@ -11,23 +11,21 @@ $record    = $data->record;
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">購入内容</h2>
 	
-		<?php
-		include('form_buy_confirm.phtml');
-		?>
+	<?php
+	include('form_buy_confirm.phtml');
+	?>
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 40px; font-size: 20px;">お客様情報</h2>
 		
-		<?php
-		$data->submit_label = ' この内容で購入 ';
-		include('form_address_confirm.phtml');
-		?>
-		
-		<!-- 戻るボタン -->
-		<form action="<?=$this->ConvertURL("app:/buy/$coupon_id/address")?>" method="post">
-			<div style="text-align:center">
-				<input type="submit" class="submit" value=" 入力内容を修正する ">
-			</div>
-		</form>
-	</div>
+	<?php
+	$data->submit_label = ' この内容で購入 ';
+	include('form_address_confirm.phtml');
+	?>
+	
+	<!-- 戻るボタン -->
+	<form action="<?=$this->ConvertURL("app:/buy/$coupon_id/address")?>" method="post">
+		<div style="text-align:center">
+			<input type="submit" class="submit" value=" 入力内容を修正する ">
+		</div>
+	</form>
 </div>
-
