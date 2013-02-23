@@ -63,12 +63,14 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function form_buy( $coupon_id )
+	function form_buy($coupon_id)
 	{
 		$form_config = self::_get_form_default();
 	
 		// form name
-		$form_config->name = 'form_buy_'.$coupon_id;
+		$form_config->name = 'form_buy';
+		$form_config->action = '/buy/'.$coupon_id; // URL controll by controller
+		//$form_config->action = '/buy/login'; // URL controll by controller
 		
 		// input text
 		$input_name = 'coupon_id';
@@ -80,14 +82,17 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'quantity';
 		$form_config->input->$input_name->name  = $input_name;
 		$form_config->input->$input_name->type  = 'select';
-		$form_config->input->$input_name->style  = 'font-size:1em; height:1.5em;';
-		$form_config->input->$input_name->id     = 'quantity';
 		$form_config->input->$input_name->validate->required = true;
+		$form_config->input->$input_name->style  = 'font-size:1em; height:1.5em;';
+		$form_config->input->$input_name->id  = 'quantity';
+		//$input['onchange'] = 'change_quantity();';
 		$form_config->input->$input_name->onchange  = 'change_quantity();';
+		//$form_config->input->$input_name->option->none->value = '';
 		
 		for( $i=1; $i<10; $i++){
 			$form_config->input->$input_name->option->$i->label   = $i;
 			$form_config->input->$input_name->option->$i->value   = $i;
+			//$option['style'] = 'text-align:center;';
 			$form_config->input->$input_name->option->$i->style   = 'text-align:center;';
 		}
 		
@@ -230,7 +235,7 @@ class CouponConfig extends ConfigMgr
 			$form_config->input->$input_name->options->f->value = 'F';
 			
 		//  Pref
-		$input_name = 'favorite_pref';
+		$input_name = 'pref';
 		$form_config->input->$input_name->label = '都道府県';
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->required = true;
@@ -296,7 +301,7 @@ class CouponConfig extends ConfigMgr
 		$form_config = self::_get_form_default();
 		
 		$select = $this->select_address( $account_id, $seq_no );
-		$record = $this->pdo()->select($select);
+		//$record = $this->pdo()->select($select);
 		
 		//  form name
 		$form_config->name   = 'form_address';
@@ -304,49 +309,58 @@ class CouponConfig extends ConfigMgr
 		//  First name
 		$input_name = 'first_name';
 		$form_config->input->$input_name->label = '名';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->required = true;
 		
 		//  Last name
 		$input_name = 'last_name';
 		$form_config->input->$input_name->label = '姓';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  postcode
 		$input_name = 'zipcode';
 		$form_config->input->$input_name->label = '郵便番号';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  pref
 		$input_name = 'pref';
+		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->label = '都道府県';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $this->model('JapanesePref')->GetIndex($t_address['pref']);
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->options = $this->model('JapanesePref')->UsedToForms();
 
 		//  city
 		$input_name = 'city';
 		$form_config->input->$input_name->label = '市区町村';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  address
 		$input_name = 'address';
 		$form_config->input->$input_name->label = '丁目番地';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		//  building
 		$input_name = 'building';
 		$form_config->input->$input_name->label = '建物名';
-		$form_config->input->$input_name->value = $record[$input_name];
+		//$form_config->input->$input_name->value = $record[$input_name];
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = ' 入力内容を確認する ';
 		
 		return $form_config;
 	}
@@ -527,6 +541,22 @@ class CouponConfig extends ConfigMgr
 		$config = $this->select_address($account_id);
 		$t_address = $this->pdo()->select($config);
 	
+		//  form name
+		$form_config->name   = 'form_address_change';
+		
+		//  First name
+		$input_name = 'first_name';
+		$form_config->input->$input_name->label = '名';
+		$form_config->input->$input_name->value = $record[$input_name];
+		$form_config->input->$input_name->required = true;
+		
+		//  Last name
+		$input_name = 'last_name';
+		$form_config->input->$input_name->label = '姓';
+		$form_config->input->$input_name->value = $record[$input_name];
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
 		//  zipcode
 		$input_name = 'zipcode';
 		$form_config->input->$input_name->label = '郵便番号';
@@ -715,6 +745,21 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
+	function button_add_address()
+	{
+		$form_config = new Config();
+		
+		$form_config->name = 'button_add_address';
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = ' 住所を追加する ';
+		
+		return $form_config;
+	}
 	//===========================================//
 	
 	function credit( $id, $amount )
@@ -1150,6 +1195,20 @@ class CouponConfig extends ConfigMgr
 		$config->limit = 1;
 		$config->set = $set;
 		
+		return $config;
+	}
+	
+	function update_address( $account_id,$seq_no)
+	{
+		$set = $this->form()->GetInputValueAll('form_address_change');
+		unset($set->submit);
+	
+		$config = parent::update('t_address');
+		$config->where->account_id = $account_id;
+		$config->where->seq_no = $seq_no;
+		$config->limit = 1;
+		$config->set = $set;
+	
 		return $config;
 	}
 	

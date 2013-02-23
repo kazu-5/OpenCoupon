@@ -20,11 +20,6 @@ class CouponApp extends App
 		return parent::Config( $cmgr );
 	}
 	
-	function Path2URL( $path )
-	{
-		return str_replace( rtrim($_SERVER['DOCUMENT_ROOT'],'/'), '', $path);
-	}
-	
 	/***		ACTION		***/
 	
 	function GetAction(){
