@@ -677,9 +677,9 @@ class CouponConfig extends ConfigMgr
 		$select = $this->select_photo( $shop_id, 0, $seq_no );
 		$record = $this->pdo()->select($select);
 		
-		$this->d($record);
-		
 		if( $record['url'] ){
+			$config->input->$input_name->save->path = $record['url'];
+		}else{
 			$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
 			$config->input->$input_name->save->name = '1';
 		}
