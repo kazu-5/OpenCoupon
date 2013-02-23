@@ -16,9 +16,11 @@ $record = $this->pdo()->select($select);
 
 //  templateに渡すdata
 $data = new Config();
-$data->coupon_id = $coupon_id;
-$data->record    = $record;
-$data->form_name = $form_config->name;
+$data->coupon_id    = $coupon_id;
+$data->record       = $record;
+$data->form_name    = $form_config->name;
+$data->form_action  = null;
+$data->submit_label = ' この内容で購入 ';
 
 //  Action
 switch( $action ){

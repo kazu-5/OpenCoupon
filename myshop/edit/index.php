@@ -26,14 +26,22 @@ $this->form()->AddForm( $config );
 $form_name_shop_photo = $config->name; 
 
 switch( $action ){
+	case 'photo':
+		//  Get submit images url.
+		$shop_photo_1 = $this->form()->GetValue('shop_photo_1',$form_name_shop_photo);
+		
+		//  Save photo's URL
+		$insert = $this->config()->insert_photo( $shop_id, 0, 1, $shop_photo_1 );
+		$num = $this->pdo()->insert($insert);
+	//	break;
+		
 	case 'index':
 		//  form shop
-		$data['form_name'] = $form_name_shop;
-		$this->template('form.phtml',$data);
-
-		//  form shop
-		$data['form_name'] = $form_name_shop_photo;
-		$this->template('shop_photo.phtml',$data);
+		$data->form_name_shop = $form_name_shop;
+		//  form shop photo
+		$data->form_name_shop_photo = $form_name_shop_photo;
+		//  template
+		$this->template('index.phtml',$data);
 		break;
 		
 	case 'confirm':
