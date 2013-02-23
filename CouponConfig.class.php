@@ -641,10 +641,19 @@ class CouponConfig extends ConfigMgr
 		//  input setting
 		$input_name = 'shop_photo_1';
 		$config->input->$input_name->type = 'file';
-		$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
-		$config->input->$input_name->save->name = '1';
 		$config->input->$input_name->validate->permit = 'image';
-
+		
+		//  Check saved image url.
+		$select = $this->select_photo( $shop_id, 0, $seq_no );
+		$record = $this->pdo()->select($select);
+		
+		$this->d($record);
+		
+		if( $record['url'] ){
+			$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
+			$config->input->$input_name->save->name = '1';
+		}
+		
 		$input_name = 'submit';
 		$config->input->$input_name->type = 'submit';
 		
@@ -756,8 +765,14 @@ class CouponConfig extends ConfigMgr
 		
 		//  Create select config.
 		$config = self::select_coupon();
+		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
+		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
 		$config->limit  = $limit;
 		$config->offset = $offset;
+		
+		//  alias
+		$config->column->coupon_normal_price = 'coupon_normal_price'; 
+		
 		return $config;
 	}
 	
@@ -767,13 +782,9 @@ class CouponConfig extends ConfigMgr
 		if( $coupon_id ){
 			$config->where->coupon_id = $coupon_id;
 		}else{
-			//  TODO: Convert to GMT
-			$config->where->coupon_sales_start = '> '.date('Y-m-d H:i:s');
-		//	$config->order = '';
+			//	$config->order = '';
 		}
 		$config->limit = 1;
-		
-		$this->d( Toolbox::toArray($config) );
 		
 		return $config;
 	}
@@ -903,6 +914,18 @@ class CouponConfig extends ConfigMgr
 		*/
 		return self::select_address( $id, 1 );
 	}
+	
+	function select_photo( $shop_id, $coupon_id, $seq_no )
+	{
+		$config = parent::select('t_photo');
+	//	$config->where->shop_id   = $shop_id;
+	//	$config->where->coupon_id = $coupon_id;
+	//	$config->where->seq_no    = $seq_no; 
+	//	$config->column = 'url';
+		$config->limit  = 1;
+		return $config; 
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
@@ -1033,6 +1056,16 @@ class CouponConfig extends ConfigMgr
 		$config = parent::insert('t_coupon');
 		$config->set->shop_id = $shop_id;
 		$config->set = $value;
+		return $config;
+	}
+	
+	function insert_photo( $shop_id, $coupon_id, $seq_no, $path )
+	{
+		$config = new Config();
+		$config->set->shop_id = $shop_id;
+		$config->set->seq_no  = $seq_no;
+		$config->set->url     = $this->Path2URL($path);
+		$config->update       = true;
 		return $config;
 	}
 	
