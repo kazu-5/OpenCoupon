@@ -50,64 +50,36 @@
 	<p class="red"><?=$data->message?></p>
 <?php endif; ?>
 
+<?=$this->form()->Start('form_address','commit');?>
+
 <div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
 		<h1 style="font-size: 20px;">登録情報</h1>
 	</div>
 	
-	<?php //会員情報 ?>
-	<div id="customer_informartion" style="padding-top:8px;">
-		<?php $this->form()->Start('form_customer','confirm');?>
-		<table style="border-collapse: collapse;">
-			<tr style="height:50px; padding: 25px 0;" align="left">
-				<th style="width:5px;">名前</th>
-				<td style="width:400px;">
-					姓：<?php $this->form()->Input('last_name');?>
-					名：<?php $this->form()->Input('first_name');?>
-					<p class="red"><?php $this->form()->InputError('last_name')?></p>
-					<p class="red"><?php $this->form()->InputError('first_name')?></p>
-				</td>
-			</tr>
-			<tr align="left">
-				<th>メールアドレス</th>
-				<td>
-					<a href="/mypage/customer/email">変更する</a>
-				</td>
-			</tr>
-			<tr align="left">
-				<th>パスワード</th>
-				<td>
-					<a href="/mypage/customer/password">変更する</a>
-				</td>
-			</tr>
-			<tr align="left">
-				<th>生年月日</th>
-				<td>
-					<?php $this->form()->Input('birthday') ?>
-					<p class="red"><?php $this->form()->Error('birthday') ?></p>
-				</td>
-			</tr>
-			<tr align="left">
-				<th>性別</th>
-				<td>
-					<?php $this->form()->Input('gender'); ?>
-					<p class="red"><?php $this->form()->InputError('gender');?></p>
-				</td>
-			</tr>
-		</table>
-		<div style="text-align:center">
-			<?php $this->form()->Input('submit')?>
-		</div>
-		<?php $this->form()->Finish('form_customer'); ?>
+	<div id="customer_informartion" style="padding-top:8px;">	
+		<h1 style="font-size: 16px;">お客様の基本情報</h1>
 		
-		<?php //住所情報 ?>
-		<?php $this->form()->Start('form_address_change','address_commit');?>
+		<p>姓：<?php $this->form()->Value('last_name');?></p>
+		<p>名：<?php $this->form()->Value('first_name');?></p>
+		<p>郵便番号：<?php $this->form()->Value('zipcode');?></p>
+		<p>都道府県：<?php $this->form()->Value('pref');?></p>
+		<p>市区町村：<?php $this->form()->Value('city');?></p>
+		<p>丁目番地：<?php $this->form()->Value('address');?></p>
+		<p>建物名：<?php $this->form()->Value('building');?></p>
+		<div style="text-align:center">
+			<?php $this->form()->Input('submit','この内容で登録する')?>
+		</div>
+		<?php //$this->form()->Start('form_address','address_commit');?>
+		
+		<?php
+		/*
 		<table style="border-collapse: collapse;">
 			<tr style="height:50px; padding: 25px 0;" align="left">
 				<th style="width:5px;">名前</th>
 				<td style="width:400px;">
-					姓：<?php $this->form()->Input('last_name');?>
-					名：<?php $this->form()->Input('first_name');?>
+					<p>姓：<?php $this->form()->Input('last_name');?></p>
+					<p>名：<?php $this->form()->Input('first_name');?></p>
 					<p class="red"><?php $this->form()->InputError('last_name')?></p>
 					<p class="red"><?php $this->form()->InputError('first_name')?></p>
 				</td>
@@ -157,14 +129,9 @@
 		<div style="text-align:center">
 			<?php $this->form()->Input('submit')?>
 		</div>
-		<?php $this->form()->Finish('form_address_change'); ?>
-		
-		<?php //住所追加 ?>
-		<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">住所の追加</h2>
-		<?php $this->form()->Start('button_add_address','add');?>
-		<div style="text-align:center">
-			<?php $this->form()->Input('submit')?>
-		</div>
-		<?php $this->form()->Finish('button_add_address'); ?>
+		<?php $this->form()->Finish('form_address'); ?>
+		*/
+		?>
 	</div>
 </div>
+<?php $this->form()->Finish('form_address'); ?>
