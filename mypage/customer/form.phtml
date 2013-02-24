@@ -55,6 +55,7 @@
 		<h1 style="font-size: 20px;">登録情報</h1>
 	</div>
 	
+	<?php //会員情報 ?>
 	<div id="customer_informartion" style="padding-top:8px;">
 		<?php $this->form()->Start('form_customer','confirm');?>
 		<table style="border-collapse: collapse;">
@@ -99,6 +100,7 @@
 		</div>
 		<?php $this->form()->Finish('form_customer'); ?>
 		
+		<?php //住所情報 ?>
 		<?php $this->form()->Start('form_address_change','address_commit');?>
 		<table style="border-collapse: collapse;">
 			<tr style="height:50px; padding: 25px 0;" align="left">
@@ -157,6 +159,7 @@
 		</div>
 		<?php $this->form()->Finish('form_address_change'); ?>
 		
+		<?php //住所追加 ?>
 		<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">住所の追加</h2>
 		<?php $this->form()->Start('button_add_address','add');?>
 		<div style="text-align:center">

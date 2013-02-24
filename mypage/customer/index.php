@@ -23,12 +23,12 @@ $this->form()->AddForm($config);
 $config = $this->config()->button_add_address();
 $this->form()->AddForm($config);
 
-
-//$records = $this->config()->select_address($id);
 //  customer table
-$config = $this->config()->select_address($account_id);
+$this->d($id);
+$config = $this->config()->select_address($id);
 $t_address = $this->pdo()->select($config);
 $this->d($t_address);
+$this->mark( $this->pdo()->qu() ); // 最後のSQL文を出力
 
 //	Action
 switch( $action ){
