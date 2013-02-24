@@ -12,7 +12,7 @@ switch( $action ){
 		$coupon_id = $this->GetDefaultCouponId();
 		$t_coupon  = $this->GetTCoupon($coupon_id);
 		$t_shop    = $this->GetTShop($t_coupon['shop_id']);
-
+		
 		//$this->d($t_coupon);
 		//$this->d($t_shop);
 		

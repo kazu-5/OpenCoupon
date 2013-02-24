@@ -22,7 +22,6 @@ class CouponApp extends App
 	
 	function Path2URL($path)
 	{
-		//  rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR) is fail.
 		$app_root = $this->GetEnv('app_root');
 		$app_root = rtrim( $app_root, DIRECTORY_SEPARATOR );
 		return str_replace( $app_root, '', $path );
@@ -165,6 +164,14 @@ class CouponApp extends App
 		return $this->pdo()->quick(" t_shop.shop_id = $shop_id ");
 	}
 	
+	/**
+	 * myshopで使うクーポン一覧を取得する
+	 * 
+	 * myshopでしか使わないので、これは分離した方が良い。
+	 * 
+	 * @param  integer $shop_id
+	 * @return array 
+	 */
 	function GetCouponListByShopId($shop_id)
 	{
 		if(!$shop_id){
@@ -182,27 +189,27 @@ class CouponApp extends App
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '> '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s');
-		$list['wait']  = $this->pdo()->select($config);
+		$list['wait'][]  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  On sale
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '<  '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '>  '.date('Y-m-d H:i:s');
-		$list['on']  = $this->pdo()->select($config);
+		$list['on'][]  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  End of sale
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
-		$list['off']  = $this->pdo()->select($config);
+		$list['off'][]  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  Delete
 		$config = $this->config()->select_coupon();
 		$config->where->deleted = '! null';
-		$list['delete']  = $this->pdo()->select($config);
+		$list['delete'][]  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		return $list;

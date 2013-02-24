@@ -1,33 +1,46 @@
 <?php
 /* @var $this CouponApp */
-$action = $this->GetAction();
+
+$action    = $this->GetAction();
+$coupon_id = $this->GetCouponId();
+$this->mark("action=$action",'debug');
+$this->mark("coupon_id=$coupon_id",'debug');
 
 //  Init credit card form
-$config = $this->config()->form_payment();
-$this->form()->AddForm($config);
+$form_config = $this->config()->form_payment();
+$this->form()->AddForm($form_config);
 
-//  Get ID
+//  Check login ID
 $id = $this->model('Login')->GetLoginId();
 if(empty($id)){
-	$this->mark("Does not loggedin.");
+	$this->mark("Not logged in.");
 	return;
 }
 
-//  Get Coupon ID
-$cid = $this->GetCouponID();
-
-//  Check form coupon_id
-$form_buy = $this->form()->GetInputValueAll('form_buy',true);
-$this->d( Toolbox::toArray($form_buy) );
-
-if( $form_buy->coupon_id != $cid ){
-	$this->mark("![ .red [ Does not match Coupon ID of buy-form. ]]");
-	return false;
+//  Check coupon_id
+if(empty($coupon_id)){
+	$this->mark("Not set coupon_id.");
+	return;
 }
 
-//  debug
-$this->mark("account_id: $id", 'debug');
-$this->mark("coupon_id: $cid", 'debug');
+//  Get quantity
+$form_config = $this->config()->form_buy($coupon_id);
+$this->form()->AddForm($form_config);
+$quantity = $this->form()->GetValue('quantity',$form_config->name);
+if(empty($quantity)){
+	$this->mark("Not set quantity.");
+	return;
+}
+
+//  Save payment coupon id
+if(!$payment_coupon_id = $this->GetSession('payment_coupon_id')){
+	$this->SetSession('payment_coupon_id',$coupon_id);
+}else{
+	if( $payment_coupon_id != $coupon_id ){
+		$this->mark("Does not match payment_coupon_id.");
+		return;
+	}
+}
 
 //  Switch action.
 switch( $action ){
@@ -79,6 +92,11 @@ switch( $action ){
 		$this->form()->clear('form_address');
 		$this->form()->clear('form_payment');
 		
+		break;
+		
+	case 'cancel':
+		$this->SetSession('payment_coupon_id',null);
+		$this->mark('Canceled this coupon.');
 		break;
 		
 	default:

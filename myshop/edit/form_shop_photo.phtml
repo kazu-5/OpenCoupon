@@ -1,0 +1,27 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start($data->form_name,'photo'); ?>
+	<table>
+		<tr>
+			<td>
+				<nobr>Shop's photo</nobr>
+			</td>
+			<td>
+				<?php if( $path = $this->form()->GetValue('shop_photo_1') ): ?>
+					<img src="<?= $this->Path2URL($path) ?>"><br/>
+				<?php endif; ?>
+				<?php $this->form()->Input('shop_photo_1'); ?>
+				<?php $this->form()->Error('shop_photo_1'); ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			
+			</td>
+			<td>
+				<?php $this->form()->Input('submit',' Upload photo '); ?>
+			</td>
+		</tr>
+	</table>
+<?php $this->form()->Finish($data->form_name); ?>

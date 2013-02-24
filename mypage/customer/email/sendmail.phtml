@@ -1,0 +1,15 @@
+<?php
+/* @var $this CouponApp */
+?>
+<h2>メールを送信しました。</h2>
+<p>以下のメールアドレス宛にメールを送信しました。</p>
+<p>メールに記載のある確認コードを入力して下さい。</p>
+<?php $this->form()->Start($data->form_name,'commit') ?>
+	<?php $this->form()->Label('email') ?>：
+	<?php $this->form()->Value('email') ?><br/>
+	
+	<?php $this->form()->Label('confirm_key') ?>：
+	<?php $this->form()->Value('confirm_key') ?><br/>
+	
+	<?php $this->form()->Value('submit') ?><br/>
+<?php $this->form()->Finish($data->form_name) ?>

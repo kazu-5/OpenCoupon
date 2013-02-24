@@ -16,41 +16,35 @@ $this->mark("shop_id: $shop_id",'controller');
 $data = null;
 
 //  Form (shop information)
-if( $config = $this->config()->form_shop($shop_id) ){
-	$form_name_shop = $config->name;
-	$this->form()->AddForm( $config );
-}else{
-	$this->d( Toolbox::toArray($config) );
-}
+$config = $this->config()->form_shop($shop_id);
+$this->form()->AddForm( $config );
+$form_name_shop = $config->name;
 
 //  Form (shop photo)
-if( $config = $this->config()->form_shop_photo($shop_id) ){
-	$form_name_photo = $config->name;
-	$this->form()->AddForm( $config );
-}else{
-	$this->d( Toolbox::toArray($config) );
-}
+$config = $this->config()->form_shop_photo($shop_id);
+$this->form()->AddForm( $config );
+$form_name_shop_photo = $config->name;
 
-//  form name
-$form_name = $config->name;
-$this->mark("form_name: $form_name",'controller');
-
+//  Do action
 switch( $action ){
-	case 'shop-photo':
+	case 'photo':
+		//  Get submit images url.
+		$shop_photo_1 = $this->form()->GetValue('shop_photo_1',$form_name_shop_photo);
 		
-		if( $this->form()->Secure($form_name_photo) ){
-			
-		}
-		
+		//  Save photo's URL
+		$insert = $this->config()->insert_photo( $shop_id, 0, 1, $shop_photo_1 );
+		$num = $this->pdo()->insert($insert);
 	//	break;
 		
 	case 'index':
-		//  form shop 
-		$data['form_name'] = $form_name_shop;
-		$this->template('form.phtml',$data);
+		//  form shop
+		$data->form_name_shop = $form_name_shop;
+		
 		//  form shop photo
-		$data['form_name'] = $form_name_photo;
-		$this->template('form_photo.phtml');
+		$data->form_name_shop_photo = $form_name_shop_photo;
+		
+		//  template
+		$this->template('index.phtml',$data);
 		break;
 		
 	case 'confirm':

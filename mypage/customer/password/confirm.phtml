@@ -1,0 +1,10 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start( $data->form_name, 'commit' ) ?>
+	<?php $this->form()->Value('password') ?>
+	<br>
+	<?php $this->form()->Value('password_confirm') ?>
+	<br>
+	<?php $this->form()->Input('submit','　確認　') ?>
+<?php $this->form()->Finish($data->form_name) ?>
