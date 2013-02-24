@@ -10,10 +10,13 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$config = $this->config()->form_customer( $id );
+$config = $this->config()->form_customer($id);
 $this->form()->AddForm($config);
 
-$config = $this->config()->form_address_change( $id, 1);
+$config = $this->config()->form_address_change($id, 1);
+$this->form()->AddForm($config);
+
+$config = $this->config()->form_address($id, 1);
 $this->form()->AddForm($config);
 
 //  Button
@@ -49,6 +52,7 @@ switch( $action ){
 			
 			//  Update
 			$update = $this->config()->update_customer( $id );
+			$this->d($update);
 			$num = $this->pdo()->update($update);
 			
 			if( $num !== false ){
@@ -66,19 +70,42 @@ switch( $action ){
 		}
 		break;
 	
-	case 'address_commit':
-		if( $this->form()->Secure('form_customer') ){
+	case 'add':
+		if( $this->form()->Secure('button_add_address') ){
 			//  OK
 			//  Update
+			/*
 			$update = $this->config()->update_address( $id);
 			$num = $this->pdo()->update($update);
-			$this->template('form.phtml');
+			*/
+			
+			$this->template('add.phtml');
 		}else{
 			//  NG
 			$this->template('form.phtml');
 		}
 		break;
 		
+	case 'add_confirm':
+		if( $this->form()->Secure('form_address') ){
+			//  OK
+			// Insert
+			$insert = $this->config()->insert_address($id);
+			$num = $this->pdo()->insert($insert);
+			
+			//  Update
+			/*
+			$update = $this->config()->update_address( $id);
+			$num = $this->pdo()->update($update);
+			*/
+				
+			$this->template('add_confirm.phtml');
+		}else{
+			//  NG
+			$this->template('form.phtml');
+		}
+		break;
+	
 	/*
 	case 'address_input':
 		if( $this->form()->Secure('button_add_address') ){
