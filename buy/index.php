@@ -23,6 +23,21 @@ $data->form_action  = null;
 $data->submit_label = ' この内容で購入 ';
 
 //  Action
+if( $action !== 'index' ){
+	//  Get account_id.
+	$id = $this->model('Login')->GetLoginID();
+	//  Check
+	if( !$id ){
+		//  Does not logged in.
+		$this->Location('app:/login');
+	}
+	//  Get address form.
+	$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
+	$config = $this->config()->form_address( $id, $seq_no );
+	$this->form()->AddForm($config);
+}
+
+//  Do action
 switch( $action ){
 	case 'index':
 		//  Check secures
@@ -44,9 +59,6 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
-			//  住所フォーム
-			$config = $this->config()->form_address( $id );
-			$this->form()->AddForm($config);
 			include('address.phtml');
 		}else{
 			//  NG
@@ -58,9 +70,6 @@ switch( $action ){
 		//  Check login
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
-			//  住所フォーム
-			$config = $this->config()->form_address( $id );
-			$this->form()->AddForm($config);
 			$this->Template('confirm.phtml',$data);
 		}else{
 			//  NG
@@ -73,10 +82,6 @@ switch( $action ){
 		if($id = $this->model('Login')->GetLoginID()){
 			//  OK
 			
-			//  住所フォーム
-			$config = $this->config()->form_address( $id );
-			$this->form()->AddForm($config);
-			
 			//  Check secure
 			if( /* $this->form()->Secure('form_buy') and $this->form()->Secure('form_address') */ true ){
 				//  OK
@@ -84,6 +89,7 @@ switch( $action ){
 				//  Insert Address
 				$config = $this->config()->insert_address( $id );
 				$id = $this->pdo()->insert($config);
+			//	$this->mark($id);
 				
 				if( $id !== false ){
 					$url = $this->ConvertURL('app:/buy/payment');

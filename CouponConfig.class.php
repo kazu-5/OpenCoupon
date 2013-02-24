@@ -296,12 +296,9 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
-	function form_address( $account_id, $seq_no=1 )
+	function form_address( $account_id, $seq_no=null )
 	{
 		$form_config = self::_form_default();
-		
-		$select = $this->select_address( $account_id, $seq_no );
-		//$record = $this->pdo()->select($select);
 		
 		//  form name
 		$form_config->name   = 'form_address';
@@ -361,6 +358,22 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
 		$form_config->input->$input_name->value  = ' 入力内容を確認する ';
+		
+		//  seq_no
+		$input_name = 'seq_no';
+		$form_config->input->$input_name->value  = $seq_no;
+		
+		//  Set saved value from database.
+		if( $seq_no ){
+			$select = $this->select_address( $account_id, $seq_no );
+			$record = $this->pdo()->select($select);
+			foreach($record as $input_name => $value){
+				if( isset($form_config->input->$input_name) ){
+					$form_config->input->$input_name->value = $value;
+				}
+			}
+		//	$this->d( $record );
+		}
 		
 		return $form_config;
 	}
@@ -1049,29 +1062,17 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
-		$_post = $this->form()->GetInputValueAll('form_address');
-		$_post = $this->Decode($_post);
-	//	$this->d($_post);
-		
-		$last_name  = $_post->last_name;
-		$first_name = $_post->first_name;
-		$zipcode    = $_post->zipcode;
-		$pref       = $_post->pref;
-		$city       = $_post->city;
-		$address    = $_post->address;
-		$building   = $_post->building;
+		$set = $this->form()->GetInputValueAll('form_address');
+		$set = $this->Decode($set);
+		//  Added
+		$set->account_id = $account_id;
+		//  Remove
+		unset($set->submit);
 		
 		$config = parent::insert('t_address');
-	
-		$config->set->account_id  = $account_id;
-		$config->set->first_name  = $first_name;
-		$config->set->last_name   = $last_name;
-		$config->set->zipcode     = $zipcode;
-		$config->set->pref        = $pref;
-		$config->set->city        = $city;
-		$config->set->address     = $address;
-		$config->set->building    = $building;
-	
+		$config->set = $set;
+		$config->update = true;
+		
 		return $config;
 	}
 	
