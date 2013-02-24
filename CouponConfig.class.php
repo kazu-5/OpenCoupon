@@ -235,7 +235,7 @@ class CouponConfig extends ConfigMgr
 			$form_config->input->$input_name->options->f->value = 'F';
 			
 		//  Pref
-		$input_name = 'pref';
+		$input_name = 'favorite_pref';
 		$form_config->input->$input_name->label = '都道府県';
 		$form_config->input->$input_name->type  = 'select';
 		$form_config->input->$input_name->required = true;
@@ -677,11 +677,13 @@ class CouponConfig extends ConfigMgr
 		$select = $this->select_photo( $shop_id, 0, $seq_no );
 		$record = $this->pdo()->select($select);
 		
-		$this->d($record);
+		//  Set save dir/name. 
+		$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
+		$config->input->$input_name->save->name = '1';
 		
+		//  Set saved file path.
 		if( $record['url'] ){
-			$config->input->$input_name->save->dir  = "app:/shop/$shop_id";
-			$config->input->$input_name->save->name = '1';
+			$config->input->$input_name->value = $record['url'];
 		}
 		
 		$input_name = 'submit';
