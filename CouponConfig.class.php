@@ -191,7 +191,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->tail  = '<br/>';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
-		$form_config->input->$name->validate->permit = 'email';
+		$form_config->input->$input_name->validate->permit = 'email';
 		
 		//  E-mail (confirm)
 		$input_name = 'email_confirm';
