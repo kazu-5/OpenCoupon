@@ -23,9 +23,9 @@ $this->form()->AddForm($config);
 $config = $this->config()->button_add_address();
 $this->form()->AddForm($config);
 
-//  customer table
-$this->d($id);
-$config = $this->config()->select_address($id);
+//  Get t_address record
+$seq_no = 1;
+$config = $this->config()->select_address( $id, $seq_no );
 $t_address = $this->pdo()->select($config);
 $this->d($t_address);
 $this->mark( $this->pdo()->qu() ); // 最後のSQL文を出力
