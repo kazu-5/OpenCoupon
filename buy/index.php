@@ -45,7 +45,8 @@ switch( $action ){
 		if( $id = $this->model('Login')->GetLoginID() ){
 			//  OK
 			//  住所フォーム
-			$config = $this->config()->form_address( $id );
+			$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
+			$config = $this->config()->form_address( $id, $seq_no );
 			$this->form()->AddForm($config);
 			include('address.phtml');
 		}else{

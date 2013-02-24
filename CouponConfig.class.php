@@ -296,12 +296,9 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
-	function form_address( $account_id, $seq_no=1 )
+	function form_address( $account_id, $seq_no=null )
 	{
 		$form_config = self::_form_default();
-		
-		$select = $this->select_address( $account_id, $seq_no );
-		//$record = $this->pdo()->select($select);
 		
 		//  form name
 		$form_config->name   = 'form_address';
@@ -361,6 +358,18 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
 		$form_config->input->$input_name->value  = ' 入力内容を確認する ';
+
+		//  Set saved value from database.
+		if( $seq_no ){
+			$select = $this->select_address( $account_id, $seq_no );
+			$record = $this->pdo()->select($select);
+			foreach($record as $input_name => $value){
+				if( isset($form_config->input->$input_name) ){
+					$form_config->input->$input_name->value = $value;
+				}
+			}
+			$this->d( $record );
+		}
 		
 		return $form_config;
 	}
