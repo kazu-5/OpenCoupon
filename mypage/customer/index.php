@@ -13,27 +13,10 @@ $id = $this->model('Login')->GetLoginID();
 $config = $this->config()->form_customer($id);
 $this->form()->AddForm($config);
 
-$config = $this->config()->form_address_change($id, 1);
-$this->form()->AddForm($config);
-
-$config = $this->config()->form_address($id, 1);
-$this->form()->AddForm($config);
-
-//  Button
-$config = $this->config()->button_add_address();
-$this->form()->AddForm($config);
-
-//  Get t_address record
-$seq_no = 1;
-$config = $this->config()->select_address( $id, $seq_no );
-$t_address = $this->pdo()->select($config);
-$this->d($t_address);
-$this->mark( $this->pdo()->qu() ); // 最後のSQL文を出力
-
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('index.phtml');
 		break;
 		
 	case 'confirm':

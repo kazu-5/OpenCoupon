@@ -368,7 +368,7 @@ class CouponConfig extends ConfigMgr
 					$form_config->input->$input_name->value = $value;
 				}
 			}
-			$this->d( $record );
+		//	$this->d( $record );
 		}
 		
 		//  seq_no
