@@ -33,7 +33,7 @@ $this->mark( $this->pdo()->qu() ); // 最後のSQL文を出力
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('index.phtml');
 		break;
 		
 	case 'confirm':
