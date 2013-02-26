@@ -10,15 +10,16 @@ $action = isset($args[1]) ? $args[1]: 'index';
 
 //  Data use to template.
 $data = new Config();
+$data->message     = null;
 
 //  Check seq_no
 if(!$seq_no){
-	$data->message = '順番号が指定されていません。';
+	$data->error    = '順番号が指定されていません。';
 	$data->template = 'error.phtml';
 	$this->template('index.phtml',$data);
 	return;
 }else if(!is_numeric($seq_no)){
-	$data->message = '順番号ではありません。';
+	$data->error    = '順番号ではありません。';
 	$data->template = 'error.phtml';
 	$this->template('index.phtml',$data);
 	return;
@@ -35,7 +36,6 @@ $this->form()->AddForm($form_config);
 //  Set data
 $data->form_name   = $form_name;
 $data->form_action = $this->ConvertURL("ctrl:/$seq_no/confirm");
-$data->message     = null;
 
 //	Action
 switch( $action ){
@@ -59,7 +59,13 @@ switch( $action ){
 		if( $this->form()->Secure($form_name) ){
 			//  OK
 			$update = $this->config()->update_address( $id, $seq_no );
-			$data->message  = "更新しました。";
+			if( $num = $this->pdo()->update($update) ){
+				$data->message  = "修正しました。";
+			}else if( $num === 0 ){
+				$data->message  = "既に修正してあります。";
+			}else{
+				$data->message  = "修正に失敗しました。";
+			}
 		}else{
 			//  NG
 			//$this->form()->debug($form_name);

@@ -35,7 +35,7 @@
 					<nobr>
 					<select id="form_change_address" name="form_change_address">
 					<?php foreach($data->t_address as $r): ?>
-						<?php $address = $this->model('JapanesePref')->Get((int)$r['pref']).$r['city'].$r['address']; ?>
+						<?php $address = $this->model('JapanesePref')->Get($r['pref']).$r['city'].$r['address']; ?>
 						<option value="<?=$r['seq_no']?>"><?=$address?></option>
 					<?php endforeach; ?>
 					</select>

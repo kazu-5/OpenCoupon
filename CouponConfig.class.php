@@ -990,9 +990,9 @@ class CouponConfig extends ConfigMgr
 	{
 		$config = parent::select('t_address');
 		$config->table = 't_address';
-		$config->account_id = $id;
+		$config->where->account_id = $id;
 		if( $seq_no ){
-			$config->seq_no = $seq_no;
+			$config->where->seq_no = $seq_no;
 			$config->limit = 1;
 		}
 		return $config;
@@ -1241,7 +1241,6 @@ class CouponConfig extends ConfigMgr
 	{
 		$form_name = "form_address_{$seq_no}";
 		$set = $this->form()->GetInputValueAll($form_name);
-	//	unset($set->submit);
 		
 		$config = parent::update('t_address');
 		$config->where->account_id = $account_id;
