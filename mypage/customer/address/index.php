@@ -11,10 +11,16 @@ $action = isset($args[1]) ? $args[1]: 'index';
 //  Data use to template.
 $data = new Config();
 
-//  seq_no is check
+//  Check seq_no
 if(!$seq_no){
 	$data->message = '順番号が指定されていません。';
-	$this->template('error.phtml',$data);
+	$data->template = 'error.phtml';
+	$this->template('index.phtml',$data);
+	return;
+}else if(!is_numeric($seq_no)){
+	$data->message = '順番号ではありません。';
+	$data->template = 'error.phtml';
+	$this->template('index.phtml',$data);
 	return;
 }
 
@@ -26,25 +32,30 @@ $form_config = $this->config()->form_address( $id, $seq_no );
 $form_name   = $form_config->name;
 $this->form()->AddForm($form_config);
 
-//  Save form_name
-$data->form_name = $form_name;
+//  Set data
+$data->form_name   = $form_name;
+$data->form_action = $this->ConvertURL("ctrl:/$seq_no/confirm");
 
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('index.phtml',$data);
+		$data->template = 'form.phtml';
 		break;
 
 	case 'confirm':
 		if( $this->form()->Secure($form_name) ){
 			//  OK
-			$this->template('confirm.phtml',$data);
+			$data->template = 'confirm.phtml';
+			$data->form_action = $this->ConvertURL("ctrl:/$seq_no/commit");
 		}else{
 			//  NG
-			$this->template('form.phtml',$data);
+			$this->form()->debug($form_name);
+			$data->template = 'form.phtml';
 		}
 		break;
 				
 	default:
 		$this->mark("undefined action. ($action)");
 }
+
+$this->template('index.phtml',$data);

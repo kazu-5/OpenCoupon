@@ -302,6 +302,9 @@ class CouponConfig extends ConfigMgr
 		
 		//  form name
 		$form_config->name   = 'form_address';
+		if( $seq_no ){
+			$form_config->name .= "_$seq_no";
+		}
 		
 		//  First name
 		$input_name = 'first_name';
