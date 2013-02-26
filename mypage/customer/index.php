@@ -3,6 +3,9 @@
 
 //  Login check has been done in the "setting.php"
 
+//  Init data
+$data = new Config();
+
 //  Get Action
 $action = $this->GetAction();
 
@@ -16,7 +19,10 @@ $this->form()->AddForm($config);
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('index.phtml');
+		//  Get t_address by account_id
+		$select = $this->config()->select_address($id);
+		$data->t_address = $this->pdo()->Select($select);
+		$this->template('index.phtml',$data);
 		break;
 		
 	case 'confirm':

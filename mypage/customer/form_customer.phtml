@@ -24,7 +24,24 @@
 			<tr align="left">
 				<th>住所</th>
 				<td>
+					<script>
+					function change_address(){
+						var t = document.getElementById('form_change_address');
+						var seq_no = t.options[t.selectedIndex].value;
+						var url    = '<?=$this->ConvertURL('ctrl:/address/')?>';
+						window.location.href = url + seq_no;
+					}
+					</script>
+					<nobr>
+					<select id="form_change_address" name="form_change_address">
+					<?php foreach($data->t_address as $r): ?>
+						<?php $address = $this->model('JapanesePref')->Get((int)$r['pref']).$r['city'].$r['address']; ?>
+						<option value="<?=$r['seq_no']?>"><?=$address?></option>
+					<?php endforeach; ?>
+					</select>
+					<input type="button" value=" 変更する " onclick="change_address();" />
 					<a href="/mypage/customer/address/1">変更する</a>
+					</nobr>
 				</td>
 			</tr>
 			<tr align="left">

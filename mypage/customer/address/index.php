@@ -35,6 +35,7 @@ $this->form()->AddForm($form_config);
 //  Set data
 $data->form_name   = $form_name;
 $data->form_action = $this->ConvertURL("ctrl:/$seq_no/confirm");
+$data->message     = null;
 
 //	Action
 switch( $action ){
@@ -49,12 +50,26 @@ switch( $action ){
 			$data->form_action = $this->ConvertURL("ctrl:/$seq_no/commit");
 		}else{
 			//  NG
-			$this->form()->debug($form_name);
+			//$this->form()->debug($form_name);
 			$data->template = 'form.phtml';
 		}
 		break;
-				
+
+	case 'commit':
+		if( $this->form()->Secure($form_name) ){
+			//  OK
+			$update = $this->config()->update_address( $id, $seq_no );
+			$data->message  = "更新しました。";
+		}else{
+			//  NG
+			//$this->form()->debug($form_name);
+		}
+		$data->template = 'form.phtml';
+		break;
+		
 	default:
+		$data->message  = "不正なアクセスです。($action)";
+		$data->template = 'error.phtml';
 		$this->mark("undefined action. ($action)");
 }
 

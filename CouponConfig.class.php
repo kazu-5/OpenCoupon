@@ -1237,17 +1237,18 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_address( $account_id,$seq_no)
+	function update_address( $account_id, $seq_no )
 	{
-		$set = $this->form()->GetInputValueAll('form_address_change');
-		unset($set->submit);
-	
+		$form_name = "form_address_{$seq_no}";
+		$set = $this->form()->GetInputValueAll($form_name);
+	//	unset($set->submit);
+		
 		$config = parent::update('t_address');
 		$config->where->account_id = $account_id;
-		$config->where->seq_no = $seq_no;
+		$config->where->seq_no     = $seq_no;
 		$config->limit = 1;
 		$config->set = $set;
-	
+		
 		return $config;
 	}
 	
