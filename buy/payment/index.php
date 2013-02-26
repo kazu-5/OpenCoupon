@@ -1,7 +1,7 @@
 <?php
 /* @var $this CouponApp */
 
-$action    = $this->GetBuyAction();
+$action    = $this->GetAction();
 $coupon_id = $this->GetCouponId();
 $this->mark("action=$action",'debug');
 $this->mark("coupon_id=$coupon_id",'debug');
@@ -30,6 +30,16 @@ $quantity = $this->form()->GetValue('quantity',$form_config->name);
 if(empty($quantity)){
 	$this->mark("Not set quantity.");
 	return;
+}
+
+//  Save payment coupon id
+if(!$payment_coupon_id = $this->GetSession('payment_coupon_id')){
+	$this->SetSession('payment_coupon_id',$coupon_id);
+}else{
+	if( $payment_coupon_id != $coupon_id ){
+		$this->mark("Does not match payment_coupon_id.");
+		return;
+	}
 }
 
 //  Switch action.
@@ -82,6 +92,11 @@ switch( $action ){
 		$this->form()->clear('form_address');
 		$this->form()->clear('form_payment');
 		
+		break;
+		
+	case 'cancel':
+		$this->SetSession('payment_coupon_id',null);
+		$this->mark('Canceled this coupon.');
 		break;
 		
 	default:

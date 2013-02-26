@@ -1,0 +1,58 @@
+		<?php $this->form()->Start('form_address_change','address_commit');?>
+		<table style="border-collapse: collapse;">
+			<tr style="height:50px; padding: 25px 0;" align="left">
+				<th style="width:5px;">名前</th>
+				<td style="width:400px;">
+					姓：<?php $this->form()->Input('last_name');?>
+					名：<?php $this->form()->Input('first_name');?>
+					<p class="red"><?php $this->form()->InputError('last_name')?></p>
+					<p class="red"><?php $this->form()->InputError('first_name')?></p>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>郵便番号</th>
+				<td>
+					<?php $this->form()->Input('zipcode'); ?>
+					<p class="red"><?php $this->form()->InputError('zipcode');?></p>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>都道府県</th>
+				<td>
+					<?php $this->form()->Input('pref'); ?>
+					<p class="red"><?php $this->form()->InputError('pref');?></p>
+				</td>
+			</tr>
+
+			<tr align="left">
+				<th>市区町村</th>
+				<td>
+					<?php $this->form()->Input('city'); ?>
+					<p class="red"><?php $this->form()->InputError('city');?></p>
+					<p>例：新宿区</p>
+				</td>
+			</tr>
+
+			<tr align="left">
+				<th>丁目番地</th>
+				<td>
+					<?php $this->form()->Input('address'); ?>
+					<p class="red"><?php $this->form()->InputError('address');?></p>
+					<p>例：新宿1-1-1</p>
+				</td>
+			</tr>
+
+			<tr align="left">
+				<th>建物名</th>
+				<td>
+					<?php $this->form()->Input('building'); ?>
+					<p class="red"><?php $this->form()->InputError('building');?></p>
+					<p>例：新宿ビル5F</p>
+				</td>
+			</tr>
+		</table>
+		<div style="text-align:center">
+			<?php $this->form()->Input('submit')?>
+		</div>
+		<?php $this->form()->Finish('form_address_change'); ?>
+		

@@ -39,8 +39,17 @@ switch( $action ){
 	case 'sendmail':
 		if( $this->form()->Secure($form_name) ){
 			//  OK
+			
+			//  Send mail
 			$mail_config = $this->config()->mail_identification();
 			$this->Mail($mail_config);
+			
+			//  Form
+			$form_config = $this->config()->form_email_identification();
+			$this->form()->AddForm($form_config);
+			
+			//  Print form
+			$data->form_name = $form_config->name;
 			$this->template('sendmail.phtml',$data);
 		}else{
 			//  NG
