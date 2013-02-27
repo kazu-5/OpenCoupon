@@ -1077,12 +1077,13 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
+		//  
 		$set = $this->form()->GetInputValueAll('form_address');
 		$set = $this->Decode($set);
+		
 		//  Added
 		$set->account_id = $account_id;
-		//  Remove
-		unset($set->submit);
+		$set->seq_no = 0;
 		
 		$config = parent::insert('t_address');
 		$config->set = $set;
