@@ -10,7 +10,8 @@ $action = isset($args[1]) ? $args[1]: 'index';
 
 //  Data use to template.
 $data = new Config();
-$data->message     = null;
+$data->message  = null;
+$data->template = 'form/address.phtml';
 
 //  Check seq_no
 if(!$seq_no){
@@ -40,18 +41,17 @@ $data->form_action = $this->ConvertURL("ctrl:/$seq_no/confirm");
 //	Action
 switch( $action ){
 	case 'index':
-		$data->template = 'form.phtml';
 		break;
 
 	case 'confirm':
 		if( $this->form()->Secure($form_name) ){
 			//  OK
-			$data->template = 'confirm.phtml';
+			$data->template = 'form/confirm/address.phtml';
 			$data->form_action = $this->ConvertURL("ctrl:/$seq_no/commit");
 		}else{
 			//  NG
 			//$this->form()->debug($form_name);
-			$data->template = 'form.phtml';
+			$data->template = 'form/address.phtml';
 		}
 		break;
 
@@ -70,7 +70,7 @@ switch( $action ){
 			//  NG
 			//$this->form()->debug($form_name);
 		}
-		$data->template = 'form.phtml';
+		$data->template = 'form/address.phtml';
 		break;
 		
 	default:

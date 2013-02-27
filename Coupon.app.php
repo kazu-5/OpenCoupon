@@ -72,6 +72,21 @@ class CouponApp extends App
 		
 		return $action;
 	}
+
+	/***    URL Arguments    ***/
+	
+	function GetArgs( $define=null )
+	{
+		$temp = parent::GetArgs();
+		if( $define ){
+			foreach( explode('/',$define) as $key ){
+				$args[$key] = array_shift($temp);
+			}
+		}else{
+			$args = $temp;
+		}
+		return $args;
+	}
 	
 	/**
 	 * 

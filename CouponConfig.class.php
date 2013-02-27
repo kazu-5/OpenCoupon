@@ -998,16 +998,18 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
+	function select_address_seq_no( $id )
+	{
+		$config = self::select_address($id);
+		unset($config->where->deleted);
+		$config->agg->count = 'account_id';
+		$config->limit = 1;
+		return $config;
+	}
+	
 	function select_my_address()
 	{
 		$id = $this->model('Login')->GetLoginID();
-		/*
-			$config = $this->select();
-		$config->table = 't_address';
-		$config->account_id = $id;
-		$config->seq_no = 1;
-		$config->limit = 1;
-		*/
 		return self::select_address( $id, 1 );
 	}
 	
@@ -1025,7 +1027,6 @@ class CouponConfig extends ConfigMgr
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
-		//$this->d($_post);
 		
 		$blowfish = new Blowfish();
 		
@@ -1048,7 +1049,6 @@ class CouponConfig extends ConfigMgr
 		}
 		
 		$_post = $this->form()->GetInputValueAll('form_register');
-		//$this->d($_post);
 		
 		$nick_name  = $_post->nick_name;
 		$first_name = $_post->first_name;
@@ -1077,16 +1077,26 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
+		//  Posted value.
 		$set = $this->form()->GetInputValueAll('form_address');
 		$set = $this->Decode($set);
+		
+		//  Get seq_no
+		$select = $this->config()->select_address_seq_no($account_id);
+		$record = $this->pdo()->select($select);
+		$seq_no = $record['COUNT(account_id)'];
+		
 		//  Added
 		$set->account_id = $account_id;
-		//  Remove
-		unset($set->submit);
+		$set->seq_no     = $seq_no + 1;
 		
+		// TODO:
+		// $this->pdo()->Quick("sum(account_id) <- t_address.account_id = $account_id");
+		
+		//  
 		$config = parent::insert('t_address');
 		$config->set = $set;
-		$config->update = true;
+		$config->update = false;
 		
 		return $config;
 	}
