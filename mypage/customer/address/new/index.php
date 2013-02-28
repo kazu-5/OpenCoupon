@@ -58,7 +58,7 @@ switch( $action ){
 				$data->message  = "既に修正してあります。";
 			}else{
 				$data->message  = "修正に失敗しました。";
-			};
+			}
 		}else{
 			//  NG
 			//$this->form()->debug($form_name);
