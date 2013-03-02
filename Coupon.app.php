@@ -204,27 +204,27 @@ class CouponApp extends App
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '> '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s');
-		$list['wait'][]  = $this->pdo()->select($config);
+		$list['wait']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  On sale
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '<  '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '>  '.date('Y-m-d H:i:s');
-		$list['on'][]  = $this->pdo()->select($config);
+		$list['on']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  End of sale
 		$config = $this->config()->select_coupon();
 		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s');
 		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
-		$list['off'][]  = $this->pdo()->select($config);
+		$list['off']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		//  Delete
 		$config = $this->config()->select_coupon();
 		$config->where->deleted = '! null';
-		$list['delete'][]  = $this->pdo()->select($config);
+		$list['delete']  = $this->pdo()->select($config);
 	//	$this->mark( $this->pdo()->qu() );
 		
 		return $list;
