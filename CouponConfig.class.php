@@ -12,14 +12,28 @@ class CouponConfig extends ConfigMgr
 		
 		parent::__call($name, $args);
 	}
-
-	function GenerateFormFromDatabase( $table, $record )
+	
+	/**
+	 * データベースに存在するテーブル定義を元にしてフォームのconfigを作成する。
+	 * 
+	 * @see ConfigMgr::GenerateFormFromDatabase()
+	 * @param string $table_name 定義の元になるテーブル名
+	 * @param array  $record input.valueに代入する初期値
+	 * @return Config
+	 */
+	function GenerateFormFromDatabase( $table_name, $record=null )
 	{
+		//  Init.
 		$config = new Config();
-		$config->table = $table;
+		//  Set table name.
+		$config->table = $table_name;
+		//  Get table structs.
 		$struct = $this->pdo()->GetTableStruct($config);
+		//  Get form config.
 		$config = parent::GenerateFormFromDatabase($struct,$record);
+		//  Create submit button.
 		$config->input->submit->type = 'submit';
+		//  Return form config.
 		return $config;
 	}
 	
@@ -842,7 +856,7 @@ class CouponConfig extends ConfigMgr
 	
 	//===========================================//
 
-	function database()
+	static function database()
 	{
 		$config = parent::database();
 	
