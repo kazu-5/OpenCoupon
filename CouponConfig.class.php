@@ -866,7 +866,7 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_coupon_list()
+	function select_coupon_list( $coupon_id=null )
 	{
 		//  Init.
 		$limit  = 10;
@@ -874,14 +874,19 @@ class CouponConfig extends ConfigMgr
 		$offset = $limit * $page;
 		
 		//  Create select config.
-		$config = self::select_coupon();
+		$config = self::select_coupon( $coupon_id );
 		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
 		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
-		$config->limit  = $limit;
-		$config->offset = $offset;
+		if( $coupon_id ){
+			$config->where->coupon_id = $coupon_id;
+			$config->limit = 2;
+		}else{
+			$config->limit  = $limit;
+			$config->offset = $offset;
+		}
 		
-		//  alias
-		$config->column->coupon_normal_price = 'coupon_normal_price'; 
+		//  alias (Is this necessary?)
+		//  $config->column->coupon_normal_price = 'coupon_normal_price'; 
 		
 		return $config;
 	}
@@ -891,10 +896,10 @@ class CouponConfig extends ConfigMgr
 		$config = parent::select('t_coupon');
 		if( $coupon_id ){
 			$config->where->coupon_id = $coupon_id;
+			$config->limit = 1;
 		}else{
 			//	$config->order = '';
 		}
-		$config->limit = 1;
 		
 		return $config;
 	}

@@ -1,27 +1,24 @@
 <?php
 /* @var $this CouponApp */
 
+//  templateに渡すdata
+$data = new Config();
+$data->form_action  = null;
+$data->submit_label = ' この内容で購入 ';
+
 //
 $action    = $this->GetBuyAction();
 $coupon_id = $this->GetCouponId();
-$this->mark("action=$action",'debug');
-$this->mark("coupon_id=$coupon_id",'debug');
+$data->coupon_id = $coupon_id;
 
 //  Formの設定
 $form_config = $this->config()->form_buy($coupon_id);
 $this->form()->AddForm($form_config);
+$data->form_name_buy = $form_config->name;
 
 //  クーポンのrecord
 $select = $this->config()->select_coupon($coupon_id);
-$record = $this->pdo()->select($select);
-
-//  templateに渡すdata
-$data = new Config();
-$data->coupon_id    = $coupon_id;
-$data->record       = $record;
-$data->form_name    = $form_config->name;
-$data->form_action  = null;
-$data->submit_label = ' この内容で購入 ';
+$data->t_coupon = $this->pdo()->select($select);
 
 //  Action
 if( $action !== 'index' ){
@@ -36,6 +33,8 @@ if( $action !== 'index' ){
 	$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
 	$config = $this->config()->form_address( $id, $seq_no );
 	$this->form()->AddForm($config);
+	//  Save address-form name.
+	$data->form_name_address = $config->name;
 }
 
 //  Do action
@@ -52,7 +51,7 @@ switch( $action ){
 			}
 		}else{
 			//  NG
-			include('form_buy.phtml');
+			$this->template('index.phtml',$data);
 		}
 		break;
 		
