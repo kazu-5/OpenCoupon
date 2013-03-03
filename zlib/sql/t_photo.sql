@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 2 月 23 日 10:42
+-- 生成時間: 2013 年 3 月 03 日 05:24
 -- サーバのバージョン: 5.1.44
 -- PHP のバージョン: 5.3.1
 
@@ -42,4 +42,4 @@ CREATE TABLE IF NOT EXISTS `t_photo` (
 --
 
 INSERT INTO `t_photo` (`shop_id`, `coupon_id`, `seq_no`, `url`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 0, 1, '/shop/1/1.jpg', '2013-02-22 10:47:36', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2013-02-22 19:47:36');
+(1, 0, 1, '/shop/1/1.jpg', '2013-02-22 10:47:36', NULL, NULL, '2013-02-24 01:57:01');
