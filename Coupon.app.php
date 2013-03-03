@@ -20,12 +20,14 @@ class CouponApp extends App
 		return parent::Config( $cmgr );
 	}
 	
-	function Path2URL( $path )
+	function Path2URL($path)
 	{
-		return str_replace( rtrim($_SERVER['DOCUMENT_ROOT'],'/'), '', $path);
+		$app_root = $this->GetEnv('app_root');
+		$app_root = rtrim( $app_root, DIRECTORY_SEPARATOR );
+		return str_replace( $app_root, '', $path );
 	}
 	
-	/***		ACTION		***/
+	/***    ACTION    ***/
 	
 	function GetAction(){
 		$args = $this->GetArgs();
@@ -69,6 +71,21 @@ class CouponApp extends App
 		}
 		
 		return $action;
+	}
+
+	/***    URL Arguments    ***/
+	
+	function GetArgs( $define=null )
+	{
+		$temp = parent::GetArgs();
+		if( $define ){
+			foreach( explode('/',$define) as $key ){
+				$args[$key] = array_shift($temp);
+			}
+		}else{
+			$args = $temp;
+		}
+		return $args;
 	}
 	
 	/**
@@ -162,6 +179,14 @@ class CouponApp extends App
 		return $this->pdo()->quick(" t_shop.shop_id = $shop_id ");
 	}
 	
+	/**
+	 * myshopで使うクーポン一覧を取得する
+	 * 
+	 * myshopでしか使わないので、これは分離した方が良い。
+	 * 
+	 * @param  integer $shop_id
+	 * @return array 
+	 */
 	function GetCouponListByShopId($shop_id)
 	{
 		if(!$shop_id){

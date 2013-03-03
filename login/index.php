@@ -31,7 +31,13 @@ if( $this->form()->Secure('form_login') ){
 	$pass  = md5($pass);
 	
 	//  Get registered value.
-	list($id,$password) = $this->pdo()->quick("id, password <- t_account.email_md5 = $email");
+	list( $id, $password ) = $this->pdo()->quick("id, password <- t_account.email_md5 = $email");
+	
+	$config = new Config();
+	$config->table = 't_account';
+	$config->column->password = 'password';
+	$config->where->email_md5 = $email;
+	$record = $this->pdo()->Select($config);
 	
 	//  Check password.
 	if( $pass === $password ){

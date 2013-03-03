@@ -1,0 +1,14 @@
+<?php
+$shop_id = $data->shop_id;
+if( file_exists($this->ConvertPath("app:/shop/$shop_id/1.jpg")) ){
+	$src = "/shop/$shop_id/1.jpg";
+}else if( file_exists($this->ConvertPath("app:/shop/$shop_id/1.png")) ){
+	$src = "/shop/$shop_id/1.png";
+}else{
+	$src = null;
+}
+
+?>
+<div style="float:right;">
+	<img src="<?=$src?>"/>
+</div>
