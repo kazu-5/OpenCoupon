@@ -1,4 +1,10 @@
-
+<?php
+/* @var $this CouponApp */
+$quantity = $this->form()->GetValue('quantity',$data->form_name);
+$coupon_price_sales = $data->t_coupon['coupon_sales_price'];
+$coupon_price_total = $coupon_price_sales  * $quantity;
+$coupon_description = $data->t_coupon['coupon_description'];
+?>
 	<div id="coupon_content" style="padding-top:8px;">
 		<table style="border-collapse: collapse; width:100%;">
 			<tr style="background-color: #DEEDCE;">
@@ -11,20 +17,19 @@
 				<td>
 					クーポンの写真を掲載する
 					<img style="float:left; margin: 5px;" height="75px" src="">
-					<p style="font-size:13px;"><?=$record['coupon_description']?></p>
+					<p style="font-size:13px;"><?=$coupon_description?></p>
 				</td>
 				<td colspan="3" style="font-size: 40px; text-align:center;">
 					<nobr>
 						<span class="coupon_price">
 							<span class="coupon_price">
-							<?php $quantity = $this->form()->GetValue('quantity',$data->form_name);?>
 							<?php print $quantity ?>
 							</span>
 							×
-							<span id="coupon_normal_price" class="coupon_price"><?=$record['coupon_normal_price']?></span>円
+							<span id="coupon_normal_price" class="coupon_price"><?=$coupon_price_sales?></span>円
 							＝
 							<span id="price" class="coupon_price">
-								<?php print number_format( $quantity * $record['coupon_normal_price'] ) ?>
+								<?php print number_format($coupon_price_total) ?>
 							</span>円
 						</span>
 					</nobr>

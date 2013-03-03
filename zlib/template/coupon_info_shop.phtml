@@ -2,6 +2,11 @@
 
 	<h2>お店の説明</h2>
 	<div>
+		<?php
+		$data = new Config();
+		$data->shop_id = $t_shop['shop_id'];
+		$this->template('coupon_shop_photo.phtml',$data); 
+		?>
 		店名：<?=$t_shop['shop_name'];?><br>
 		説明：<?=$t_shop['shop_description']?><br>
 		住所：<?=$t_shop['shop_address']?><br>
