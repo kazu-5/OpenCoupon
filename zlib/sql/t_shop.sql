@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost
--- 生成時間: 2013 年 2 月 02 日 16:15
+-- 生成時間: 2013 年 3 月 03 日 05:25
 -- サーバのバージョン: 5.1.44
 -- PHP のバージョン: 5.3.1
 
@@ -44,11 +44,13 @@ CREATE TABLE IF NOT EXISTS `t_shop` (
   `deleted` datetime DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間',
   PRIMARY KEY (`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- テーブルのデータをダンプしています `t_shop`
 --
 
 INSERT INTO `t_shop` (`shop_id`, `shop_name`, `shop_description`, `shop_pref`, `shop_city`, `shop_address`, `shop_building`, `shop_tel`, `shop_holiday`, `shop_open`, `shop_close`, `shop_railway`, `shop_station`, `created`, `updated`, `deleted`, `timestamp`) VALUES
-(1, 'ルノアール銀座', 'ルノアール銀座です。', '東京', '豊島区', '池袋１丁目', '豊島ビル', '03-1234-1234', '年中無休（年末年始を除く）', '07:00:00', '22:00:00', '山手線', 'ＪＲ池袋駅', NULL, NULL, NULL, '2013-02-03 00:43:15');
+(1, '株式会社オープンクーポン', '株式会社オープンクーポンが発行するオープンなクーポンです。\r\n色々なクーポンを発行しています。', '東京', '豊島区', '池袋１丁目', '豊島ビル', '03-1234-1234', '年中無休（年末年始を除く）', '07:00:00', '22:00:00', 'JR山手線線・西武池袋線', 'ＪＲ池袋駅', NULL, NULL, NULL, '2013-02-13 09:04:34'),
+(2, 'ダミー店舗', 'この店舗は表示されてはならない。', '', '', '', '', '', '', '00:00:00', '00:00:00', '', '', NULL, NULL, NULL, '2013-02-19 21:46:42'),
+(3, 'ダミー店舗', 'この店舗は表示されてはならない。', '', '', '', '', '', '', '00:00:00', '00:00:00', '', '', NULL, NULL, NULL, '2013-02-19 21:46:42');
