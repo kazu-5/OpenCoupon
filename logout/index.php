@@ -14,3 +14,5 @@ if( $id = $this->model('Login')->GetLoginID() ){
 $data = new Config();
 $data->message = $message;
 $this->template('index.phtml',$data);
+
+$this->module('Transfer')->test();

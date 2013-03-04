@@ -23,6 +23,9 @@ $app->SetTemplateDir("app:/zlib/template");
 //  Set model directory
 $app->SetModelDir('app:/zlib/model');
 
+//  Set module directory
+$app->SetModuleDir('app:/zlib/module');
+
 //  config
 $app->config();
 
