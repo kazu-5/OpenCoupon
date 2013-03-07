@@ -45,7 +45,8 @@ if( $this->form()->Secure('form_login') ){
 		$this->model('Login')->SetLoginId($id);
 		$cid = $this->GetCouponID();
 		$url = $this->ConvertUrl("app:/buy/$cid");
-		$this->template('login_success.phtml',array('url'=>$url));
+	//	$this->template('login_success.phtml',array('url'=>$url));
+		$this->module('Transfer')->Forward();
 		return;
 	}else{
 		//  NG

@@ -27,7 +27,8 @@ if( $action !== 'index' ){
 	//  Check
 	if( !$id ){
 		//  Does not logged in.
-		$this->Location('app:/login');
+	//	$this->Location('app:/login');
+		$this->module('Transfer')->Set('app:/login');
 	}
 	//  Get address form.
 	$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
@@ -47,7 +48,7 @@ switch( $action ){
 			if( $id = $this->model('Login')->GetLoginID() ){
 				$this->Location("app:/buy/$coupon_id/address");
 			}else{
-				$this->Location('app:/login');
+				$this->module('Transfer')->Set('app:/login');
 			}
 		}else{
 			//  NG
