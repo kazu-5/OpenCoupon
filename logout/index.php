@@ -12,8 +12,4 @@ if( $id = $this->model('Login')->GetLoginID() ){
 	$message = 'ログインしていません。';
 }
 
-//  Transfer module
-$data = new Config();
-$data->class   = 'red';
-$data->message = $message;
-$this->module('Transfer')->Set('app:/login',$data);
+include('index.phtml');

@@ -29,6 +29,7 @@ if( $action !== 'index' ){
 		//  Does not logged in.
 	//	$this->Location('app:/login');
 		$this->module('Transfer')->Set('app:/login');
+		return;
 	}
 	//  Get address form.
 	$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
