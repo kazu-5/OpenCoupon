@@ -43,10 +43,11 @@ if( $this->form()->Secure('form_login') ){
 	if( $pass === $password ){
 		//  OK
 		$this->model('Login')->SetLoginId($id);
-		$cid = $this->GetCouponID();
-		$url = $this->ConvertUrl("app:/buy/$cid");
+	//	$cid = $this->GetCouponID();
+	//	$url = $this->ConvertUrl("app:/buy/$cid");
 	//	$this->template('login_success.phtml',array('url'=>$url));
-		$this->module('Transfer')->Forward();
+	//	$this->module('Transfer')->Forward();
+		include('login_ok.phtml');
 		return;
 	}else{
 		//  NG

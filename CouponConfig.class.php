@@ -110,6 +110,9 @@ class CouponConfig extends ConfigMgr
 			$form_config->input->$input_name->option->$i->style   = 'text-align:center;';
 		}
 		
+		//  submit
+		$form_config->input->submit->style = "font-size:18px;";
+		
 		return $form_config;
 	}
 	

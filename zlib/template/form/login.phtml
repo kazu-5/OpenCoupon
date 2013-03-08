@@ -1,0 +1,73 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start('form_login'); ?>
+<table>
+	<tr>
+		<td>
+			<?php $this->form()->Label('email'); ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('email'); ?><br/>
+			<?php $this->form()->Error('email'); ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('password'); ?>
+		</td>
+		<td>
+			<?php $this->form()->Input('password'); ?><br/>
+			<?php $this->form()->Error('password'); ?>
+			<p><a href="/account/login_forget" style="color: #0981BE;">パスワードを忘れた方はコチラ</a></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<?php $this->form()->Input('submit',' ログイン '); ?>
+		</td>
+	</tr>
+</table>
+<?php $this->form()->Finish('form_login'); ?>
+<?php
+/*
+//  テンプレートにベタ張りされてたCSS
+<div id="member_content">
+
+#member_content {
+	margin: 0 auto;
+}
+
+#member_content th,td {
+	border: 0px solid #CCCCCC;
+}
+
+#member_content th {
+	font-size: 12px;
+	padding: 6px 0;
+}
+
+#member_content td a {
+	font-size: 14px;
+}
+
+.input_button {
+	background: -moz-linear-gradient(center top, #78BED8, #309FC4) repeat scroll 0 0 transparent;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.496094) 0 2px 4px;
+	background-image: -webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8),to(#309FC4) );
+	border: 1px solid #2D9DC2;
+	border-radius: 9px 9px 9px 9px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	color: #FFFFFF !important;
+	cursor: pointer;
+	display: inline-block;
+	margin: 15px;
+	padding: 4px 30px;
+	text-align: center;
+	text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+	vertical-align: middle;
+}
+</div>
+*/
