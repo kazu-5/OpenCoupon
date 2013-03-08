@@ -16,7 +16,12 @@ switch( $action ){
 		//  My coupon list.
 		$t_list = $this->GetCouponListByShopId($shop_id);
 		
-		$this->template("index.phtml",array('t_shop'=>$t_shop,'t_list'=>$t_list));
+		//  Data to be passed.
+		$data->t_shop = $t_shop;
+		$data->t_list = $t_list;
+		//$this->d($data->t_list);
+		
+		$this->template("index.phtml",$data);
 		break;
 		
 	default:

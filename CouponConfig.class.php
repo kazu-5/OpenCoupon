@@ -12,14 +12,28 @@ class CouponConfig extends ConfigMgr
 		
 		parent::__call($name, $args);
 	}
-
-	function GenerateFormFromDatabase( $table, $record )
+	
+	/**
+	 * データベースに存在するテーブル定義を元にしてフォームのconfigを作成する。
+	 * 
+	 * @see ConfigMgr::GenerateFormFromDatabase()
+	 * @param string $table_name 定義の元になるテーブル名
+	 * @param array  $record input.valueに代入する初期値
+	 * @return Config
+	 */
+	function GenerateFormFromDatabase( $table_name, $record=null )
 	{
+		//  Init.
 		$config = new Config();
-		$config->table = $table;
+		//  Set table name.
+		$config->table = $table_name;
+		//  Get table structs.
 		$struct = $this->pdo()->GetTableStruct($config);
+		//  Get form config.
 		$config = parent::GenerateFormFromDatabase($struct,$record);
+		//  Create submit button.
 		$config->input->submit->type = 'submit';
+		//  Return form config.
 		return $config;
 	}
 	
@@ -842,7 +856,7 @@ class CouponConfig extends ConfigMgr
 	
 	//===========================================//
 
-	function database()
+	static function database()
 	{
 		$config = parent::database();
 	
@@ -852,7 +866,7 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_coupon_list()
+	function select_coupon_list( $coupon_id=null )
 	{
 		//  Init.
 		$limit  = 10;
@@ -860,14 +874,19 @@ class CouponConfig extends ConfigMgr
 		$offset = $limit * $page;
 		
 		//  Create select config.
-		$config = self::select_coupon();
+		$config = self::select_coupon( $coupon_id );
 		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
 		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s'/*, time() + date('Z') */);
-		$config->limit  = $limit;
-		$config->offset = $offset;
+		if( $coupon_id ){
+			$config->where->coupon_id = $coupon_id;
+			$config->limit = 2;
+		}else{
+			$config->limit  = $limit;
+			$config->offset = $offset;
+		}
 		
-		//  alias
-		$config->column->coupon_normal_price = 'coupon_normal_price'; 
+		//  alias (Is this necessary?)
+		//  $config->column->coupon_normal_price = 'coupon_normal_price'; 
 		
 		return $config;
 	}
@@ -877,10 +896,10 @@ class CouponConfig extends ConfigMgr
 		$config = parent::select('t_coupon');
 		if( $coupon_id ){
 			$config->where->coupon_id = $coupon_id;
+			$config->limit = 1;
 		}else{
 			//	$config->order = '';
 		}
-		$config->limit = 1;
 		
 		return $config;
 	}
@@ -990,24 +1009,26 @@ class CouponConfig extends ConfigMgr
 	{
 		$config = parent::select('t_address');
 		$config->table = 't_address';
-		$config->account_id = $id;
+		$config->where->account_id = $id;
 		if( $seq_no ){
-			$config->seq_no = $seq_no;
+			$config->where->seq_no = $seq_no;
 			$config->limit = 1;
 		}
+		return $config;
+	}
+	
+	function select_address_seq_no( $id )
+	{
+		$config = self::select_address($id);
+		unset($config->where->deleted);
+		$config->agg->count = 'account_id';
+		$config->limit = 1;
 		return $config;
 	}
 	
 	function select_my_address()
 	{
 		$id = $this->model('Login')->GetLoginID();
-		/*
-			$config = $this->select();
-		$config->table = 't_address';
-		$config->account_id = $id;
-		$config->seq_no = 1;
-		$config->limit = 1;
-		*/
 		return self::select_address( $id, 1 );
 	}
 	
@@ -1025,7 +1046,6 @@ class CouponConfig extends ConfigMgr
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
-		//$this->d($_post);
 		
 		$blowfish = new Blowfish();
 		
@@ -1048,7 +1068,6 @@ class CouponConfig extends ConfigMgr
 		}
 		
 		$_post = $this->form()->GetInputValueAll('form_register');
-		//$this->d($_post);
 		
 		$nick_name  = $_post->nick_name;
 		$first_name = $_post->first_name;
@@ -1077,16 +1096,26 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
+		//  Posted value.
 		$set = $this->form()->GetInputValueAll('form_address');
 		$set = $this->Decode($set);
+		
+		//  Get seq_no
+		$select = $this->config()->select_address_seq_no($account_id);
+		$record = $this->pdo()->select($select);
+		$seq_no = $record['COUNT(account_id)'];
+		
 		//  Added
 		$set->account_id = $account_id;
-		//  Remove
-		unset($set->submit);
+		$set->seq_no     = $seq_no + 1;
 		
+		// TODO:
+		// $this->pdo()->Quick("sum(account_id) <- t_address.account_id = $account_id");
+		
+		//  
 		$config = parent::insert('t_address');
 		$config->set = $set;
-		$config->update = true;
+		$config->update = false;
 		
 		return $config;
 	}
@@ -1237,17 +1266,17 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_address( $account_id,$seq_no)
+	function update_address( $account_id, $seq_no )
 	{
-		$set = $this->form()->GetInputValueAll('form_address_change');
-		unset($set->submit);
-	
+		$form_name = "form_address_{$seq_no}";
+		$set = $this->form()->GetInputValueAll($form_name);
+		
 		$config = parent::update('t_address');
 		$config->where->account_id = $account_id;
-		$config->where->seq_no = $seq_no;
+		$config->where->seq_no     = $seq_no;
 		$config->limit = 1;
 		$config->set = $set;
-	
+		
 		return $config;
 	}
 	

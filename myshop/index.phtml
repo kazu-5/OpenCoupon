@@ -1,31 +1,39 @@
 <section>
 <div class="arc" style="background-color:white; margin:1em; padding:1em;">
 
-	<h1>MyShop</h1>
-	<div style="margin:1em; margin-bottom:1em;">
-		<h2><?=$t_shop['shop_name']?></h2>
+	<div class="hgroup1">
+		<h1>店舗設定</h1>
+	</div>
+	
+	<div class="hgroup2">
+		<h2>
+			<?=$data->t_shop['shop_name']?>
+		</h2>
 		<?php
 		//$this->d($t_shop);
 		?>
-		<p><?=nl2br($t_shop['shop_description'])?></p>
+		<p><?=nl2br($data->t_shop['shop_description'])?></p>
 		<div style="float:right;">
 			[ <a href="<?=$this->ConvertURL('ctrl:/edit')?>">編集</a> ]
 		</div>
 	</div>
 	
-	<h2>クーポン一覧</h2>
-	<div style="margin:1em; margin-bottom:1em;">
+	<div class="hgroup1">
+		<h2>クーポン一覧</h2>
+	</div>
+	
+	<div class="myshop_list">
 		<?php
-		//$this->d($t_list);
+		$t_list = $data->t_list;
 		?>
 		
 		<h3>新規作成</h3>
-		<ol style="margin-bottom:1em;">
+		<ol>
 			<li><a href="<?=$this->ConvertURL('ctrl:/coupon/new')?>">新しいクーポンを作成</a></li>
 		</ol>
 		
 		<h3>販売待機中</h3>
-		<ol style="margin-bottom:1em;">
+		<ol>
 		<?php
 		if( $t_list['wait'] ){
 			foreach( $t_list['wait'] as $t_coupon ){
@@ -36,7 +44,7 @@
 		</ol>
 		
 		<h3>販売中</h3>
-		<ol style="margin-bottom:1em;">
+		<ol>
 		<?php
 		if( $t_list['on'] ){
 			foreach( $t_list['on'] as $t_coupon ){
@@ -47,7 +55,7 @@
 		</ol>
 		
 		<h3>販売終了</h3>
-		<ol style="margin-bottom:1em;">
+		<ol>
 		<?php
 		if( $t_list['off'] ){
 			foreach( $t_list['off'] as $t_coupon ){
@@ -58,7 +66,7 @@
 		</ol>
 		
 		<h3>削除済み</h3>
-		<ol style="margin-bottom:1em;">
+		<ol>
 		<?php
 		if( $t_list['delete'] ){
 			foreach( $t_list['delete'] as $t_coupon ){

@@ -1,0 +1,47 @@
+<?php
+$url     = isset($data->url)     ? $data->url     : null;
+$count   = isset($data->count)   ? $data->count   : null;
+$class   = isset($data->class)   ? $data->class   : null; 
+$message = isset($data->message) ? $data->message : null; 
+?>
+<script>
+$(document).ready(function(){
+    //	Do loop, every 1sec.
+    var timer_id = setInterval(function(){
+        var countdown = $('#op_module_transfer_count').text();
+        if( countdown > 0 ){
+            countdown--;
+            $('#op_module_transfer_count').text(countdown);
+        }else{
+            clearInterval(timer_id);
+            document.location = '<?=$url?>';
+        }
+    }, 1000);
+
+	//  Cancel
+    $("#op_module_transfer_cancel").click(function(){
+        clearInterval(timer_id);
+    });
+});
+</script>
+
+<!-- safety -->
+<!--
+<meta http-equiv="refresh" content="<?=$count?>;URL=<?=$url?>"/>
+-->
+
+<!--  -->
+<div id="op_module_transfer">
+	<div>
+		<p class="<?=$class?>"><?=$message?></p>
+	</div>
+	<div>
+		URL : <a id="op_module_transfer_url" href="<?=$url?>"><?=$url?></a>
+	</div>
+	<div>
+		<span id="op_module_transfer_count" class="big red"><?=$count?></span>
+	</div>
+	<div>
+		<input id="op_module_transfer_cancel" type="button" class="button cancel_button" value=" Cancel "/>
+	</div>
+</div>

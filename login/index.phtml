@@ -1,9 +1,17 @@
+<?php
+/* @var $this CouponApp */
+$message      = isset($data->message)      ? $data->message      : null;
+$submit_label = isset($data->submit_label) ? $data->submit_label : null;
+?>
 <section>
-
-<?php $this->template('form_login.phtml',$data) ?>
-
-<p style="background-color:white; margin:2em;">既に登録済みの人がログインする画面と、buy以下の [ログイン] or [登録] 画面は分ける。</p> 
-
-<?php $this->template('form_register.phtml',$data) ?>
-
+	<div class="contents">
+		<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">会員の方</h2>
+		
+		<?php if( $message ): ?>
+			<p class="red"><?=$message?></p>
+		<?php else: ?>
+			<?php $this->template('form/login.phtml',$data) ?>
+			<?php $this->template('form/register.phtml',$data) ?>
+		<?php endif; ?>
+	</div>
 </section>

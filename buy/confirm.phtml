@@ -1,7 +1,7 @@
 <?php
 /* @var $this CouponApp */
 $coupon_id = $data->coupon_id;
-$record    = $data->record;
+$t_coupon  = $data->t_coupon;
 ?>
 
 <div class="arc" style="background-color:white; margin:5px; padding:13px;">
@@ -12,14 +12,16 @@ $record    = $data->record;
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">購入内容</h2>
 	
 	<?php
-	include('form_buy_confirm.phtml');
+	$data->form_name = $data->form_name_buy;
+	$this->template('form_buy_confirm.phtml',$data);
 	?>
 	
 	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 40px; font-size: 20px;">お客様情報</h2>
 		
 	<?php
+	$data->form_name    = $data->form_name_address; 
 	$data->submit_label = ' この内容で購入 ';
-	include('form_address_confirm.phtml');
+	$this->template('form_address_confirm.phtml',$data);
 	?>
 	
 	<!-- 戻るボタン -->

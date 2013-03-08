@@ -14,8 +14,10 @@ $register_flag = false; // TODO
 	
 	<?php 
 	//  Form settings.
+	$data->form_name    = $data->form_name_buy;
 	$data->form_action  = '';
 	$data->submit_label = ' 数量の変更 ';
+	
 	//  Print form
 	include('form_buy.phtml'); 
 	?>
@@ -27,7 +29,7 @@ $register_flag = false; // TODO
 		
 		<?php
 		//  Form settings.
-		$data->form_name    = 'form_address';
+		$data->form_name    = 'form_address_'.$seq_no;
 		$data->form_action  = "app:/buy/$coupon_id/confirm";
 		$data->submit_label = ' 入力内容を確認する ';
 		//  Print form
