@@ -5,7 +5,7 @@ body {
 }
 
 .contents{
-	min-width: 650px;
+	width: 650px;
 	
 	margin:  1em;
 	padding: 1em;
@@ -21,12 +21,17 @@ body {
 
 .img_coupon{
 	margin: 0.5em;
+	min-width: 200px;
+	max-width: 300px;
 }
 
 #header {
 	background-repeat: repeat-x;
 	background-image: url('/img/backgroud_header.png');
-	/* min-width: 970px; */
+	/*
+	use to image
+	min-width: 970px; 
+	*/
 }
 
 .deal_price{
@@ -103,6 +108,23 @@ body {
 	.coupon_price{
 		font-size: 26px;
 		
+	}
+	
+	.button{
+		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
+		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
+		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
+		border: 1px solid #2D9DC2;
+		border-radius: 9px 9px 9px 9px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+		color: #FFFFFF !important;
+		cursor: pointer;
+		display: inline-block;
+		margin: 15px;
+		padding: 4px 30px;
+		text-align: center;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+		vertical-align: middle;
 	}
 	
 	.button{
