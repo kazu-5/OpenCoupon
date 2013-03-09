@@ -20,7 +20,6 @@ if( $this->form()->Secure($form_name) ){
 	$identification = $this->form()->GetInputValue( 'identification', $form_name );
 	if( $identification === $this->GetSession('identification') ){
 		
-		
 		//  Update
 		$update = $this->config()->update_email();
 		$num = $this->pdo()->update($update);
@@ -41,6 +40,12 @@ if( $this->form()->Secure($form_name) ){
 		$data->template = 'form.phtml';
 	}
 }else{
+	switch( $status = $this->form()->GetStatus($form_name) ){
+		case '':
+			break;
+		default:
+	}
+	$this->d($status);
 	$data->class    = 'red';
 	$data->message  = 'もう一度送信ボタンを押して下さい。';
 	$data->template = 'form.phtml';
