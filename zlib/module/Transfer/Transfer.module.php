@@ -8,7 +8,19 @@ class Module_Transfer extends Model_Model
 	 */
 	function Forward( Config $config=null )
 	{
+		//  Get
 		$url = $this->GetSession('transfer_url');
+		
+		//  Reset
+		$this->SetSession('transfer_url',null);
+		
+		//  Check
+		if( empty($url) ){
+			$url = $this->ConvertURL('app:/');
+			$this->StackError("Empty forward URL.");
+		}
+		
+		//  Do
 		$this->_Behavior( $url, $config );
 	}
 	

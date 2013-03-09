@@ -1,8 +1,9 @@
 <?php
 /* @var $this CouponApp */
 ?>
-<?php $this->form()->Start( $data->form_name, 'sendmail' ) ?>
-	<?php $this->form()->Label('email') ?>
-	<?php $this->form()->Value('email') ?>
-	<?php $this->form()->Input('submit','　確定　') ?>
+<?php $this->form()->Start( $data->form_name, 'commit' ) ?>
+	<p>このメールアドレスに確認メールを送信します。</p>
+	<p>確認メールに記載のある確認キーを使って認証します。</p>
+	<?php $this->form()->Value('email') ?><br/>
+	<?php $this->form()->Input('submit','　確定メールを送信　') ?>
 <?php $this->form()->Finish($data->form_name) ?>

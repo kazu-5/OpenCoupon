@@ -23,37 +23,16 @@ $data->form_name = $form_name;
 //	Action
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml',$data);
+		$data->template = 'form.phtml';
 		break;
 		
 	case 'confirm':
 		if( $this->form()->Secure($form_name) ){
 			//  OK
-			$this->template('confirm.phtml',$data);
+			$data->template = 'confirm.phtml';
 		}else{
 			//  NG
-			$this->template('form.phtml',$data);
-		}
-		break;
-		
-	case 'sendmail':
-		if( $this->form()->Secure($form_name) ){
-			//  OK
-			
-			//  Send mail
-			$mail_config = $this->config()->mail_identification();
-			$this->Mail($mail_config);
-			
-			//  Form
-			$form_config = $this->config()->form_email_identification();
-			$this->form()->AddForm($form_config);
-			
-			//  Print form
-			$data->form_name = $form_config->name;
-			$this->template('sendmail.phtml',$data);
-		}else{
-			//  NG
-			$this->template('form.phtml',$data);
+			$data->template = 'form.phtml';
 		}
 		break;
 		
@@ -61,29 +40,37 @@ switch( $action ){
 		if( $this->form()->Secure($form_name) ){
 			//  OK
 			
-			//  Update
-			$update = $this->config()->update_email( $id );
-			$num = $this->pdo()->update($update);
-			
 			//  Print template
 			if( $num !== false ){
+				
+				//  All done.
+				$data->template = 'commit.phtml';
+
+				//  Send mail
+				$identification = md5(microtime());
+				$this->SetSession('identification',$identification);
+				$mail_config = $this->config()->mail_identification($identification);
+				$io = $this->Mail($mail_config);
+				$this->d($io);
+				$this->d($mail_config);
 
 				//  Clear of saved form value.
-				$this->form()->Clear($form_name);
-					
-				//  All done.
-				$this->template('commit.phtml');
+			//	$this->form()->Clear($form_name);
+				
 			}else{
 				//  No good.
 				$data->message = 'エラーが発生しました。';
-				$this->template('form.phtml',$data);
+				$data->template = 'form.phtml';
 			}
 		}else{
 			//  NG
-			$this->template('form.phtml',$data);
+			$data->template = 'form.phtml';
 		}
 		break;
 		
 	default:
 		$this->mark("undefined action. ($action)");
 }
+
+include('index.phtml');
+
