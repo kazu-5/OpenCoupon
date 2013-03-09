@@ -72,7 +72,7 @@ class CouponConfig extends ConfigMgr
 		
 		$mail_config = new Config();
 		$mail_config->to      = $this->form()->GetInputValue('email','form_email');
-		$mail_config->form    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：メールアドレスの変更';
 		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
 		
@@ -1307,12 +1307,19 @@ class CouponConfig extends ConfigMgr
 
 	function update_email()
 	{
+		//  Init value
 		$id = $this->model('Login')->GetLoginID();
+		$email = $this->form()->GetInputValue('email','form_email');
+		//$email = $this->model('Blowfish')->Encrypt($email); // TODO: to modeling
+		$bf = new Blowfish();
+		$email = $bf->Encrypt($email);
 		
+		//  Create config
 		$config = parent::update('t_account');
 		$config->where->id = $id;
 		$config->limit = 1;
-		$config->set->email = $this->form()->GetInputValue('email','form_email');
+		$config->set->email = $email;
+		$config->set->email_md5 = md5($email);
 		
 		return $config;
 	}
