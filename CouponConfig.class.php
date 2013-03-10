@@ -1078,7 +1078,7 @@ class CouponConfig extends ConfigMgr
 		$password = $_post->password;
 		
 		$config = parent::insert('t_account');
-		$config->set->email     = $blowfish->Encrypt( $email, '04B915BA43FEB5B6' );
+		$config->set->email     = $blowfish->Encrypt($email);
 		$config->set->email_md5 = md5($email);
 		$config->set->password  = md5($password);
 		
@@ -1087,29 +1087,24 @@ class CouponConfig extends ConfigMgr
 	
 	function insert_customer( $account_id )
 	{
+		//  Check
 		if(!$account_id){
 			$this->StackError("acount_id is empty.");
 			return false;
 		}
 		
-		$_post = $this->form()->GetInputValueAll('form_register');
+		//  Init set
+		$set = $this->form()->GetInputValueAll('form_register');
+		$set->account_id = $account_id;
+		unset($set->email);
+		unset($set->email_confirm);
+		unset($set->password);
+		unset($set->password_confirm);
+		unset($set->agree);
 		
-		$nick_name  = $_post->nick_name;
-		$first_name = $_post->first_name;
-		$last_name  = $_post->last_name;
-		$gender     = $_post->gender;
-		$pref       = $_post->pref;
-		$birthday   = $_post->birthday;
-		
+		//  Insert
 		$config = parent::insert('t_customer');
-
-		$config->set->account_id = $account_id;
-		$config->set->nick_name   = $nick_name;
-		$config->set->first_name  = $first_name;
-		$config->set->last_name   = $last_name;
-		$config->set->gender      = $gender;
-		$config->set->pref        = $pref;
-		$config->set->birthday    = $birthday;
+		$config->set = $set;
 		
 		return $config;
 	}
@@ -1312,13 +1307,12 @@ class CouponConfig extends ConfigMgr
 		$email = $this->form()->GetInputValue('email','form_email');
 		//$email = $this->model('Blowfish')->Encrypt($email); // TODO: to modeling
 		$bf = new Blowfish();
-		$email = $bf->Encrypt($email);
 		
 		//  Create config
 		$config = parent::update('t_account');
 		$config->where->id = $id;
 		$config->limit = 1;
-		$config->set->email = $email;
+		$config->set->email = $bf->Encrypt($email);
 		$config->set->email_md5 = md5($email);
 		
 		return $config;
