@@ -2,11 +2,15 @@
 
 <?php print ${"header.phtml"}; ?>
 
-<table>
-	<tr>
-		<td class="top"><section> <?php $this->content(); ?> </section></td>
-	</tr>
-</table>
+<div id="coupon_content" class="table">
+	<div class="tr">
+		<div class="td top" style="border-width: 0px">
+			<section>
+				<?php $this->content(); ?>
+			</section>
+		</div>
+	</div>
+</div>
 
 <?php print ${"footer.phtml"}; ?>
 

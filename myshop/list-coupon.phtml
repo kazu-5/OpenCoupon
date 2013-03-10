@@ -3,13 +3,13 @@ $href_coupon = $this->ConvertURL("app:/coupon/$coupon_id");
 $href_edit   = $this->ConvertURL("ctrl:/coupon/edit/$coupon_id");
 $href_delete = $this->ConvertURL("ctrl:/coupon/delete/$coupon_id");
 ?>
-<li>
+<li class="smaller">
 	<a href="<?=$href_coupon?>">
 		<?=$coupon_title?>: 
 		<?=$coupon_description?>
 	</a>
 	<br/>
-	<span style="font-size:small;">
+	<span style="font-size:smaller;">
 		<?=$coupon_sales_start?> - <?=$coupon_sales_finish?>
 	</span>
 	<span style="">

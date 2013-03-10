@@ -65,14 +65,16 @@ class CouponConfig extends ConfigMgr
 	 * 
 	 * 
 	 */
-	function mail_identification()
+	function mail_identification($identification)
 	{
-		$mail_config = new Config();
+		$data = new Config();
+		$data->identification = $identification;
 		
+		$mail_config = new Config();
 		$mail_config->to      = $this->form()->GetInputValue('email','form_email');
-		$mail_config->form    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：メールアドレスの変更';
-		$mail_config->message = $this->GetTemplate('mail/identification.phtml');
+		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
 		
 		return $mail_config;
 	}
@@ -109,6 +111,9 @@ class CouponConfig extends ConfigMgr
 			//$option['style'] = 'text-align:center;';
 			$form_config->input->$input_name->option->$i->style   = 'text-align:center;';
 		}
+		
+		//  submit
+		$form_config->input->submit->style = "font-size:18px;";
 		
 		return $form_config;
 	}
@@ -653,9 +658,23 @@ class CouponConfig extends ConfigMgr
 	{
 		$form_config = self::_form_default(__FUNCTION__);
 		
+		//  Current email address
+		$id = $this->model('Login')->GetLoginID();
+		$email = $this->pdo()->quick("email <- t_account.id = $id");
+		//  TODO:
+		//$email = $this->model('Blowfish')->Decript($email);
+		$bf = new Blowfish();
+		$email = $bf->Decrypt($email);
+		
 		//  form name
 		$form_config->name   = 'form_email';
-	//	$form_config->action = "app:/mypage/customer/email";
+		
+		//  email current
+		$input_name = 'email_current';
+		$form_config->input->$input_name->label  = '現在のメールアドレス';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->value  = $email;
+		$form_config->input->$input_name->readonly = true; //  TODO: write testcase
 		
 		//  email
 		$input_name = 'email';
@@ -663,6 +682,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'text';
 		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->validate->permit   = 'email';
+		$form_config->input->$input_name->error->required    = '$labelが未入力です。';
 		
 		//  email confirm
 		$input_name = 'email_confirm';
@@ -670,6 +690,8 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type  = 'text';
 		$form_config->input->$input_name->validate->required = true;
 		$form_config->input->$input_name->validate->compare  = 'email';
+		$form_config->input->$input_name->error->required    = '$labelが未入力です。';
+		$form_config->input->$input_name->error->compare     = '$labelが一致しません。';
 		
 		return $form_config;
 	}
@@ -681,11 +703,14 @@ class CouponConfig extends ConfigMgr
 	function form_email_identification()
 	{
 		$form_config = self::_form_default(__FUNCTION__);
-	
+		
+		//  Form
+		$form_config->name = 'form_identification';
+		
 		//  key code
 		$input_name = 'identification';
 		$form_config->input->$input_name->label = '確認コード';
-	
+		
 		return $form_config;
 	}
 	
@@ -1053,7 +1078,7 @@ class CouponConfig extends ConfigMgr
 		$password = $_post->password;
 		
 		$config = parent::insert('t_account');
-		$config->set->email     = $blowfish->Encrypt( $email, '04B915BA43FEB5B6' );
+		$config->set->email     = $blowfish->Encrypt($email);
 		$config->set->email_md5 = md5($email);
 		$config->set->password  = md5($password);
 		
@@ -1062,29 +1087,24 @@ class CouponConfig extends ConfigMgr
 	
 	function insert_customer( $account_id )
 	{
+		//  Check
 		if(!$account_id){
 			$this->StackError("acount_id is empty.");
 			return false;
 		}
 		
-		$_post = $this->form()->GetInputValueAll('form_register');
+		//  Init set
+		$set = $this->form()->GetInputValueAll('form_register');
+		$set->account_id = $account_id;
+		unset($set->email);
+		unset($set->email_confirm);
+		unset($set->password);
+		unset($set->password_confirm);
+		unset($set->agree);
 		
-		$nick_name  = $_post->nick_name;
-		$first_name = $_post->first_name;
-		$last_name  = $_post->last_name;
-		$gender     = $_post->gender;
-		$pref       = $_post->pref;
-		$birthday   = $_post->birthday;
-		
+		//  Insert
 		$config = parent::insert('t_customer');
-
-		$config->set->account_id = $account_id;
-		$config->set->nick_name   = $nick_name;
-		$config->set->first_name  = $first_name;
-		$config->set->last_name   = $last_name;
-		$config->set->gender      = $gender;
-		$config->set->pref        = $pref;
-		$config->set->birthday    = $birthday;
+		$config->set = $set;
 		
 		return $config;
 	}
@@ -1276,6 +1296,24 @@ class CouponConfig extends ConfigMgr
 		$config->where->seq_no     = $seq_no;
 		$config->limit = 1;
 		$config->set = $set;
+		
+		return $config;
+	}
+
+	function update_email()
+	{
+		//  Init value
+		$id = $this->model('Login')->GetLoginID();
+		$email = $this->form()->GetInputValue('email','form_email');
+		//$email = $this->model('Blowfish')->Encrypt($email); // TODO: to modeling
+		$bf = new Blowfish();
+		
+		//  Create config
+		$config = parent::update('t_account');
+		$config->where->id = $id;
+		$config->limit = 1;
+		$config->set->email = $bf->Encrypt($email);
+		$config->set->email_md5 = md5($email);
 		
 		return $config;
 	}
