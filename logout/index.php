@@ -11,6 +11,5 @@ if( $id = $this->model('Login')->GetLoginID() ){
 }else{
 	$message = 'ログインしていません。';
 }
-$data = new Config();
-$data->message = $message;
-$this->template('index.phtml',$data);
+
+include('index.phtml');

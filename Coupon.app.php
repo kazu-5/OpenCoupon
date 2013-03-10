@@ -258,20 +258,11 @@ class CouponApp extends App
 			return 0;
 		}
 		
-		
 		return $t_buy['SUM(coupon_id)'];
 	}
 	
 	function GetTShopByShopId($shop_id)
-	{	
-		/*
-		$select = array();
-		$select['table'] = 't_shop';
-		$select['where']['shop_id'] = $shop_id;
-		$select['limit'] = 1;
-		$t_shop = $this->mysql->select($select);
-		*/
-				
+	{
 		//  SELECTの定義を作成
 		$config = new Config();
 		$config->table = 't_shop';
@@ -284,30 +275,7 @@ class CouponApp extends App
 		
 		return $t_shop;
 	}
-
-	/**
-	 * これは使ってる？
-	 * @param $sid
-	 */
-	function _GetShopTable($sid){
-
-		$select = array();
-		$select['table'] = 't_shop';
-		$select['where']['shop_id'] = $sid;
-		$select['limit'] = 1;
-		$t_shop = $this->mysql->select($select);
-
-		$s_name				 = $t_shop['shop_name'];
-		$s_desc				 = $t_shop['shop_description'];
-		$s_address			 = $t_shop['shop_address'];
-		$s_telephone		 = $t_shop['shop_telephone'];
-		$s_holiday			 = $t_shop['shop_holiday'];
-		$s_opening_hour		 = $t_shop['shop_opening_hour'];
-		$s_nearest_station	 = $t_shop['shop_nearest_station'];
-
-		return $t_shop;
-	}
-
+	
 	/**
 	 * 新規アカウントをt_accountに登録
 	 *

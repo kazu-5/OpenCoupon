@@ -1,3 +1,14 @@
+<section>
+<div class="contents">
 <p class="red">
 	<?=$data->message?>
+	<?php
+	//  Transfer module
+	$data = new Config();
+	$data->class   = 'red';
+	$data->message = $message;
+	$this->module('Transfer')->Set('app:/',$data);
+	?>
 </p>
+</div>
+</section>

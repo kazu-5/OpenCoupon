@@ -22,17 +22,22 @@ $data->t_coupon = $this->pdo()->select($select);
 
 //  Action
 if( $action !== 'index' ){
+	
 	//  Get account_id.
 	$id = $this->model('Login')->GetLoginID();
+	
 	//  Check
 	if( !$id ){
 		//  Does not logged in.
-		$this->Location('app:/login');
+		$this->module('Transfer')->Set('app:/login');
+		return;
 	}
+	
 	//  Get address form.
 	$seq_no = $this->pdo()->quick("address_seq_no <- t_customer.account_id = $id");
 	$config = $this->config()->form_address( $id, $seq_no );
 	$this->form()->AddForm($config);
+	
 	//  Save address-form name.
 	$data->form_name_address = $config->name;
 }
@@ -47,7 +52,7 @@ switch( $action ){
 			if( $id = $this->model('Login')->GetLoginID() ){
 				$this->Location("app:/buy/$coupon_id/address");
 			}else{
-				$this->Location('app:/login');
+				$this->module('Transfer')->Set('app:/login');
 			}
 		}else{
 			//  NG

@@ -1,32 +1,39 @@
 <?php
 /* @var $this CouponApp */
 
+//  Init Config
+$data = new Config();
+
 //  Init form
-$form_name = 'form_register';
-$config = $this->config()->form_register();
-$this->form()->AddForm($config);
+$form_config = $this->config()->form_register();
+$this->form()->AddForm($form_config);
 
+//  form name
+$form_name = $form_config->name;
+
+//  Set data
+$data->form_name = $form_name;
+
+//  Action
 $action = $this->GetAction();
-
 switch( $action ){
-	case '':
 	case 'index':
-		$this->template('form_register.phtml',array('form_name'=>$form_name));
+		$data->template = 'form.phtml';
 		break;
 		
 	case 'confirm':
 		//  Check secure
 		if(!$this->form()->Secure($form_name) ){
-			$this->template('form_register.phtml',array('form_name'=>$form_name));
+			$data->template = 'form.phtml';
 		}else{
-			$this->template('form_register_confirm.phtml',array('form_name'=>$form_name));
+			$data->template = 'confirm.phtml';
 		}
 		break;
 		
 	case 'commit':
 		//  Check secure
 		if(!$this->form()->Secure($form_name) ){
-			$this->template('form_register.phtml',array('form_name'=>$form_name));
+			$data->template = 'form.phtml';
 		}else{
 			
 			//  Insert account
@@ -53,18 +60,10 @@ switch( $action ){
 			//  Form clear
 			$this->form()->Clear('form_register');
 			
-			//  Transfer
-			$args = array();
-			$args['form_name'] = $form_name;
-			$args['count']     = 5;
-			$args['url']       = $this->ConvertUrl("app:/login");
-			$this->template('form_register_commit.phtml',$args);
+			// 
+			$this->template('commit.phtml',$args);
 		}
 		break;
 }
 
-
-
-
-
-
+include('index.phtml');
