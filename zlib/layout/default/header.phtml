@@ -21,9 +21,9 @@ div.header_login a{
 			$name = $this->pdo()->quick(" nick_name <- t_customer.account_id = $id ");
 			$name = sprintf('<a href="%s">%s</a>',$href,$name);
 		}else{
-			$href = $this->ConvertURL('app:/Login');
+			$href = $this->ConvertURL('app:/login');
 			$name = sprintf('<a href="%s">GUEST</a>',$href); 
-		}	
+		}
 		?>
 		<?=$name?>
 	</div>

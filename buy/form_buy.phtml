@@ -9,34 +9,61 @@ $coupon_price_total  = $quantity * $coupon_price_sales;
 $coupon_description  = $t_coupon['coupon_description'];
 ?>
 
+<style>
+table{
+	border-width: 0px;
+}
+tr{
+	border-width: 0px;
+}
+th{
+	border-width: 0px;
+}
+td{
+	border-width: 0px;
+}
+</style>
 <?php $this->form()->Start( $data->form_name, $data->form_action ); ?>
 <table style="border-collapse: collapse; width:100%;">
 	<tr style="background-color: #DEEDCE;">
-		<th style="border: 1px solid #CCCCCC; width:50%; height:">購入クーポン</th>
-		<th>数量</th>
-		<th>単価</th>
-		<th>合計</th>
+		<th style="border-width: 1px 0px; border-left-width:1px;">購入クーポン</th>
+		<th style="border-width: 1px 0px;">数量</th>
+		<th style="border-width: 1px 0px;"> </th>
+		<th style="border-width: 1px 0px;"> </th>
+		<th style="border-width: 1px 0px;">単価</th>
+		<th style="border-width: 1px 0px;"> </th>
+		<th style="border-width: 1px 0px;"> </th>
+		<th style="border-width: 1px 0px; border-right-width:1px;">合計</th>
 	</tr>
 	<tr>
-		<td>
-			<img style="float:left; margin: 5px;" height="75px" src="../img/dummy.jpg">
-			<p style="font-size:13px;"><?=$coupon_description?></p>
+		<td class="small" rowspan="2" style="width:50%;">
+			<img class="img_coupon float_left" src="../img/dummy.jpg">
+			<p><?=nl2br($this->wiki2($coupon_description))?></p>
 		</td>
-		<td colspan="3" style="font-size: 40px; text-align:center;">
-			<nobr>
-				<span class="coupon_price">
-					<span class="coupon_price"><?php $this->form()->Input('quantity'); ?></span>
-					×
-					<span id="coupon_normal_price" class="coupon_price"><?=$coupon_price_sales?></span>円
-					＝
-					<span id="price" class="coupon_price"><?=$coupon_price_total?></span>円
-				</span>
-			</nobr>
-			<p style="font-size:13px; color: #FF9800;">▲数量の変更はこちらから</p>
+		<td class="center" style="height: 3em;">
+			<span class="coupon_price"><?php $this->form()->Input('quantity'); ?></span>
+		</td>
+		<td class="center" colspan="2" style="padding:0.5em 0em;">
+			×
+		</td>
+		<td class="center nobr">
+			<span id="coupon_normal_price" class="coupon_price"><?=$coupon_price_sales?></span>円
+		</td>
+		<td class="center" colspan="2" style="padding:0.5em 0em;">
+			＝
+		</td>
+		<td class="center nobr">
+			<span id="price" class="coupon_price"><?=$coupon_price_total?></span>円
+		</td>
+	</tr>
+	<tr>
+		<td colspan="10" style="padding-left: 2em;" valign="top">
+			<p class="small orange">▲数量の変更はこちらから</p>
 		</td>
 	</tr>
 </table>
-<div style="text-align:center">
+
+<div class="center">
 	<?php $this->form()->Input( 'submit', $data->submit_label ); ?>
 </div>
 <?php $this->form()->Finish($data->form_name); ?>

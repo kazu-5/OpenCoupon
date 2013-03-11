@@ -1,0 +1,68 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start($data->form_name,'./commit') ?>
+<table>
+	<tr>
+		<td>
+			名前
+		</td>
+		<td>
+			<?php $this->form()->Value('first_name') ?>
+			<?php $this->form()->Value('last_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('nick_name') ?>
+		</td>
+		<td>
+			<?php $this->form()->Value('nick_name') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('email') ?>
+		</td>
+		<td>
+			<?php $this->form()->Value('email') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('gender') ?>
+		</td>
+		<td>
+			<?php $this->form()->Value('gender') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('birthday') ?>
+		</td>
+		<td>
+			<?php
+			$birthday = $this->form()->GetInputValue('birthday');
+			$temp = explode('-',$birthday);
+			printf('%s年%s月%s日',$temp[0],$temp[1],$temp[2]);
+			?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php $this->form()->Label('favorite_pref') ?>
+		</td>
+		<td>
+			<?php $this->form()->Value('favorite_pref') ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		
+		</td>
+		<td>
+			<?php $this->form()->Input('submit'," この内容で登録する ") ?>
+		</td>
+	</tr>
+</table>
+<?php $this->form()->Finish($data->form_name) ?>
