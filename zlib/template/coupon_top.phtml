@@ -3,7 +3,6 @@
 	<tr>
 		<td colspan="2" valign="top">
 			<h1><?=$t_coupon['coupon_title']?></h1>
-			<p><?=$t_coupon['coupon_description']?></p>
 		</td>
 	</tr>
 	<tr>
@@ -12,7 +11,7 @@
 		</td>
 		<td valign="top">
 			<?=$this->template('coupon_info_detail.phtml',array('t_coupon'=>$t_coupon))?>
-			<p>ここはクーポンの説明１</p>
+			<p><?=$t_coupon['coupon_description']?></p>
 			<p style="color:#8AB657; font-size:90%; border-bottom:2px solid #E3E3E3" class="bold">ご利用上の注意</p>
 			<p>ここにご利用上の注意が必要</p>
 		</td>
@@ -24,4 +23,3 @@
 	<p>ここがお店の説明欄</p>
 	<?=$this->template('coupon_info_shop.phtml',array('t_shop'=>$t_shop))?>
 </div>
-

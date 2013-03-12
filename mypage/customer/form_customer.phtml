@@ -1,0 +1,77 @@
+<?php $this->form()->Start('form_customer','confirm');?>
+		<table style="border-collapse: collapse;">
+			<tr style="height:50px; padding: 25px 0;" align="left">
+				<th style="width:5px;">名前</th>
+				<td style="width:400px;">
+					姓：<?php $this->form()->Input('last_name');?>
+					名：<?php $this->form()->Input('first_name');?>
+					<p class="red"><?php $this->form()->InputError('last_name')?></p>
+					<p class="red"><?php $this->form()->InputError('first_name')?></p>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>メールアドレス</th>
+				<td>
+					<a href="/mypage/customer/email">変更する</a>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>パスワード</th>
+				<td>
+					<a href="/mypage/customer/password">変更する</a>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>住所</th>
+				<td>
+					<script>
+					/* 既存の住所を修正 */
+					function change_address(){
+						var t = document.getElementById('form_change_address');
+						var seq_no = t.options[t.selectedIndex].value;
+						var url    = '<?=$this->ConvertURL('ctrl:/address/')?>';
+						window.location.href = url + seq_no;
+					}
+
+					/* 新しい住所を追加 */
+					function new_address(){
+						var url    = '<?=$this->ConvertURL('ctrl:/address/new')?>';
+						window.location.href = url;
+					}
+					</script>
+					
+					<!--  既存の住所を修正  -->
+					<nobr>
+						<select id="form_change_address" name="form_change_address">
+						<?php foreach($data->t_address as $r): ?>
+							<?php $address = $this->model('JapanesePref')->Get($r['pref']).$r['city'].$r['address']; ?>
+							<option value="<?=$r['seq_no']?>"><?=$address?></option>
+						<?php endforeach; ?>
+						</select>
+						<input type="button" value=" 変更する " class="submit" onclick="change_address();" />
+					</nobr>
+					
+					<!--  新しい住所を追加  -->
+					<input type="button" value=" 新しい住所を追加する " class="submit" onclick="new_address();" />
+				</td>
+			</tr>
+			<tr align="left">
+				<th>生年月日</th>
+				<td>
+					<?php $this->form()->Input('birthday') ?>
+					<p class="red"><?php $this->form()->Error('birthday') ?></p>
+				</td>
+			</tr>
+			<tr align="left">
+				<th>性別</th>
+				<td>
+					<?php $this->form()->Input('gender'); ?>
+					<p class="red"><?php $this->form()->InputError('gender');?></p>
+				</td>
+			</tr>
+		</table>
+		<div style="text-align:center">
+			<?php $this->form()->Input('submit')?>
+		</div>
+		<?php $this->form()->Finish('form_customer'); ?>
+		

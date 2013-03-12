@@ -10,7 +10,7 @@ $action = $this->GetAction();
 $id = $this->model('Login')->GetLoginID();
 
 //  Form
-$form_config = $this->config()->form_email( $id );
+$form_config = $this->config()->form_password( $id );
 $this->form()->AddForm($form_config);
 
 //  form name
@@ -25,17 +25,7 @@ switch( $action ){
 	case 'index':
 		$this->template('form.phtml',$data);
 		break;
-		
-	case 'confirm':
-		if( $this->form()->Secure($form_name) ){
-			//  OK
-			$this->template('confirm.phtml',$data);
-		}else{
-			//  NG
-			$this->template('form.phtml',$data);
-		}
-		break;
-		
+				
 	case 'commit':
 		if( $this->form()->Secure($form_name) ){
 			//  OK

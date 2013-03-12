@@ -1,6 +1,7 @@
 <?php
 /* @var $this CouponApp */
 
+//  Init
 $action    = $this->GetBuyAction();
 $coupon_id = $this->GetCouponId();
 $this->mark("action=$action",'debug');
