@@ -65,6 +65,20 @@ class CouponConfig extends ConfigMgr
 	 * 
 	 * 
 	 */
+	function mail_identification_register($identification)
+	{
+		$data = new Config();
+		$data->identification = $identification;
+	
+		$mail_config = new Config();
+		$mail_config->to      = $this->form()->GetInputValue('email','form_register');
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->subject = 'オープンクーポン：ユーザ情報の登録';
+		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
+	
+		return $mail_config;
+	}
+	
 	function mail_identification($identification)
 	{
 		$data = new Config();
@@ -312,6 +326,24 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
 		$form_config->input->$input_name->value  = ' この内容で仮登録する ';
 		
+		return $form_config;
+	}
+	
+	/**
+	 * 登録しようとしているメールアドレスが本人かキーコードを送信し、入力して貰って本人確認を行う。
+	 *
+	 */
+	function form_register_identification()
+	{
+		$form_config = self::_form_default(__FUNCTION__);
+	
+		//  Form
+		$form_config->name = 'form_register_identification';
+	
+		//  key code
+		$input_name = 'identification';
+		$form_config->input->$input_name->label = '確認コード';
+	
 		return $form_config;
 	}
 	
@@ -1094,7 +1126,17 @@ class CouponConfig extends ConfigMgr
 		}
 		
 		//  Init set
-		$set = $this->form()->GetInputValueAll('form_register');
+		$_post = $this->form()->GetInputValueAll('form_register');
+		
+		$config = parent::insert('t_customer');
+		$config->set->nick_name = $_post->nick_name;
+		$config->set->last_name = $_post->last_name;
+		$config->set->first_name = $_post->first_name;
+		$config->set->gender = $_post->gender;
+		$config->set->favorite_pref = $_post->favorite_pref;
+		$config->set->birthday = $_post->birthday;
+		
+		/*
 		$set->account_id = $account_id;
 		unset($set->email);
 		unset($set->email_confirm);
@@ -1102,10 +1144,11 @@ class CouponConfig extends ConfigMgr
 		unset($set->password_confirm);
 		unset($set->agree);
 		
+		
 		//  Insert
 		$config = parent::insert('t_customer');
 		$config->set = $set;
-		
+		*/
 		return $config;
 	}
 
