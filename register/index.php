@@ -35,7 +35,32 @@ switch( $action ){
 		if(!$this->form()->Secure($form_name) ){
 			$data->template = 'form.phtml';
 		}else{
+			//  OK
+			//  Print template
+			if( $num !== false ){
 			
+				//  All done.
+				$data->template = 'commit.phtml';
+			
+				//  Send mail
+				$identification = md5(microtime());
+				$this->SetSession('identification',$identification);
+				$mail_config = $this->config()->register_mail_identification($identification);
+				$io = $this->Mail($mail_config);
+				$this->d($io);
+				$this->d($mail_config);
+				$this->d($identification);
+			
+				//  Clear of saved form value.
+				//	$this->form()->Clear($form_name);
+			
+			}else{
+				//  No good.
+				$data->message = 'エラーが発生しました。';
+				$data->template = 'form.phtml';
+			}
+			
+			/*
 			//  Insert account
 			$insert = new Config();
 			$insert = $this->config()->insert_account();
@@ -59,7 +84,7 @@ switch( $action ){
 			
 			//  Form clear
 			$this->form()->Clear('form_register');
-			
+			*/
 			// 
 			$this->template('commit.phtml',$args);
 		}

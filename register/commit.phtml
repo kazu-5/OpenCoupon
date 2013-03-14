@@ -1,7 +1,5 @@
-<p>仮登録が完了しました。</p>
+<p>確認メールを送信しました。</p>
+<p>次の画面でメールに記載されている確認キーを入力して下さい。</p>
 <?php
-/* @var $this CouponApp */
-
-//  Transfer
-$url = $this->ConvertUrl("app:/login");
+$url = $this->ConvertURL('ctrl:/identification');
 $this->module('Transfer')->Set($url);
