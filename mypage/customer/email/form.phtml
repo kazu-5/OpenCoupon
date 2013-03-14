@@ -1,0 +1,41 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php $this->form()->Start( $data->form_name, 'confirm' ) ?>
+	<table>
+		<tr>
+			<th>
+				<?php $this->form()->Label('email_current') ?>
+			</th>
+			<td>
+				<?php $this->form()->Value('email_current') ?><br>
+				<?php $this->form()->Error('email_current') ?>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php $this->form()->Label('email') ?>
+			</th>
+			<td>
+				<?php $this->form()->Input('email') ?><br>
+				<?php $this->form()->Error('email') ?>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php $this->form()->Label('email_confirm') ?>
+			</th>
+			<td>
+				<?php $this->form()->Input('email_confirm') ?><br>
+				<?php $this->form()->Error('email_confirm') ?>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			</th>
+			<td>
+				<?php $this->form()->Input('submit','　入力したメールアドレスを確認する　') ?>
+			</td>
+		</tr>
+	</table>
+<?php $this->form()->Finish($data->form_name) ?>

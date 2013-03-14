@@ -1,0 +1,40 @@
+<?php
+/* @var $this CouponApp */
+$coupon_id = $this->GetCouponID();
+$record = $this->pdo()->quick(" t_coupon.coupon_id = $coupon_id ");
+$register_flag = false; // TODO
+?>
+
+<div class="arc" style="background-color:white; margin:5px; padding:13px;">
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">クーポン購入</h1>
+	</div>
+	
+	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 20px; font-size: 20px;">購入内容</h2>
+	
+	<?php 
+	//  Form settings.
+	$data->form_name    = $data->form_name_buy;
+	$data->form_action  = '';
+	$data->submit_label = ' 数量の変更 ';
+	
+	//  Print form
+	include('form_buy.phtml'); 
+	?>
+	
+	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 40px; font-size: 20px;">お客様情報</h2>
+	
+	<div id="customer_informartion" style="padding-top:8px;">
+		<p style="padding: 0 0 8px;">▼以下にてお支払いに関する情報をご記入ください。</p>	
+		
+		<?php
+		//  Form settings.
+		$data->form_name    = 'form_address_'.$seq_no;
+		$data->form_action  = "app:/buy/$coupon_id/confirm";
+		$data->submit_label = ' 入力内容を確認する ';
+		//  Print form
+		include('form_address.phtml'); 
+		?>
+		
+	</div>
+</div>

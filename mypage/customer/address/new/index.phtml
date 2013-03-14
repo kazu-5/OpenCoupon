@@ -1,0 +1,23 @@
+<?php
+/* @var $this CouponApp */
+?>
+
+<div>
+	[ <a href="/mypage">マイページ</a> ＞ <a href="/mypage/customer">登録情報</a> ＞ <a href="/mypage/customer/address">住所</a> ＞ 新規 ]
+</div>
+
+<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
+	<div>
+		<p class="blue"><?=$data->message?></p>
+	</div>
+	
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">住所</h1>
+	</div>
+	
+	<div id="customer_informartion" style="padding-top:8px;">
+	<?php
+	$this->template( $data->template, $data );
+	?>
+	</div>
+</div>

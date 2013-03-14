@@ -1,0 +1,127 @@
+<?php
+/* @var $this CouponApp */
+?>
+<style>
+	.block_payment_creditcard table {
+		border: 0px;
+	}
+	.block_payment_creditcard td{
+		border-bottom: 1px dotted #D0D0D0;
+		padding: 5px 6px 17px;
+		vertical-align: top;
+		font-size: 14px;
+	}
+	.block_payment_creditcard th, td {
+		border: 0px solid #CCCCCC;
+	}
+	.input_button{
+		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
+		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
+		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
+		border: 1px solid #2D9DC2;
+		border-radius: 9px 9px 9px 9px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+		color: #FFFFFF !important;
+		cursor: pointer;
+		display: inline-block;
+		margin: 15px;
+		padding: 4px 30px;
+		text-align: center;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+		vertical-align: middle;
+	}
+</style>
+<?php $this->form()->Start('form_payment') ?>
+<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">クーポン購入</h1>
+	</div>
+	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">決済方法をお選びください</h2>
+	<div class="block_payment_creditcard" style="padding-top:8px;">
+		<h3></h3>
+		<table style="border-collapse: collapse;">
+			<tr>
+				<td style="width:200px;">カード番号</td>
+				<td>
+					ご自身以外の名義のカードはご家族のものであってもご利用いただけません<br/>
+					クレジットカードに記載されているカード番号を半角数字で入力してください<br/>
+					(例) 0123456789012345<br/>
+					<?php $this->form()->Input('card_no') ?>
+					<p><?php $this->form()->Error('card_no') ?></p>
+				</td>
+			</tr>
+			<tr>
+				<td>カード有効期限</td>
+				<td>
+					クレジットカードの有効期限を選択してください<br/>
+					(例) 2015年12月の場合は 月：12 年：2015<br/>
+					月：<?php $this->form()->Input('exp_mm') ?>
+					   <span class="black">/</span>
+					年：<?php $this->form()->Input('exp_yy') ?>
+					<p><?php $this->form()->InputError('exp_yy') ?></p>
+					<p><?php $this->form()->InputError('exp_mm') ?></p>
+				</td>
+			</tr>
+			<!--  
+			<tr>
+				<td>支払い方法</td>
+				<td>
+					<?php $this->form()->Input('paymode') ?>
+					<?php $this->form()->Input('incount') ?>
+					<p> <?php $this->form()->InputError('paymode') ?> </p>
+					<p> <?php $this->form()->InputError('incount') ?> </p>
+				</td>
+			</tr>
+			-->
+			<tr>
+				<td>セキュリティコード</td>
+				<td>
+					クレジットカード裏面（American Expressカードは表面）に<br/>
+					記載されているセキュリティコードを半角数字で入力してください<br/>
+					(例) 123 <br/>
+					<?php $this->form()->Input('csc') ?>
+					<p> <?php $this->form()->InputError('csc') ?> </p>
+				</td>
+			</tr>
+		</table>
+		<div style="text-align:center">
+		<?php $this->form()->Input('submit') ?>
+		</div>
+	</div>
+</div>
+<?php $this->form()->Finish('form_payment') ?>
+
+
+<script>
+
+function check_paymode(t){
+//		$('#console').append('<p>'+ t.value +'</p>');
+		switch(t.value){
+			case "10":
+			case "21":
+			case "80":
+				$('#incount').attr('disabled','disabled');
+				break;
+				
+			default:
+				$('#incount').removeAttr('disabled');
+		}
+}
+
+$(document).ready(function(){
+	
+	var paymode = document.getElementById('paymode');
+	check_paymode(paymode);
+	
+	$('#paymode').change(function(){
+		check_paymode(this);
+	});
+	
+	if(0){
+		$('#console').css('border','1px dotted blue');
+		$('#console').css('margin','5px');
+		$('#console').append('<h2>Console</h2><hr>');
+	}
+});
+</script>
+<div id="console"></div>

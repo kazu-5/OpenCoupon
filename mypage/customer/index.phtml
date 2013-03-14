@@ -1,0 +1,20 @@
+<?php
+/* @var $this CouponApp */
+?>
+<?php if( isset($data->message) ): ?>
+	<p class="red"><?=$data->message?></p>
+<?php endif; ?>
+
+<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
+	
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">登録情報</h1>
+	</div>
+	
+	<div id="customer_informartion" style="padding-top:8px;">
+		<?php
+		//  t_customer
+		$this->template('form_customer.phtml',$data);
+		?>
+	</div>
+</div>

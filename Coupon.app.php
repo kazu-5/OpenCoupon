@@ -1,7 +1,10 @@
 <?php
-
-include('NewWorld5.class.php');
-
+/**
+ * Open Coupon App
+ * 
+ * @author Open Coupon Projects members <open-coupon@gmail.com>
+ *
+ */
 class CouponApp extends App
 {
 	/**
@@ -17,7 +20,14 @@ class CouponApp extends App
 		return parent::Config( $cmgr );
 	}
 	
-	/***		ACTION		***/
+	function Path2URL($path)
+	{
+		$app_root = $this->GetEnv('app_root');
+		$app_root = rtrim( $app_root, DIRECTORY_SEPARATOR );
+		return str_replace( $app_root, '', $path );
+	}
+	
+	/***    ACTION    ***/
 	
 	function GetAction(){
 		$args = $this->GetArgs();
@@ -45,69 +55,50 @@ class CouponApp extends App
 		return $action;
 	}
 	
-	/**
-	 *  General checker
-	 *  汎用的な Checker
-	 *
-	 *  @return  Boolean
-	 */
-	function Check($key){
-		switch(strtolower($key)){
-			
-			case 'login':
-			case 'loggedin':
-				$io = $this->GetSession('isLoggedin');
-				break;
-				
-			case 'shop_flag':
-				$io = $this->GetSession('account_id') == 1 ? true: false;
-				break;
-				
-			default:
-				$io = false;
+	function GetMyShopAction()
+	{
+		//  Init
+		$action = 'does_not_set';
+		
+		//  Get URL Argument
+		$args = $this->GetArgs();
+		
+		//  Standard
+		$action = $args[0];
+		switch( $action ){
+			case '':
+				$action = 'index';
 		}
-		return $io;
+		
+		return $action;
+	}
+
+	/***    URL Arguments    ***/
+	
+	function GetArgs( $define=null )
+	{
+		$temp = parent::GetArgs();
+		if( $define ){
+			foreach( explode('/',$define) as $key ){
+				$args[$key] = array_shift($temp);
+			}
+		}else{
+			$args = $temp;
+		}
+		return $args;
 	}
 	
-	function GetMailaddrFromId( $id ){
-
-		//	IDからレコードを取得
-		$select = array();
-		$select['table'] = 't_account';
-		$select['where']['id'] = $id;
-		$select['limit'] = 1;
-		$t_account = $this->mysql->select($select);
-		//		$this->d($t_account);
-
-		$mailaddr = $this->Dec($t_account['mailaddr']);
-		//		$this->d($mailaddr);
-
-		return $mailaddr;
-	}
-
 	/**
-	 *
-	 * メールアドレスからIDを求める（存在しない場合は0を返す）
-	 *
+	 * 
 	 */
-	function GetIdFromMailaddr( $mailaddr ){
-
-		//	メールアドレスからレコードを取得
-		$select = array();
-		$select['table'] = 't_account';
-		$select['where']['mailaddr_md5'] = md5($mailaddr);
-		$select['limit'] = 1;
-		$t_account = $this->mysql->select($select);
-
-		if( count($t_account) ){
-			$id = $t_account['id'];
-		}else{
-			$id = 0;
+	function GetShopID($id=null)
+	{
+		if(!$shop_id = $this->GetSession('myshop_id') ){
+			$this->Location('app:/myshop/error/GetShopID');
 		}
-
-		return $id;
+		return $shop_id;
 	}
-
+	
 	/**
 	 * URLで指定されたcoupon_idまたはsessionに保存していたcoupon_id
 	 *
@@ -167,7 +158,7 @@ class CouponApp extends App
 		$t_coupon['coupon_discount_rate'] = 100 - (($t_coupon['coupon_sales_price'] / $t_coupon['coupon_normal_price']) * 100);
 
 		//	残り時間を計算
-		$rest_time = strtotime($t_coupon['coupon_sales_limit']) - time();
+		$rest_time = strtotime($t_coupon['coupon_sales_finish']) - time();
 
 		//	レコードに残り時間を追加
 		$t_coupon['rest_time_day']    = floor($rest_time / (86400));
@@ -185,14 +176,58 @@ class CouponApp extends App
 			return false;
 		}
 		
-		$config = new Config();
-		$config->table = 't_shop';
-		$config->where->shop_id = $shop_id;
-		$config->limit = 1;
-		$t_shop = $this->pdo()->select($config);
-		//$this->d($t_shop);
+		return $this->pdo()->quick(" t_shop.shop_id = $shop_id ");
+	}
+	
+	/**
+	 * myshopで使うクーポン一覧を取得する
+	 * 
+	 * myshopでしか使わないので、これは分離した方が良い。
+	 * 
+	 * @param  integer $shop_id
+	 * @return array 
+	 */
+	function GetCouponListByShopId($shop_id)
+	{
+		if(!$shop_id){
+			$this->StackError("Does not set shop_id.");
+			return false;
+		}
 		
-		return $t_shop;
+		//  Init
+		$list['wait']   = null;
+		$list['on']     = null;
+		$list['off']    = null;
+		$list['delete'] = null;
+		
+		//  Wait sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_start  = '> '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '> '.date('Y-m-d H:i:s');
+		$list['wait']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		//  On sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_start  = '<  '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '>  '.date('Y-m-d H:i:s');
+		$list['on']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		//  End of sale
+		$config = $this->config()->select_coupon();
+		$config->where->coupon_sales_start  = '< '.date('Y-m-d H:i:s');
+		$config->where->coupon_sales_finish = '< '.date('Y-m-d H:i:s');
+		$list['off']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		//  Delete
+		$config = $this->config()->select_coupon();
+		$config->where->deleted = '! null';
+		$list['delete']  = $this->pdo()->select($config);
+	//	$this->mark( $this->pdo()->qu() );
+		
+		return $list;
 	}
 	
 	/**
@@ -210,11 +245,11 @@ class CouponApp extends App
 		
 		//  SELECTの定義を作成
 		$config = new Config();
-		$config->table = 't_buy';
+		$config->table    = 't_buy';
 		$config->where->coupon_id = $coupon_id;
 		$config->agg->sum = 'coupon_id';
-		$config->group = 'coupon_id';
-		$config->limit = 1;
+		$config->group    = 'coupon_id';
+		$config->limit    = 1;
 		
 		//  Selectの実行
 		$t_buy = $this->pdo()->select($config);
@@ -227,15 +262,7 @@ class CouponApp extends App
 	}
 	
 	function GetTShopByShopId($shop_id)
-	{	
-		/*
-		$select = array();
-		$select['table'] = 't_shop';
-		$select['where']['shop_id'] = $shop_id;
-		$select['limit'] = 1;
-		$t_shop = $this->mysql->select($select);
-		*/
-				
+	{
 		//  SELECTの定義を作成
 		$config = new Config();
 		$config->table = 't_shop';
@@ -248,30 +275,7 @@ class CouponApp extends App
 		
 		return $t_shop;
 	}
-
-	/**
-	 * これは使ってる？
-	 * @param $sid
-	 */
-	function _GetShopTable($sid){
-
-		$select = array();
-		$select['table'] = 't_shop';
-		$select['where']['shop_id'] = $sid;
-		$select['limit'] = 1;
-		$t_shop = $this->mysql->select($select);
-
-		$s_name				 = $t_shop['shop_name'];
-		$s_desc				 = $t_shop['shop_description'];
-		$s_address			 = $t_shop['shop_address'];
-		$s_telephone		 = $t_shop['shop_telephone'];
-		$s_holiday			 = $t_shop['shop_holiday'];
-		$s_opening_hour		 = $t_shop['shop_opening_hour'];
-		$s_nearest_station	 = $t_shop['shop_nearest_station'];
-
-		return $t_shop;
-	}
-
+	
 	/**
 	 * 新規アカウントをt_accountに登録
 	 *

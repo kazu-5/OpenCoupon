@@ -2,13 +2,18 @@
 
 	<h2>お店の説明</h2>
 	<div>
+		<?php
+		$data = new Config();
+		$data->shop_id = $t_shop['shop_id'];
+		$this->template('coupon_shop_photo.phtml',$data); 
+		?>
 		店名：<?=$t_shop['shop_name'];?><br>
 		説明：<?=$t_shop['shop_description']?><br>
 		住所：<?=$t_shop['shop_address']?><br>
-		電話番号：<?=$t_shop['shop_telephone']?><br>
+		電話番号：<?=$t_shop['shop_tel']?><br>
 		定休日：<?=$t_shop['shop_holiday']?><br>
-		営業時間：<?=$t_shop['shop_opening_hour']?><br>
-		最寄り駅：<?=$t_shop['shop_nearest_station']?>
+		営業時間：<?=$t_shop['shop_open']?><br>
+		最寄り駅：<?=$t_shop['shop_railway']?><?=$t_shop['shop_station']?>
 	</div>
 
 </div>

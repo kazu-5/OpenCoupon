@@ -1,82 +1,97 @@
-/*
+/**
+ * General CSS
+ * 
+ * 
+ * 
+ */
 
-  汎用 - 他のサイトでも使用する
+@CHARSET "UTF-8";
 
-*/
+#OnePiece *{
 
-*{
-	margin:0px;
-	padding:0px;
-	font-size:medium;
-	/*
-	font: normal normal 13px/22px  "メイリオ", "ＭＳ Ｐゴシック", Verdana,Osaka, sans-serif;
-	*/
 }
 
+/***************************************************************************************************/
+
 /* HTML5 */
-section, article, aside, header, footer, nav{
+#OnePiece section, article, aside, header, footer, nav{
 	display:block;
 }
 
 /* Block */
-p{
+#OnePiece p{
 	line-height: 20px;
 }
 
-/* リスト */
-ol,ul{
+.p{
+	text-indent: 1em;
+}
+
+/* headline */
+#OnePiece h1, h2, h3, h4, h5, h6{
+	font-size:larger;
+	margin: 0px;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	_border: 1px dotted blue;
+}
+
+/* list */
+#OnePiece ol,ul{
 	_border:1px dotted blue;
 	padding-left: 1em;
 }
 
-ul li{
+#OnePiece ul li{
 	_border:1px dotted green;
 	margin-left:1em;
 }
 
-ol li{
+#OnePiece ol li{
 	_border:1px dotted green;
 	margin-left:3em;
 }
 
-dl{
+#OnePiece dl{
 	_border:1px dotted blue;
 }
 
-dt{
+#OnePiece dt{
 	_border:1px dotted red;
 }
 
-dd{
+#OnePiece dd{
 	_border:1px dotted green;
 	padding-left: 2em;
 	padding-bottom: 1.5em;
 }
 
-/* テーブル */
-
-div.table{
-    display: table;
-}
-
-div.tr{
-    display: table-row;
-}
-
-div.td{
-    display: table-cell;
-}
-
-table{
-	border: 0px solid black;
+/* table */
+#OnePiece table{
+	border: 1px solid black;
 	border-collapse: separate;
 	border-spacing: 1px;
 }
 
-th,td{
+#OnePiece th,td{
 	vertical-align:top;
-	border: 0px solid black;
 	padding: 0px 2px;
+}
+
+div.table{
+	border: 0px dotted black;
+    display: table;
+}
+
+div.tr{
+	border: 0px dotted blue;
+    display: table-row;
+}
+
+div.td{
+	border: 0px dotted yellow;
+    display: table-cell;
+    vertical-align: top;
 }
 
 .separate{
@@ -92,12 +107,109 @@ th,td{
 	border-width: 0px;
 }
 
-/* イメージ */
-img{
+/* Inline */
+#OnePiece strong{
+	/* If you want to use the bold, using the class=".bold". */
+	font-weight:normal;
+}
+
+/* Image */
+#OnePiece img{
 	border-width:0px;
 }
 
-/*  幅  */
+/***************************************************************************************************/
+
+/*  layout  */
+.m0{
+	margin:0px;
+}
+
+.m1{
+	margin:1px;
+}
+
+.m2{
+	margin:2px;
+}
+
+.m1em{
+	margin: 1em;
+}
+
+.mt0p{
+	margin-top: 0px;
+}
+
+.mb0p{
+	margin-bottom: 0px;
+}
+
+.ml0p{
+	margin-left: 0px;
+}
+
+.mr0p{
+	margin-right: 0px;
+}
+
+.p0{
+	padding:0px;
+}
+
+.pt1em{
+	padding-top: 1em;
+}
+
+.pl1em{
+	padding-left: 1em;
+}
+
+.pr1em{
+	padding-right: 1em;
+}
+
+.pb1em{
+	padding-bottom: 1em;
+}
+
+.b0{
+	border-width: 0px;
+}
+
+.b1{
+	border: 1px solid black;
+}
+
+.i1em{
+	text-indent: 1em;
+}
+
+.i2em{
+	text-indent: 2em;
+}
+
+.i3em{
+	text-indent: 3em;
+}
+
+.i4em{
+	text-indent: 4em;
+}
+
+.br{
+	margin-bottm: 1.5em;
+}
+
+.float_left{
+	float:left;
+}
+
+.float_right{
+	float:right;
+}
+
+/*  width  */
 .micro{
 	width:50px;
 }
@@ -122,16 +234,16 @@ img{
 	width:400px;
 }
 
-.ext{ /* extensive */
+.extensive{
 	width:500px;
 }
 
-/*  高さ  */
+/*  height  */
 .tall{
 	height:200px;
 }
 
-/*  配置  */
+/*  position  */
 .right{
 	text-align:right;
 }
@@ -142,14 +254,6 @@ img{
 
 .center{
 	text-align:center;
-}
-
-.top{
-    vertical-align: top;
-}
-
-.middle{
-    vertical-align: middle;
 }
 
 .super{
@@ -168,7 +272,7 @@ img{
 	vertical-align: sub;
 }
 
-/*  文字の大きさ  */
+/*  size  */
 .medium{
 	font-size: medium;
 }
@@ -221,7 +325,7 @@ img{
 	font-size:xx-large;
 }
 
-/*  文字のスタイル  */
+/*  style  */
 .bold{
 	font-weight:bold;
 }
@@ -230,7 +334,24 @@ img{
 	font-weight:normal;
 }
 
-/*  文字の装飾  */
+/* Italics. base the Cursive. */
+.italic{
+	font-style:italic;
+}
+
+/* Italics. base the Gothic. */
+.oblique{
+    font-family: oblique;
+}
+
+.mono{
+	font-family:monospace;
+}
+
+.monospace{
+	font-family:monospace;
+}
+
 .strike{
 	text-decoration: line-through;
 }
@@ -251,7 +372,23 @@ img{
 	text-decoration: blink;
 }
 
-/*  文字の色  */
+.nobr{
+	white-space: nowrap;
+}
+
+.nowrap{
+	white-space: nowrap;
+}
+
+/*  color  */
+.black{
+	color:black;
+}
+
+.gray{
+	color:gray;
+}
+
 .red{
 	color:red;
 }
@@ -268,15 +405,11 @@ img{
 	color:yellow;
 }
 
-.gray{
-	color:gray;
+.orange{
+	color: #FF9800;	
 }
 
-.black{
-	color:black;
-}
-
-/*  背景の色  */
+/*  background color  */
 .bg-white{
 	background-color: #ffffff;
 }
@@ -307,7 +440,7 @@ img{
 }
 
 
-/*  枠線  */
+/*  border  */
 .border{
 	border: 1px solid black;
 }
@@ -332,13 +465,13 @@ img{
 	border-color: yellow;
 }
 
-/*  文字色、背景色、枠線色の一括指定  */
+/* message and error */
 .message{
-
+	color:blue;
 }
 
 .error{
-
+	color:red;
 }
 
 .notice{
@@ -348,7 +481,7 @@ img{
 	border: 1px solid blue;
 }
 
-/*  弧線  */
+/*  arc  */
 .arc{
 	border-radius:         5px;
 	-o-border-radius:      5px;
@@ -357,7 +490,16 @@ img{
 	-webkit-border-radius: 5px;
 }
 
-/*  ディスプレイ  */
+/* box shadow */
+.box_shadow{
+	box-shadow:         3px 3px 10px #606060;
+	-o-box-shadow:      3px 3px 10px #606060;
+	-ms-box-shadow:     3px 3px 10px #606060;
+	-moz-box-shadow:    3px 3px 10px #606060;
+	-webkit-box-shadow: 3px 3px 10px #606060;
+}
+
+/*  display  */
 .box{
 	display: box;
 	display: -o-box;

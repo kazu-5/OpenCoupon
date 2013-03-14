@@ -1,20 +1,30 @@
 <?php
 
+$st = microtime(true);
+
+include('App.class.php');
+
 include('Coupon.app.php');
 $app = new CouponApp();
 
 //  Set environment.
-$app->SetEnv("controller-name","index.php");
+$app->SetControllerName("index.php");
+
+//  Setting
+$app->SetSettingName("setting.php");
 
 //  layout
-$app->SetEnv("layout-dir","app:/zlib/layout");
-$app->SetEnv("layout","default");
+$app->SetLayoutDir("app:/zlib/layout");
+$app->SetLayoutName("default");
 
 //  template
-$app->SetEnv("template-dir","app:/zlib/template");
+$app->SetTemplateDir("app:/zlib/template");
 
 //  Set model directory
-$app->SetEnv('model-dir','app:/zlib/model');
+$app->SetModelDir('app:/zlib/model');
+
+//  Set module directory
+$app->SetModuleDir('app:/zlib/module');
 
 //  config
 $app->config();
@@ -35,3 +45,7 @@ if(!$io){
 
 //  Do dispatch
 $app->Dispatch();
+
+$en = microtime(true);
+
+printf('<div>Execute time is %s seconds.</div>', $en - $st );
