@@ -1096,10 +1096,6 @@ class CouponConfig extends ConfigMgr
 	function select_photo( $shop_id, $coupon_id, $seq_no )
 	{
 		$config = parent::select('t_photo');
-	//	$config->where->shop_id   = $shop_id;
-	//	$config->where->coupon_id = $coupon_id;
-	//	$config->where->seq_no    = $seq_no; 
-	//	$config->column = 'url';
 		$config->limit  = 1;
 		return $config; 
 	}
@@ -1107,9 +1103,6 @@ class CouponConfig extends ConfigMgr
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
-		$this->d($_post);
-		
-		$blowfish = new Blowfish();
 		
 		$email    = $_post->email;
 		$password = $_post->password;
@@ -1130,34 +1123,17 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
-		$nick_name = $this->form()->GetInputValue('nick_name','form_register');
-		$this->d($nick_name);
-		
 		//  Init set
 		$_post = $this->form()->GetInputValueAll('form_register');
 		
 		$config = parent::insert('t_customer');
-		$this->d($_post);
-		$config->set->nick_name = $_post->nick_name;
-		$config->set->last_name = $_post->last_name;
-		$config->set->first_name = $_post->first_name;
-		$config->set->gender = $_post->gender;
+		$config->set->nick_name     = $_post->nick_name;
+		$config->set->last_name     = $_post->last_name;
+		$config->set->first_name    = $_post->first_name;
+		$config->set->gender        = $_post->gender;
 		$config->set->favorite_pref = $_post->favorite_pref;
-		$config->set->birthday = $_post->birthday;
+		$config->set->birthday      = $_post->birthday;
 		
-		/*
-		$set->account_id = $account_id;
-		unset($set->email);
-		unset($set->email_confirm);
-		unset($set->password);
-		unset($set->password_confirm);
-		unset($set->agree);
-		
-		
-		//  Insert
-		$config = parent::insert('t_customer');
-		$config->set = $set;
-		*/
 		return $config;
 	}
 
