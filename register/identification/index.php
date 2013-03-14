@@ -69,6 +69,7 @@ if( $this->form()->Secure($form_name) ){
 		default:
 	}
 	$this->d($status);
+	$this->d($this->GetSession('identification'));
 	$data->class    = 'red';
 	$data->message  = 'もう一度送信ボタンを押して下さい。';
 	$data->template = 'form.phtml';
