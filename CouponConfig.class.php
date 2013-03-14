@@ -60,10 +60,10 @@ class CouponConfig extends ConfigMgr
 	}
 	
 	/**
-	 * メールを送って本人確認を行う。
+	 * メール送信用のConfig（本人確認する）
 	 * 
-	 * 
-	 * 
+	 * @param  string $identification 
+	 * @return Config
 	 */
 	function mail_identification($identification)
 	{
@@ -944,13 +944,41 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_account()
+	/**
+	 * ここにコメントを入力する
+	 * 
+	 * @param  string $id
+	 * @param  string $email
+	 * @return Config
+	 */
+	function select_account( $id=null, $email )
 	{
 		$config = $this->select();
 		$config->table = 't_account';
+		
+		if( $id ){
+			$config->where->id = $id;
+			$config->limit = 1;
+		}
+		
 		return $config;
 	}
-
+	
+	/**
+	 * 
+	 * @return unknown
+	 */
+	function select_account_mine()
+	{
+		//  Get Login id
+		$id = $this->model('Login')->GetLoginID();
+		
+		//  Get config
+		$config = $this->select_account($id);
+		
+		return $config;
+	}
+	
 	function select_buy( $id=null )
 	{
 		if(!$id){
@@ -980,19 +1008,6 @@ class CouponConfig extends ConfigMgr
 		return $this->select_buy($id);
 	}
 	
-	/*
-	function select_my_buy()
-	{
-		$id = $this->model('Login')->GetLoginID();
-		$config = $this->select();
-		$config->table = 't_buy';
-		$config->account_id = $id; // where が指定されていません
-		$config->settle_flag = 1;
-		
-		return $config;
-	}
-	*/
-	
 	function select_one_coupon($coupon_id)
 	{
 		$config = $this->select();
@@ -1017,17 +1032,6 @@ class CouponConfig extends ConfigMgr
 	{
 		$id = $this->model('Login')->GetLoginID();
 		return $this->select_customer($id);
-	}
-	
-	function select_my_account()
-	{
-		$id = $this->model('Login')->GetLoginID();
-		$config = $this->select();
-		$config->table = 't_account';
-		$config->account_id = $id;
-		$config->limit = 1;
-		
-		return $config;
 	}
 	
 	function select_address( $id, $seq_no=null )
@@ -1257,7 +1261,7 @@ class CouponConfig extends ConfigMgr
 			$this->StackError("form_name is empty.");
 			return false;
 		}
-				
+		
 		$config = parent::update('t_coupon');
 		
 		//  Get submitted form value
