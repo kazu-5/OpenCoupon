@@ -1,0 +1,12 @@
+<?php
+/* @var $this CouponApp */
+?>
+<div>
+	再生成したパスワードを以下のメールアドレスに送信します。	
+</div>
+<br>
+<?php $this->form()->Start( $data->form_name, 'commit' ) ?>
+	<?php $this->form()->Label('email') ?>
+	<?php $this->form()->Value('email') ?><br>
+	<?php $this->form()->Input('submit','　再生成したパスワードを送信する　') ?>
+<?php $this->form()->Finish($data->form_name) ?>
