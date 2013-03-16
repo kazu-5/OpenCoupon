@@ -1168,17 +1168,13 @@ class CouponConfig extends ConfigMgr
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
-		$this->d($_post);
 		
 		$blowfish = new Blowfish();
 		
-		$email    = $_post->email;
-		$password = $_post->password;
-		
 		$config = parent::insert('t_account');
-		$config->set->email     = $blowfish->Encrypt($email);
-		$config->set->email_md5 = md5($email);
-		$config->set->password  = md5($password);
+		$config->set->email_md5 = md5($_post->email);
+		$config->set->email = $blowfish->Encrypt($_post->email);
+		$config->set->password = md5($_post->password);
 		
 		return $config;
 	}
@@ -1191,14 +1187,11 @@ class CouponConfig extends ConfigMgr
 			return false;
 		}
 		
-		$nick_name = $this->form()->GetInputValue('nick_name','form_register');
-		$this->d($nick_name);
-		
 		//  Init set
 		$_post = $this->form()->GetInputValueAll('form_register');
 		
 		$config = parent::insert('t_customer');
-		$this->d($_post);
+		$config->set->account_id = $account_id;
 		$config->set->nick_name = $_post->nick_name;
 		$config->set->last_name = $_post->last_name;
 		$config->set->first_name = $_post->first_name;

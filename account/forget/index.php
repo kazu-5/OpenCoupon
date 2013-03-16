@@ -73,6 +73,7 @@ switch( $action ){
 			$res = $this->Mail($mail_config);
 			$this->d($res);			
 
+			$this->d($password);
 			$data->template = 'commit.phtml';
 			
 		}else{
