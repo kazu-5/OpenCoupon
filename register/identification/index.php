@@ -5,6 +5,9 @@
 $data = new Config();
 
 //  Init Form
+$form_config = $this->config()->form_register();
+$this->form()->AddForm($form_config);
+
 $form_config = $this->config()->form_register_identification();
 $this->form()->AddForm($form_config);
 

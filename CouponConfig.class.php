@@ -92,6 +92,41 @@ class CouponConfig extends ConfigMgr
 		
 		return $mail_config;
 	}
+
+	function mail_forget($email, $password)
+	{
+		$data = new Config();
+		$data->password = $password;
+		
+		$mail_config = new Config();
+		$mail_config->to      = $email;
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
+		$mail_config->message = $this->GetTemplate('mail/password_forget.phtml',$data);
+		
+		return $mail_config;
+	}
+	
+	
+	function password_forget($email){
+
+		//	generate new password
+		$new_password = $this->model('Password')->get();
+		
+		//	get account_id
+		//$account_id = $this->model('Login')->GetLoginID();
+		//$config = $this->
+		
+		
+		$this->d($account_id);
+		
+		//	update database
+		//$res = $this->update_password_forget($account_id, $password);
+		
+		
+		return $new_password;
+	}
+	
 	
 	function form_buy($coupon_id)
 	{
@@ -224,7 +259,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->tail  = '<br/>';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
-		$form_config->input->$name->validate->permit = 'email';
+		$form_config->input->$input_name->validate->permit = 'email';
 		
 		//  E-mail (confirm)
 		$input_name = 'email_confirm';
@@ -328,6 +363,25 @@ class CouponConfig extends ConfigMgr
 		
 		return $form_config;
 	}
+
+	function form_forget()
+	{
+		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		
+		//  form name
+		$form_config->name   = 'form_forget';
+
+		//  email
+		$input_name = 'email';
+		$form_config->input->$input_name->label = 'メールアドレス';
+		$form_config->input->$input_name->type  = 'text';
+		$form_config->input->$input_name->validate->required = true;
+		$form_config->input->$input_name->validate->permit   = 'email';
+		$form_config->input->$input_name->error->required    = '$labelが未入力です。';
+
+		return $form_config;
+	}
+	
 	
 	/**
 	 * 登録しようとしているメールアドレスが本人かキーコードを送信し、入力して貰って本人確認を行う。
@@ -1066,6 +1120,29 @@ class CouponConfig extends ConfigMgr
 		return $this->select_customer($id);
 	}
 	
+	/*
+	function select_my_account()
+	{
+		$id = $this->model('Login')->GetLoginID();
+		$config = $this->select();
+		$config->table = 't_account';
+		$config->where->id = $id;
+		$config->limit = 1;
+		
+		return $config;
+	}
+	*/
+	
+	function select_account_email( $email )
+	{
+		$config = $this->select();
+		$config->table = 't_account';
+		$config->where->email_md5 = md5($email);
+		$config->limit = 1;
+		
+		return $config;//dbに問い合わせはしていない。
+	}
+	
 	function select_address( $id, $seq_no=null )
 	{
 		$config = parent::select('t_address');
@@ -1104,13 +1181,12 @@ class CouponConfig extends ConfigMgr
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
 		
-		$email    = $_post->email;
-		$password = $_post->password;
+		$blowfish = new Blowfish();
 		
 		$config = parent::insert('t_account');
-		$config->set->email     = $blowfish->Encrypt($email);
-		$config->set->email_md5 = md5($email);
-		$config->set->password  = md5($password);
+		$config->set->email_md5 = md5($_post->email);
+		$config->set->email = $blowfish->Encrypt($_post->email);
+		$config->set->password = md5($_post->password);
 		
 		return $config;
 	}
@@ -1127,12 +1203,14 @@ class CouponConfig extends ConfigMgr
 		$_post = $this->form()->GetInputValueAll('form_register');
 		
 		$config = parent::insert('t_customer');
-		$config->set->nick_name     = $_post->nick_name;
-		$config->set->last_name     = $_post->last_name;
-		$config->set->first_name    = $_post->first_name;
-		$config->set->gender        = $_post->gender;
-		$config->set->favorite_pref = $_post->favorite_pref;
-		$config->set->birthday      = $_post->birthday;
+		
+		$config->set->account_id	 = $account_id;
+		$config->set->nick_name		 = $_post->nick_name;
+		$config->set->last_name		 = $_post->last_name;
+		$config->set->first_name	 = $_post->first_name;
+		$config->set->gender		 = $_post->gender;
+		$config->set->favorite_pref	 = $_post->favorite_pref;
+		$config->set->birthday		 = $_post->birthday;
 		
 		return $config;
 	}
@@ -1346,10 +1424,24 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function update_password( $account_id )
+	function update_password( $account_id, $password = null )
 	{
-		//  Get submit value from form.
-		$password = $this->form()->GetValue('password','form_password');
+		if( !$password ){
+			//  Get submit value from form.
+			$password = $this->form()->GetValue('password','form_password');
+		}
+		
+		//  Create config
+		$config = parent::update('t_account');
+		$config->where->id = $account_id;
+		$config->limit = 1;
+		$config->set->password = md5($password);
+		
+		return $config;
+	}
+	
+	function update_password_forget( $account_id, $password )
+	{
 		
 		//  Encrypt
 		$browfish = new Blowfish();
@@ -1362,6 +1454,7 @@ class CouponConfig extends ConfigMgr
 		$config->set->password = $password;
 		
 		return $config;
+		
 	}
 	
 	function delete_coupon( $coupon_id )

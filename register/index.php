@@ -50,10 +50,10 @@ switch( $action ){
 				$this->d($io);
 				$this->d($mail_config);
 				$this->d($identification);
-			
+				
 				//  Clear of saved form value.
 				//	$this->form()->Clear($form_name);
-			
+				
 			}else{
 				//  No good.
 				$data->message = 'エラーが発生しました。';
