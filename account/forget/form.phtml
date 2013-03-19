@@ -1,0 +1,32 @@
+<?php
+/* @var $this CouponApp */
+?>
+
+<div>
+	仮のパスワードを再生成してメールでご連絡します。
+	<br>
+	ご登録のメールアドレスを入力してください。	 
+</div>
+<br>
+<div>
+<?php $this->form()->Start( $data->form_name, 'confirm' ) ?>
+	<table>
+		<tr>
+			<th>
+				<?php $this->form()->Label('email') ?>
+			</th>
+			<td>
+				<?php $this->form()->Input('email') ?><br>
+				<?php $this->form()->Error('email') ?>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			</th>
+			<td>
+				<?php $this->form()->Input('submit','　入力したメールアドレスを確認する　') ?>
+			</td>
+		</tr>
+	</table>
+<?php $this->form()->Finish($data->form_name) ?>
+</div>
