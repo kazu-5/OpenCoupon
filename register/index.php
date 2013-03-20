@@ -45,7 +45,7 @@ switch( $action ){
 				//  Send mail
 				$identification = md5(microtime());
 				$this->SetSession('identification',$identification);
-				$mail_config = $this->config()->register_mail_identification($identification);
+				$mail_config = $this->config()->mail_identification_register($identification);
 				$io = $this->Mail($mail_config);
 				$this->d($io);
 				$this->d($mail_config);
