@@ -60,7 +60,7 @@ class CouponConfig extends ConfigMgr
 	}
 	
 	/**
-	 * メール送信用のConfig（本人確認する）
+	 * 新規登録の際にメールを送信して本人確認を行う。
 	 * 
 	 * @param  string $identification 
 	 * @return Config
@@ -75,11 +75,17 @@ class CouponConfig extends ConfigMgr
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：ユーザ情報の登録';
 		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
-	
+		
 		return $mail_config;
 	}
 	
-	function mail_identification($identification)
+	/**
+	 * mypageからメールアドレスを変更する際に、メールを送信して本人確認を行う。
+	 * 
+	 * @param  string $identification
+	 * @return Config
+	 */
+	function mail_identification_email($identification)
 	{
 		$data = new Config();
 		$data->identification = $identification;
