@@ -45,7 +45,12 @@ if( $this->form()->Secure($form_name) ){
 			break;
 		default:
 	}
+	
+	//確認コードを表示する
+	$identification = $this->GetSession('identification');
+	$this->mark( $identification );
 	$this->d($status);
+	
 	$data->class    = 'red';
 	$data->message  = 'もう一度送信ボタンを押して下さい。';
 	$data->template = 'form.phtml';

@@ -1,9 +1,10 @@
 <?php
 
+//  Measure the execution time.
 $st = microtime(true);
 
-include('App.class.php');
-
+//  Include OnePiece-Framework
+include('OnePiece5.class.php');
 include('Coupon.app.php');
 $app = new CouponApp();
 
@@ -46,6 +47,6 @@ if(!$io){
 //  Do dispatch
 $app->Dispatch();
 
+//  Measure the execution time.
 $en = microtime(true);
-
 printf('<div>Execute time is %s seconds.</div>', $en - $st );

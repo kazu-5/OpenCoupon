@@ -60,10 +60,10 @@ class CouponConfig extends ConfigMgr
 	}
 	
 	/**
-	 * メールを送って本人確認を行う。
+	 * メール送信用のConfig（本人確認する）
 	 * 
-	 * 
-	 * 
+	 * @param  string $identification 
+	 * @return Config
 	 */
 	function mail_identification_register($identification)
 	{
@@ -79,7 +79,7 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function mail_identification($identification)
+	function mail_identification_email($identification)
 	{
 		$data = new Config();
 		$data->identification = $identification;
@@ -1030,13 +1030,41 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function select_account()
+	/**
+	 * ここにコメントを入力する
+	 * 
+	 * @param  string $id
+	 * @param  string $email
+	 * @return Config
+	 */
+	function select_account( $id=null, $email )
 	{
 		$config = $this->select();
 		$config->table = 't_account';
+		
+		if( $id ){
+			$config->where->id = $id;
+			$config->limit = 1;
+		}
+		
 		return $config;
 	}
-
+	
+	/**
+	 * 
+	 * @return unknown
+	 */
+	function select_account_mine()
+	{
+		//  Get Login id
+		$id = $this->model('Login')->GetLoginID();
+		
+		//  Get config
+		$config = $this->select_account($id);
+		
+		return $config;
+	}
+	
 	function select_buy( $id=null )
 	{
 		if(!$id){
@@ -1066,19 +1094,6 @@ class CouponConfig extends ConfigMgr
 		return $this->select_buy($id);
 	}
 	
-	/*
-	function select_my_buy()
-	{
-		$id = $this->model('Login')->GetLoginID();
-		$config = $this->select();
-		$config->table = 't_buy';
-		$config->account_id = $id; // where が指定されていません
-		$config->settle_flag = 1;
-		
-		return $config;
-	}
-	*/
-	
 	function select_one_coupon($coupon_id)
 	{
 		$config = $this->select();
@@ -1105,6 +1120,7 @@ class CouponConfig extends ConfigMgr
 		return $this->select_customer($id);
 	}
 	
+	/*
 	function select_my_account()
 	{
 		$id = $this->model('Login')->GetLoginID();
@@ -1115,8 +1131,8 @@ class CouponConfig extends ConfigMgr
 		
 		return $config;
 	}
-
-	//phpdoc goes here.
+	*/
+	
 	function select_account_email( $email )
 	{
 		$config = $this->select();
@@ -1157,10 +1173,6 @@ class CouponConfig extends ConfigMgr
 	function select_photo( $shop_id, $coupon_id, $seq_no )
 	{
 		$config = parent::select('t_photo');
-	//	$config->where->shop_id   = $shop_id;
-	//	$config->where->coupon_id = $coupon_id;
-	//	$config->where->seq_no    = $seq_no; 
-	//	$config->column = 'url';
 		$config->limit  = 1;
 		return $config; 
 	}
@@ -1191,27 +1203,15 @@ class CouponConfig extends ConfigMgr
 		$_post = $this->form()->GetInputValueAll('form_register');
 		
 		$config = parent::insert('t_customer');
-		$config->set->account_id = $account_id;
-		$config->set->nick_name = $_post->nick_name;
-		$config->set->last_name = $_post->last_name;
-		$config->set->first_name = $_post->first_name;
-		$config->set->gender = $_post->gender;
-		$config->set->favorite_pref = $_post->favorite_pref;
-		$config->set->birthday = $_post->birthday;
 		
-		/*
-		$set->account_id = $account_id;
-		unset($set->email);
-		unset($set->email_confirm);
-		unset($set->password);
-		unset($set->password_confirm);
-		unset($set->agree);
+		$config->set->account_id	 = $account_id;
+		$config->set->nick_name		 = $_post->nick_name;
+		$config->set->last_name		 = $_post->last_name;
+		$config->set->first_name	 = $_post->first_name;
+		$config->set->gender		 = $_post->gender;
+		$config->set->favorite_pref	 = $_post->favorite_pref;
+		$config->set->birthday		 = $_post->birthday;
 		
-		
-		//  Insert
-		$config = parent::insert('t_customer');
-		$config->set = $set;
-		*/
 		return $config;
 	}
 
@@ -1363,7 +1363,7 @@ class CouponConfig extends ConfigMgr
 			$this->StackError("form_name is empty.");
 			return false;
 		}
-				
+		
 		$config = parent::update('t_coupon');
 		
 		//  Get submitted form value
