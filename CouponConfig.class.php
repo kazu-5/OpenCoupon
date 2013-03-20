@@ -79,7 +79,7 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function mail_identification($identification)
+	function mail_identification_email($identification)
 	{
 		$data = new Config();
 		$data->identification = $identification;

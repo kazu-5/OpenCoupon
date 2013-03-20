@@ -49,7 +49,7 @@ switch( $action ){
 				//  Send mail
 				$identification = md5(microtime());
 				$this->SetSession('identification',$identification);
-				$mail_config = $this->config()->mail_identification($identification);
+				$mail_config = $this->config()->mail_identification_email($identification);
 				$io = $this->Mail($mail_config);
 				$this->d($io);
 				$this->d($mail_config);
