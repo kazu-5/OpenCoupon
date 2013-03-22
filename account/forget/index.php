@@ -49,6 +49,23 @@ switch( $action ){
 			
 			//	get email address from form
 			$email = $this->form()->GetValue('email','form_forget');
+
+			//	genarate identification code
+			$identification = md5(microtime());
+				
+			//	store email and identification code to SESSION
+			$this->SetSession('identification',$identification);
+			$this->SetSession('email_forget',$email);
+				
+			//	send identification code to $email
+			$mail_config = $this->config()->mail_identification_forget($email, $identification);
+			//$io = $this->Mail($mail_config);
+			$this->d($io);
+			$this->d($mail_config);
+
+			$data->template = 'commit.phtml';
+			
+			/*
 			
 			//	retrieve account id from db based on email address
 			$config = $this->config()->select_account_email($email);
@@ -75,6 +92,8 @@ switch( $action ){
 
 			$this->d($password);
 			$data->template = 'commit.phtml';
+			
+			*/
 			
 		}else{
 			//  NG

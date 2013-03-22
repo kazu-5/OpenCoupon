@@ -92,6 +92,20 @@ class CouponConfig extends ConfigMgr
 		
 		return $mail_config;
 	}
+	
+	function mail_identification_forget($email, $identification)
+	{
+		$data = new Config();
+		$data->identification = $identification;
+		
+		$mail_config = new Config();
+		$mail_config->to      = $email;
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
+		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
+
+		return $mail_config;
+	}
 
 	function mail_forget($email, $password)
 	{
@@ -101,7 +115,7 @@ class CouponConfig extends ConfigMgr
 		$mail_config = new Config();
 		$mail_config->to      = $email;
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
-		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
+		$mail_config->subject = 'オープンクーポン：パスワードの再生成（完了）';
 		$mail_config->message = $this->GetTemplate('mail/password_forget.phtml',$data);
 		
 		return $mail_config;
@@ -382,6 +396,19 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
+	function form_forget_identification()
+	{
+		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		
+		//  form name
+		$form_config->name   = 'form_forget_identification';
+		
+		//  identification code
+		$input_name = 'identification';
+		$form_config->input->$input_name->label = '確認コード';//requiredにしなくて良いのか？
+		
+		return $form_config;
+	}
 	
 	/**
 	 * 登録しようとしているメールアドレスが本人かキーコードを送信し、入力して貰って本人確認を行う。
