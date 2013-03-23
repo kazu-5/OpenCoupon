@@ -37,22 +37,33 @@ if( $this->form()->Secure($form_name) ){
 		
 		//  Update
 		$update = $this->config()->update_password($account_id, $password);
-		$res = $this->pdo()->update($update);
+		$res    = $this->pdo()->update($update);
 		$this->d($update);
 
 		if( $res !== false ){
 		//	Successfully updated
 			
+			/*
 			//	send new password to $email
 			$mail_config = $this->config()->mail_forget($email, $password);
 			$this->d($mail_config);
 				
 			$io = $this->Mail($mail_config);
 			$this->d($io);
+			*/
+			
+			$this->d($this->GetSession('identification'));//for test
+			$this->d($this->GetSession('email_forget'));//for test
+			
+			//	clear SESSION (email, password)
+			$this->SetSession('identification','');
+			$this->SetSession('email_forget','');
+			$this->d($this->GetSession('identification'));//for test
+			$this->d($this->GetSession('email_forget'));//for test
 			
 			//	set message for template
 			$data->class    = 'blue';
-			$data->message  = 'パスワードを変更し、さきほどのメールアドレスに新しいパスワードをお送りしました。';
+			$data->message  = "パスワードを再設定しました。新しいパスワードは $password です。";
 			$data->template = 'commit.phtml';
 
 		}else{
@@ -60,13 +71,13 @@ if( $this->form()->Secure($form_name) ){
 
 			//	set message for template (error)
 			$data->class    = 'red';
-			$data->message  = 'パスワードの変更に失敗しました。';
+			$data->message  = 'パスワードの再設定に失敗しました。';
 			$data->template = 'form.phtml';
 		}
 
 	}else{
 		$data->class    = 'red';
-		$data->message  = '確認コードが一致しません。';
+		$data->message  = '確認コードが一致しません。もう一度入力してください。';
 		$data->template = 'form.phtml';
 	}
 

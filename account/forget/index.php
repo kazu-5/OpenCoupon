@@ -22,11 +22,6 @@ $data = new Config();
 $data->form_name = $form_name;
 
 
-//	デバッグ用機能
-//$this->mark('ajoigeoaldo;p');//デバッグ用。本番環境では表示されないようになっている
-//$this->d($_SERVER);//配列やオブジェクトをテーブル表示する機能。対象は()内で指定。
-
-
 //	Action
 switch( $action ){
 	case 'index':
@@ -59,41 +54,11 @@ switch( $action ){
 				
 			//	send identification code to $email
 			$mail_config = $this->config()->mail_identification_forget($email, $identification);
-			//$io = $this->Mail($mail_config);
-			$this->d($io);
-			$this->d($mail_config);
+			$io = $this->Mail($mail_config);
+			$this->d($io);//for test
+			$this->d($mail_config);//for test
 
 			$data->template = 'commit.phtml';
-			
-			/*
-			
-			//	retrieve account id from db based on email address
-			$config = $this->config()->select_account_email($email);
-			$record = $this->pdo()->select($config);
-			//$this->d($record);
-			
-			$account_id = $record['id'];
-			//$this->d($account_id);
-			
-			//	generate new password
-			$password = $this->model('Password')->get();
-			
-			//	update db with new password
-			$config = $this->config()->update_password($account_id, $password);
-			$res = $this->pdo()->update($config);
-			//$this->d($res);
-			
-			//	send new password to $email
-			$mail_config = $this->config()->mail_forget($email, $password);
-			//$this->d($mail_config);
-			
-			$res = $this->Mail($mail_config);
-			$this->d($res);			
-
-			$this->d($password);
-			$data->template = 'commit.phtml';
-			
-			*/
 			
 		}else{
 			//  NG
