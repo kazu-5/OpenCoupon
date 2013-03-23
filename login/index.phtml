@@ -9,6 +9,7 @@ $submit_label = isset($data->submit_label) ? $data->submit_label : null;
 		
 		<?php if( $message ): ?>
 			<p class="red"><?=$message?></p>
+			<?php $this->template('form/login.phtml',$data) ?>
 		<?php else: ?>
 			<?php $this->template('form/login.phtml',$data) ?>
 			<?php $this->template('form/register.phtml',$data) ?>
