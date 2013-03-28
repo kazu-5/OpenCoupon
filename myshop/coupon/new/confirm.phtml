@@ -1,5 +1,229 @@
+<?php
+/* @var $this CouponApp */
+?>
+<style>
+	.confirm{
+		border: 0px dotted red; 
+		background-color:white; 
+		margin:5px; 
+		padding:13px;
+	}
+	.title{
+		font-size: 20px; 
+		border-bottom: 1px solid #D9D9D9; 
+		margin-top: 8px; 
+		padding-bottom: 13px;
+	}
+	.title h1{
+		font-size: 20px;
+	}
+	.contents2{
+		padding-top:8px;
+	}
+	.contents2 p{
+		font-size: 14px;
+	}
+	.contents2 th, td {
+		border: 1px solid #CCCCCC;
+	}
+	.contents2 table{
+		border-collapse: collapse;
+	}
+	.contents2 table tr{
+		height:50px; 
+		padding: 25px 0;
+		text-align: left;
+	}
+	
+	.contents2 table tr th{
+		background: none repeat scroll 0 0 #DEEDCE;
+		font-size: 14px;
+		width: 20px;
+		padding: 8px 0;
+		padding-left: 8px;
+		width:100px;
+		/*width:5px;*/
+	}
+	
+	.contents2 table tr td{
+		width:400px;
+		padding: 20px 0;
+		font-size: 14px; 
+		padding-left: 10px;
+	}
+	
+	.div_submit{
+		text-align:center;
+	}
+	.submit{
+		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
+		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
+		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
+		border: 1px solid #2D9DC2;
+		border-radius: 9px 9px 9px 9px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+		color: #FFFFFF !important;
+		cursor: pointer;
+		display: inline-block;
+		margin: 15px;
+		padding: 4px 30px;
+		text-align: center;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+		vertical-align: middle;
+	}
+	
+<?php
+	/*
+	#customer_informartion p{
+		font-size: 14px;
+	}
+	#customer_informartion th, td {
+		border: 1px solid #CCCCCC;
+	}
+	#customer_informartion table tr{
+		height:2px;
+	}
+	
+	#customer_informartion table tr th{
+		background: none repeat scroll 0 0 #DEEDCE;
+		font-size: 14px;
+		width: 20px;
+		padding: 8px 0;
+		padding-left: 8px;
+		width:100px;
+	}
+	
+	#customer_informartion table tr td{
+		padding: 20px 0;
+		font-size: 14px; 
+		padding-left: 10px;
+	}
+	
+	.submit{
+		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
+		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
+		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
+		border: 1px solid #2D9DC2;
+		border-radius: 9px 9px 9px 9px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+		color: #FFFFFF !important;
+		cursor: pointer;
+		display: inline-block;
+		margin: 15px;
+		padding: 4px 30px;
+		text-align: center;
+		text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+		vertical-align: middle;
+	}
+	*/
+?>
+</style>
+
 <?php $this->form()->Start('form_coupon','commit') ?>
-<table>
+
+<div class="arc confirm">
+	<div class="title">
+		<h1>登録情報 - 確認</h1>
+	</div>
+	<div class="contents2">
+		<table>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_title') ?>
+				</th	>
+				<td>
+					<?php $this->form()->Value('coupon_title') ?>
+				</td>
+			</tr>
+			
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_description') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_description') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_normal_price') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_normal_price') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_sales_price') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_sales_price') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_sales_num_top') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_sales_num_top') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_sales_num_bottom') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_sales_num_bottom') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_sales_start') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_sales_start') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_sales_finish') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_sales_finish') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_expire') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_expire') ?>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_person_num') ?>
+				</th>
+				<td>
+					<?php $this->form()->Value('coupon_person_num') ?>
+				</td>
+			</tr>
+		</table>
+		<div class="div_submit">
+			<?php $this->form()->Input('submit')?>
+		</div>
+	</div>
+</div>
+
+<?php $this->form()->Finish('form_coupon') ?>
+
+<?php
+/*
+<div class="arc" style="border: 0px dotted red; background-color:white; margin:5px; padding:13px;">
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">登録情報 - 確認</h1>
+	</div>
+	<div id="customer_informartion" style="padding-top:8px;">
 	<tr>
 		<td>
 			<?php $this->form()->Label('coupon_title') ?>
@@ -97,4 +321,5 @@
 		</td>
 	</tr>
 </table>
-<?php $this->form()->Finish('form_coupon') ?>
+*/
+?>

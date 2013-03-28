@@ -911,6 +911,8 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'integer';
+		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		
 		$input_name = 'coupon_sales_price';
 		$form_config->input->$input_name->label  = '販売価格';

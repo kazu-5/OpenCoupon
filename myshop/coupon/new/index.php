@@ -18,13 +18,13 @@ $this->mark($action,'controller');
 
 switch( $action ){
 	case 'index':
-		$this->template('form.phtml');
+		$this->template('index.phtml');
 		break;
 		
 	case 'confirm':
 		if(!$this->form()->Secure('form_coupon') ){
 			$args['message'] = '入力内容を確かめて下さい。';
-			$this->template('form.phtml',$args);
+			$this->template('index.phtml',$args);
 		}else{
 			$this->template('confirm.phtml');
 		}
