@@ -28,7 +28,7 @@ class CouponConfig extends ConfigMgr
 		//  Set table name.
 		$config->table = $table_name;
 		//  Get table structs.
-		$struct = $this->pdo()->GetTableStruct($config);
+		$struct = $this->pdo()->GetTableStruct($table_name);
 		//  Get form config.
 		$config = parent::GenerateFormFromDatabase($struct,$record);
 		//  Create submit button.
@@ -887,20 +887,108 @@ class CouponConfig extends ConfigMgr
 		}
 		
 		//  t_coupon struct
-		$config = $this->GenerateFormFromDatabase('t_coupon',$record);
+		$form_config = $this->GenerateFormFromDatabase('t_coupon',$record);
 		
 		//  Init shop_id
-		$config->input->shop_id->value = $shop_id;
+		$form_config->input->shop_id->value = $shop_id;
 		
 		//  Remove new coupon required value.
-		if( $coupon_id ){
-			unset($config->coupon_id);
+		if( $form_coupon_id ){
+			unset($form_config->coupon_id);
 		}
 		
 		//  Added form name
-		$config->name = 'form_coupon' . $coupon_id;
+		$form_config->name = 'form_coupon' . $coupon_id;
 		
-		return $config;
+		$input_name = 'coupon_title';
+		$form_config->input->$input_name->label  = 'タイトル';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_description';
+		$form_config->input->$input_name->label  = '説明';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_normal_price';
+		$form_config->input->$input_name->label  = '通常価格';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'integer';
+		$form_config->input->$input_name->validate->range = '1-';
+		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+		
+		$input_name = 'coupon_sales_price';
+		$form_config->input->$input_name->label  = '販売価格';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_sales_num_top';
+		$form_config->input->$input_name->label  = '最大販売数';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_sales_num_bottom';
+		$form_config->input->$input_name->label  = '最小販売数';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_sales_start';
+		$form_config->input->$input_name->label  = '販売開始日時';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_sales_finish';
+		$form_config->input->$input_name->label  = '販売終了日時';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_expire';
+		$form_config->input->$input_name->label  = '有効期限';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_person_num';
+		$form_config->input->$input_name->label  = '一人が購入できる枚数';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		$input_name = 'coupon_image';
+		$form_config->input->$input_name->label  = 'クーポンのイメージ';
+		$form_config->input->$input_name->type   = 'file';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = '変更を保存する';
+		
+		return $form_config;
+		
+		/*
+		//  form name
+		$form_config->name   = 'form_email';
+		
+		//  email current
+		$input_name = 'email_current';
+		$form_config->input->$input_name->label  = '現在のメールアドレス';
+		$form_config->input->$input_name->type   = 'text';
+		$form_config->input->$input_name->value  = $email;
+		$form_config->input->$input_name->readonly = true; //  TODO: write testcase
+		*/
 	}
 	
 	function form_password( $account_id )
