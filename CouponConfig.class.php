@@ -233,7 +233,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  form name
 		$form_config->name   = 'form_register';
-		$form_config->action = 'app:/register/confirm';
+		$form_config->action = 'app:/account/register/confirm';
 		
 		//  First name
 		$input_name = 'first_name';
