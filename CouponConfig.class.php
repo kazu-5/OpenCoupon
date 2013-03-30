@@ -239,7 +239,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  form name
 		$form_config->name   = 'form_register';
-		$form_config->action = 'app:/register/confirm';
+		$form_config->action = 'app:/account/register/confirm';
 		
 		//  First name
 		$input_name = 'first_name';
@@ -926,36 +926,48 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'integer';
+		$form_config->input->$input_name->validate->range = '1-';
+		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		
 		$input_name = 'coupon_sales_num_top';
 		$form_config->input->$input_name->label  = '最大販売数';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'integer';
+		$form_config->input->$input_name->validate->range = '1-';
+		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		
 		$input_name = 'coupon_sales_num_bottom';
 		$form_config->input->$input_name->label  = '最小販売数';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'integer';
+		$form_config->input->$input_name->validate->range = '1-';
+		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		
 		$input_name = 'coupon_sales_start';
 		$form_config->input->$input_name->label  = '販売開始日時';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'datetime';
 		
 		$input_name = 'coupon_sales_finish';
 		$form_config->input->$input_name->label  = '販売終了日時';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'datetime';
 		
 		$input_name = 'coupon_expire';
 		$form_config->input->$input_name->label  = '有効期限';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->validate->permit = 'datetime';
 		
 		$input_name = 'coupon_person_num';
 		$form_config->input->$input_name->label  = '一人が購入できる枚数';

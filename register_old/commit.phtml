@@ -1,0 +1,5 @@
+<p>確認メールを送信しました。</p>
+<p>次の画面でメールに記載されている確認キーを入力して下さい。</p>
+<?php
+$url = $this->ConvertURL('ctrl:/identification');
+$this->module('Transfer')->Set($url);
