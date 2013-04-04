@@ -33,7 +33,7 @@ class Module_Transfer extends Model_Model
 	 */
 	function Set( $url, Config $config=null )
 	{
-		$transfer_url = $this->GetEnv('url');
+		$transfer_url = $this->GetURL('url');
 		$this->SetSession( 'transfer_url', $transfer_url );
 		
 		if( empty($url) ){
