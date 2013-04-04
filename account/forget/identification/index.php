@@ -1,21 +1,27 @@
 <?php
-
 /* @var $this CouponApp */
 
-/*
-//  Get Action
-$action = $this->GetAction();
-*/
+//	redirect to site top if logged in
+if ( !$this->model('Login')->GetLoginID() == null ){
+	
+	//	clear session data
+	$this->SetSession('identification','');//要検証。リロードするとこれが実行されて消える可能性あり。
+	$this->SetSession('email_forget','');
+	
+	//	redirect to toppage
+	header("location:/");
+}
 
-//	ここでログインチェックしてログイン済み状態の場合にはじく処理が必要かも
 
 //	form setting
 $form_config = $this->config()->form_forget_identification();
 $this->form()->AddForm($form_config);
 
+
 //  form name
 $form_name = $form_config->name;
 $data->form_name = $form_name;
+
 
 //  Do Action
 if( $this->form()->Secure($form_name) ){
@@ -26,40 +32,29 @@ if( $this->form()->Secure($form_name) ){
 		$email  = $this->GetSession('email_forget');
 		$config = $this->config()->select_account_email($email);
 		$record = $this->pdo()->select($config);
-		$this->d($record['id']);
+		//$this->d($record['id']);//for test
 			
 		$account_id = $record['id'];
-		$this->d($account_id);
+		//$this->d($account_id);//for test
 			
 		//	generate new password
 		$password = $this->model('Password')->get();
-		$this->d(md5($password));
+		//$this->d(md5($password));//for test
 		
 		//  Update
 		$update = $this->config()->update_password($account_id, $password);
 		$res    = $this->pdo()->update($update);
-		$this->d($update);
+		//$this->d($update);//for test
+		//$this->d($res);//for test
 
-		if( $res !== false ){
+		if( $res !== false and $res !== 0 ){
 		//	Successfully updated
-			
-			/*
-			//	send new password to $email
-			$mail_config = $this->config()->mail_forget($email, $password);
-			$this->d($mail_config);
-				
-			$io = $this->Mail($mail_config);
-			$this->d($io);
-			*/
-			
-			$this->d($this->GetSession('identification'));//for test
-			$this->d($this->GetSession('email_forget'));//for test
 			
 			//	clear SESSION (email, password)
 			$this->SetSession('identification','');
 			$this->SetSession('email_forget','');
-			$this->d($this->GetSession('identification'));//for test
-			$this->d($this->GetSession('email_forget'));//for test
+			//$this->d($this->GetSession('identification'));//for test
+			//$this->d($this->GetSession('email_forget'));//for test
 			
 			//	set message for template
 			$data->class    = 'blue';
@@ -82,7 +77,12 @@ if( $this->form()->Secure($form_name) ){
 	}
 
 }else{
-
+	switch( $status = $this->form()->GetStatus($form_name) ){
+		case '':
+			break;
+		default:
+	}
+	
 	//確認コードを表示する
 	$identification = $this->GetSession('identification');
 	$this->mark( $identification );

@@ -5,7 +5,10 @@
 $action = $this->GetAction();
 
 
-//	ここでログインチェックしてログイン済み状態の場合にはじく処理が必要かも
+//	redirect to site top if logged in
+if ( !$this->model('Login')->GetLoginID() == null ){
+	header("location:/");
+}
 
 
 //	form setting
@@ -55,8 +58,8 @@ switch( $action ){
 			//	send identification code to $email
 			$mail_config = $this->config()->mail_identification_forget($email, $identification);
 			$io = $this->Mail($mail_config);
-			$this->d($io);//for test
-			$this->d($mail_config);//for test
+			//$this->d($io);//for test
+			//$this->d($mail_config);//for test
 
 			$data->template = 'commit.phtml';
 			
