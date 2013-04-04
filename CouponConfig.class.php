@@ -872,7 +872,7 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function form_coupon( $shop_id, $coupon_id=null )
+	function form_myshop_coupon( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){
 			$this->StackError('Empty shop_id.');
@@ -978,6 +978,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'coupon_image';
 		$form_config->input->$input_name->label  = 'クーポンのイメージ';
 		$form_config->input->$input_name->type   = 'file';
+		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		

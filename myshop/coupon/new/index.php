@@ -1,15 +1,13 @@
 <?php
-/* 新規クーポン作成ページ */
+/* @var $this CouponApp */
 
 //  My shop ID.
 $shop_id = $this->GetShopID();
 
 //  Form
-$form_config = $this->config()->form_coupon( $shop_id );
-//$this->d($config);
+$form_config = $this->config()->form_myshop_coupon( $shop_id );
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-$this->d( Toolbox::toArray($config) );
 
 //  Action
 $action = $this->GetAction();
@@ -25,10 +23,10 @@ switch( $action ){
 		if(!$this->form()->Secure('form_coupon') ){
 			$args['message'] = '入力内容を確かめて下さい。';
 			$this->template('index.phtml',$args);
+			$this->form()->debug('form_coupon');
 		}else{
 			$this->template('confirm.phtml');
 		}
-		$this->form()->debug('form_coupon');
 		break;
 	
 	case 'commit':
