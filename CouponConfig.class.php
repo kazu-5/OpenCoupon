@@ -28,7 +28,7 @@ class CouponConfig extends ConfigMgr
 		//  Set table name.
 		$config->table = $table_name;
 		//  Get table structs.
-		$struct = $this->pdo()->GetTableStruct($config);
+		$struct = $this->pdo()->GetTableStruct($table_name);
 		//  Get form config.
 		$config = parent::GenerateFormFromDatabase($struct,$record);
 		//  Create submit button.
@@ -60,7 +60,7 @@ class CouponConfig extends ConfigMgr
 	}
 	
 	/**
-	 * メール送信用のConfig（本人確認する）
+	 * 新規登録の際にメールを送信して本人確認を行う。
 	 * 
 	 * @param  string $identification 
 	 * @return Config
@@ -75,10 +75,16 @@ class CouponConfig extends ConfigMgr
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：ユーザ情報の登録';
 		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
-	
+		
 		return $mail_config;
 	}
 	
+	/**
+	 * mypageからメールアドレスを変更する際に、メールを送信して本人確認を行う。
+	 * 
+	 * @param  string $identification
+	 * @return Config
+	 */
 	function mail_identification_email($identification)
 	{
 		$data = new Config();
@@ -893,7 +899,7 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function form_coupon( $shop_id, $coupon_id=null )
+	function form_myshop_coupon( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){
 			$this->StackError('Empty shop_id.');
@@ -999,6 +1005,7 @@ class CouponConfig extends ConfigMgr
 		$input_name = 'coupon_image';
 		$form_config->input->$input_name->label  = 'クーポンのイメージ';
 		$form_config->input->$input_name->type   = 'file';
+		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
