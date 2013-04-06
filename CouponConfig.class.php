@@ -979,22 +979,25 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->label  = '販売開始日時';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'datetime';
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_sales_finish';
 		$form_config->input->$input_name->label  = '販売終了日時';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'datetime';
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_expire';
 		$form_config->input->$input_name->label  = '有効期限';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'datetime';
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_person_num';
 		$form_config->input->$input_name->label  = '一人が購入できる枚数';
