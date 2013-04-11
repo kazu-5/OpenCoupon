@@ -4,15 +4,14 @@ class Module_Transfer extends Model_Model
 {
 	/**
 	 * Return to the forward URL.
-	 * 
 	 */
 	function Forward( Config $config=null )
 	{
 		//  Get
-		$url = $this->GetSession('transfer_url');
+		$url = $this->GetSession('referer');
 		
 		//  Reset
-		$this->SetSession('transfer_url',null);
+		$this->SetSession('referer',null);
 		
 		//  Check
 		if( empty($url) ){
@@ -33,8 +32,7 @@ class Module_Transfer extends Model_Model
 	 */
 	function Set( $url, Config $config=null )
 	{
-		$transfer_url = $this->GetEnv('url');
-		$this->SetSession( 'transfer_url', $transfer_url );
+		$this->SetSession( 'referer', $_SERVER['HTTP_REFERER'] );
 		
 		if( empty($url) ){
 			$this->StackError("URL is emtpy.");
