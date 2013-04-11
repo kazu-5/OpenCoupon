@@ -1,15 +1,13 @@
 <?php
-/* 新規クーポン作成ページ */
+/* @var $this CouponApp */
 
 //  My shop ID.
 $shop_id = $this->GetShopID();
 
 //  Form
 $form_config = $this->config()->form_coupon( $shop_id );
-//$this->d($config);
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-$this->d( Toolbox::toArray($config) );
 
 //  Action
 $action = $this->GetAction();
