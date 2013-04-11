@@ -1311,6 +1311,18 @@ class CouponConfig extends ConfigMgr
 		return $config; 
 	}
 	
+	function select_forget_email( $email )
+	{
+		//$config = self::select('t_forget');//これで良いか要確認。
+		$config = $this->select();
+		$config->table = 't_forget';
+		$config->where->email_forget = md5($email);
+		$config->and->sent >= '(CURRENT_TIMESTAMP-5)';//要確認
+		//$config->or->sent >= '(CURRENT_TIMESTAMP-5)';//要確認
+		$config->limit = 1;//これ変更しないと多分機能しない。
+		return $config;
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
@@ -1440,6 +1452,14 @@ class CouponConfig extends ConfigMgr
 		$config->set->url     = $this->Path2URL($path);
 		$config->update       = true;
 		return $config;
+	}
+	
+	function insert_forget_email( $email, $ip )
+	{
+		$config = parent::insert('t_forget');
+		$config->set->ip_address   = $ip;
+		$config->set->email_forget = md5($email);//これで良いか要確認。
+		return $config; 
 	}
 	
 	function update_uid( $aid, $uid )

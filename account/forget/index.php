@@ -48,6 +48,16 @@ switch( $action ){
 			//	get email address from form
 			$email = $this->form()->GetValue('email','form_forget');
 
+			
+			//ここにDB照会して送信間隔や上限回数判定する処理をif文で入れる
+			
+			$config = $this->config()->select_forget_email($email);
+			$record = $this->pdo()->select($config);
+			$this->d($record);//for test
+			
+			
+			//ここから下をif文で囲む予定
+			
 			//	genarate identification code
 			$identification = md5(microtime());
 				
@@ -60,6 +70,12 @@ switch( $action ){
 			$io = $this->Mail($mail_config);
 			//$this->d($io);//for test
 			//$this->d($mail_config);//for test
+			
+			
+			//ここにDBのt_forgetに書き込む処理を入れる
+			
+			//この辺までif文書で囲む予定
+			
 
 			$data->template = 'commit.phtml';
 			
