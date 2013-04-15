@@ -1317,7 +1317,7 @@ class CouponConfig extends ConfigMgr
 		$config = $this->select();
 		$config->table = 't_forget';
 		$config->where->email_forget = md5($email);
-		$config->and->sent >= '(CURRENT_TIMESTAMP-5)';//要確認
+		//$config->and->sent >= '(CURRENT_TIMESTAMP-5)';//要確認
 		//$config->or->sent >= '(CURRENT_TIMESTAMP-5)';//要確認
 		$config->limit = 1;//これ変更しないと多分機能しない。
 		return $config;
