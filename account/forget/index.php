@@ -48,34 +48,39 @@ switch( $action ){
 			//	get email address from form
 			$email = $this->form()->GetValue('email','form_forget');
 
-			
-			//ここにDB照会して送信間隔や上限回数判定する処理をif文で入れる
-			
+			//	retrieve 'sent records' for the email within last 24H from DB
 			$config = $this->config()->select_forget_email($email);
 			$record = $this->pdo()->select($config);
-			$this->d($record);//for test
+			//$this->d($config);//for test
+			//$this->d($record);//for test
 			
+			//	extract the last sent record
+			$last_sent = reset($record);
 			
-			//ここから下をif文で囲む予定
+			//	check if the last sent is <= 5 min and sent# is < 3 for past 24H  
+			if ((strtotime($last_sent['created']) + date("Z")) <= ( time()-300 ) and count($record) < 3 ){
+				//echo '5分以上前 and 4回未満';//for test
 			
-			//	genarate identification code
-			$identification = md5(microtime());
+				//	genarate identification code
+				$identification = md5(microtime());
 				
-			//	store email and identification code to SESSION
-			$this->SetSession('identification',$identification);
-			$this->SetSession('email_forget',$email);
+				//	store email and identification code to SESSION
+				$this->SetSession('identification',$identification);
+				$this->SetSession('email_forget',$email);
 				
-			//	send identification code to $email
-			$mail_config = $this->config()->mail_identification_forget($email, $identification);
-			$io = $this->Mail($mail_config);
-			//$this->d($io);//for test
-			//$this->d($mail_config);//for test
+				//	get ip address of the client
+				$ip = $_SERVER['REMOTE_ADDR'];
+				
+				//	send identification code to $email
+				$mail_config = $this->config()->mail_identification_forget($email, $identification, $ip);
+				$io = $this->Mail($mail_config);
+				$this->d($io);//for test
 			
+				//	write email address and ip address to DB
+				$insert = $this->config()->insert_forget_email($email, $ip);
+				$res    = $this->pdo()->Insert($insert);
 			
-			//ここにDBのt_forgetに書き込む処理を入れる
-			
-			//この辺までif文書で囲む予定
-			
+			}
 
 			$data->template = 'commit.phtml';
 			

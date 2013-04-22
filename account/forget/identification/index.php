@@ -5,7 +5,7 @@
 if ( !$this->model('Login')->GetLoginID() == null ){
 	
 	//	clear session data
-	$this->SetSession('identification','');//要検証。リロードするとこれが実行されて消える可能性あり。
+	$this->SetSession('identification','');
 	$this->SetSession('email_forget','');
 	
 	//	redirect to toppage
@@ -26,35 +26,32 @@ $data->form_name = $form_name;
 //  Do Action
 if( $this->form()->Secure($form_name) ){
 	$identification = $this->form()->GetInputValue( 'identification', $form_name );
-	if( $identification === $this->GetSession('identification') ){
-
+	if( $identification !== null and $identification !=='' and $identification === $this->GetSession('identification') ){
+		
 		//	retrieve account id from db based on email address
 		$email  = $this->GetSession('email_forget');
 		$config = $this->config()->select_account_email($email);
 		$record = $this->pdo()->select($config);
-		//$this->d($record['id']);//for test
-			
-		$account_id = $record['id'];
-		//$this->d($account_id);//for test
-			
-		//	generate new password
-		$password = $this->model('Password')->get();
-		//$this->d(md5($password));//for test
 		
-		//  Update
-		$update = $this->config()->update_password($account_id, $password);
-		$res    = $this->pdo()->update($update);
-		//$this->d($update);//for test
-		//$this->d($res);//for test
-
+		//	check whether the $email is exist in DB 
+		if( !empty( $record ) ){
+			
+			//	extract an id with the $email
+			$account_id = $record['id'];
+			
+			//	generate new password
+			$password = $this->model('Password')->get();
+			
+			//  Update
+			$update = $this->config()->update_password($account_id, $password);
+			$res    = $this->pdo()->update($update);
+				
+		}else{
+			$res = false;
+		}
+		
 		if( $res !== false and $res !== 0 ){
 		//	Successfully updated
-			
-			//	clear SESSION (email, password)
-			$this->SetSession('identification','');
-			$this->SetSession('email_forget','');
-			//$this->d($this->GetSession('identification'));//for test
-			//$this->d($this->GetSession('email_forget'));//for test
 			
 			//	set message for template
 			$data->class    = 'blue';
@@ -70,6 +67,10 @@ if( $this->form()->Secure($form_name) ){
 			$data->template = 'form.phtml';
 		}
 
+		//	clear SESSION (email, password)
+		$this->SetSession('identification','');
+		$this->SetSession('email_forget','');
+		
 	}else{
 		$data->class    = 'red';
 		$data->message  = '確認コードが一致しません。もう一度入力してください。';
