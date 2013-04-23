@@ -4,23 +4,19 @@
 //  Get Action
 $action = $this->GetAction();
 
-
 //	ここでログインチェックしてログイン済み状態の場合にはじく処理が必要かも
-
 
 //	form setting
 $form_config = $this->config()->form_forget();
 $this->form()->AddForm($form_config);
 
-
 //	form name (= 'form_forget')
 $form_name = $form_config->name;
-
 
 //	data
 $data = new Config();
 $data->form_name = $form_name;
-
+$data->template = 'form.phtml';
 
 //	Action
 switch( $action ){
@@ -59,13 +55,9 @@ switch( $action ){
 			$this->d($mail_config);//for test
 
 			$data->template = 'commit.phtml';
-			
-		}else{
-			//  NG
-			$data->template = 'form.phtml';
 		}
 		break;
-
+		
 	default:
 		$this->mark("undefined action. ($action)");
 }
