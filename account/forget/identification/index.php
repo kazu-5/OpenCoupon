@@ -1,65 +1,57 @@
 <?php
-
 /* @var $this CouponApp */
 
-/*
-//  Get Action
-$action = $this->GetAction();
-*/
+//	redirect to site top if logged in
+if ( !$this->model('Login')->GetLoginID() == null ){
+	
+	//	clear session data
+	$this->SetSession('identification','');
+	$this->SetSession('email_forget','');
+	
+	//	redirect to toppage
+	header("location:/");
+}
 
-//	ここでログインチェックしてログイン済み状態の場合にはじく処理が必要かも
 
 //	form setting
 $form_config = $this->config()->form_forget_identification();
 $this->form()->AddForm($form_config);
 
+
 //  form name
 $form_name = $form_config->name;
 $data->form_name = $form_name;
 
+
 //  Do Action
 if( $this->form()->Secure($form_name) ){
 	$identification = $this->form()->GetInputValue( 'identification', $form_name );
-	if( $identification === $this->GetSession('identification') ){
-
+	if( $identification !== null and $identification !=='' and $identification === $this->GetSession('identification') ){
+		
 		//	retrieve account id from db based on email address
 		$email  = $this->GetSession('email_forget');
 		$config = $this->config()->select_account_email($email);
 		$record = $this->pdo()->select($config);
-		$this->d($record['id']);
-			
-		$account_id = $record['id'];
-		$this->d($account_id);
-			
-		//	generate new password
-		$password = $this->model('Password')->get();
-		$this->d(md5($password));
 		
-		//  Update
-		$update = $this->config()->update_password($account_id, $password);
-		$res    = $this->pdo()->update($update);
-		$this->d($update);
-
-		if( $res !== false ){
-		//	Successfully updated
+		//	check whether the $email is exist in DB 
+		if( !empty( $record ) ){
 			
-			/*
-			//	send new password to $email
-			$mail_config = $this->config()->mail_forget($email, $password);
-			$this->d($mail_config);
+			//	extract an id with the $email
+			$account_id = $record['id'];
+			
+			//	generate new password
+			$password = $this->model('Password')->get();
+			
+			//  Update
+			$update = $this->config()->update_password($account_id, $password);
+			$res    = $this->pdo()->update($update);
 				
-			$io = $this->Mail($mail_config);
-			$this->d($io);
-			*/
-			
-			$this->d($this->GetSession('identification'));//for test
-			$this->d($this->GetSession('email_forget'));//for test
-			
-			//	clear SESSION (email, password)
-			$this->SetSession('identification','');
-			$this->SetSession('email_forget','');
-			$this->d($this->GetSession('identification'));//for test
-			$this->d($this->GetSession('email_forget'));//for test
+		}else{
+			$res = false;
+		}
+		
+		if( $res !== false and $res !== 0 ){
+		//	Successfully updated
 			
 			//	set message for template
 			$data->class    = 'blue';
@@ -75,6 +67,10 @@ if( $this->form()->Secure($form_name) ){
 			$data->template = 'form.phtml';
 		}
 
+		//	clear SESSION (email, password)
+		$this->SetSession('identification','');
+		$this->SetSession('email_forget','');
+		
 	}else{
 		$data->class    = 'red';
 		$data->message  = '確認コードが一致しません。もう一度入力してください。';
@@ -82,7 +78,12 @@ if( $this->form()->Secure($form_name) ){
 	}
 
 }else{
-
+	switch( $status = $this->form()->GetStatus($form_name) ){
+		case '':
+			break;
+		default:
+	}
+	
 	//確認コードを表示する
 	$identification = $this->GetSession('identification');
 	$this->mark( $identification );

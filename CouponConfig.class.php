@@ -99,17 +99,21 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function mail_identification_forget($email, $identification)
+	function mail_identification_forget($email, $identification, $ip)
 	{
 		$data = new Config();
 		$data->identification = $identification;
+		$data->ip             = $ip;
 		
 		$mail_config = new Config();
 		$mail_config->to      = $email;
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
-		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
+		//$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
+		$mail_config->message = $this->GetTemplate('mail/identification_forget.phtml',$data);
 
+		$this->d($mail_config->message);//for test
+		
 		return $mail_config;
 	}
 
@@ -386,7 +390,7 @@ class CouponConfig extends ConfigMgr
 
 	function form_forget()
 	{
-		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		$form_config = self::_form_default(__FUNCTION__);
 		
 		//  form name
 		$form_config->name   = 'form_forget';
@@ -404,14 +408,14 @@ class CouponConfig extends ConfigMgr
 	
 	function form_forget_identification()
 	{
-		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		$form_config = self::_form_default(__FUNCTION__);
 		
 		//  form name
 		$form_config->name   = 'form_forget_identification';
 		
 		//  identification code
 		$input_name = 'identification';
-		$form_config->input->$input_name->label = '確認コード';//requiredにしなくて良いのか？
+		$form_config->input->$input_name->label = '確認コード';
 		
 		return $form_config;
 	}
@@ -1315,6 +1319,18 @@ class CouponConfig extends ConfigMgr
 		return $config; 
 	}
 	
+	function select_forget_email( $email )
+	{
+		$date = date( 'Y-m-d H:i:s', strtotime( '-1 day' ) - date("Z") );
+		
+		$config = $this->select();
+		$config->table = 't_forget';
+		$config->where->email_forget = md5($email);
+		$config->where->created = ">= $date";
+		$config->order = 'created DESC'; 
+		return $config;
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
@@ -1444,6 +1460,14 @@ class CouponConfig extends ConfigMgr
 		$config->set->url     = $this->Path2URL($path);
 		$config->update       = true;
 		return $config;
+	}
+	
+	function insert_forget_email( $email, $ip )
+	{
+		$config = parent::insert('t_forget');
+		$config->set->ip_address   = $ip;
+		$config->set->email_forget = md5($email);
+		return $config; 
 	}
 	
 	function update_uid( $aid, $uid )
