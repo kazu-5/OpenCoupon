@@ -64,7 +64,7 @@ if( $this->form()->Secure($form_name) ){
 			//	set message for template (error)
 			$data->class    = 'red';
 			$data->message  = 'パスワードの再設定に失敗しました。';
-			$data->template = 'form.phtml';
+			$data->template = 'failure.phtml';
 		}
 
 		//	clear SESSION (email, password)

@@ -52,9 +52,22 @@ switch( $action ){
 			//	extract the last sent record
 			$last_sent = reset($record);
 			
-			//	check if the last sent is <= 5 min and sent# is < 3 for past 24H  
-			if ((strtotime($last_sent['created']) + date("Z")) <= ( time()-300 ) and count($record) < 3 ){
+			//	set limit_sec and limit_count for anti-tamper check  
+			$limit_sec   = $this->Config()->GetForgetLimitSecond();
+			$limit_count = $this->Config()->GetForgetLimitCount();
 			
+			if( $limit_sec >= 86400 or $limit_sec <= 0 ){
+				$limit_sec = 300;
+			}
+			
+			if( $limit_count <=0 ){
+				$limit_count = 3;
+			}
+				
+			//	anti-tamper check for interval and sent#
+			if ((strtotime($last_sent['created']) + date("Z")) <= ( time()-$limit_sec ) and count($record) < $limit_count ){
+				//	OK
+				
 				//	genarate identification code
 				$identification = md5(microtime());
 				
