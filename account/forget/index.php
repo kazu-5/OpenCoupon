@@ -50,7 +50,7 @@ switch( $action ){
 			$record = $this->pdo()->select($config);
 			
 			//	extract the last sent record
-			$last_sent = reset($record);
+			$last_sent = $record[0];
 			
 			//	set limit_sec and limit_count for anti-tamper check  
 			$limit_sec   = $this->Config()->GetForgetLimitSecond();
@@ -85,9 +85,19 @@ switch( $action ){
 				//	write email address and ip address to DB
 				$insert = $this->config()->insert_forget_email($email, $ip);
 				$res    = $this->pdo()->Insert($insert);
+				
+				//	show commit page
+				$data->template = 'commit.phtml';
+			}else{
+				//	NG
+				
+				//	prepare the values for display
+				$data->limit_sec   = round($limit_sec / 60);
+				$data->limit_count = $limit_count;
+				
+				//	show error page
+				$data->template = 'failure.phtml';
 			}
-
-			$data->template = 'commit.phtml';
 		}
 		break;
 		
