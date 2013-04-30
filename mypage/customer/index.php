@@ -19,12 +19,18 @@ $this->form()->AddForm($config);
 //	Action
 switch( $action ){
 	case 'index':
-		//  Get t_address by account_id
-		$select = $this->config()->select_address($id);
-		$data->t_address = $this->pdo()->Select($select);
-		$this->template('index.phtml',$data);
+		if( $this->form()->Secure('form_customer') ){
+			$data->message = '変更しました';
+			$this->template('index.phtml',$data);
+		}else{
+			//  Get t_address by account_id
+			$select = $this->config()->select_address($id);
+			$data->t_address = $this->pdo()->Select($select);
+			$this->template('index.phtml',$data);
+		}
 		break;
-		
+	
+	/*
 	case 'confirm':
 		if( $this->form()->Secure('form_customer') ){
 			//  OK
@@ -58,6 +64,7 @@ switch( $action ){
 			$this->template('form.phtml');
 		}
 		break;
+	*/
 	
 	case 'add':
 		if( $this->form()->Secure('button_add_address') ){
