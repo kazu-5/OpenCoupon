@@ -24,6 +24,21 @@ switch( $action ){
 			$args['message'] = '入力内容を確かめて下さい。';
 			$this->template('index.phtml',$args);
 		}else{
+			$id = $this->model('Login')->GetLoginID();
+			$temp_file = $id.'_'.date("YmdHis");
+			
+			//var_dump($_POST);
+			//var_dump($_SESSION);
+			$this->form()->Start('form_coupon');
+			var_dump($this);
+			//$test = $this->form()->Value('coupon_normal_price');
+			//echo $test;
+			
+			$this->form()->Finish('form_coupon');
+			//echo $this->d($_POST['coupon_image'][2]);
+			//var_dump($_POST);
+			//copy($_POST,$temp_file);
+			//echo $this->form()->Value('coupon_image');
 			$this->template('confirm.phtml');
 		}
 		$this->form()->debug('form_coupon');
