@@ -991,7 +991,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'submit';
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
-		$form_config->input->$input_name->value  = '変更を保存する';
+		$form_config->input->$input_name->value  = '登録する';
 		
 		return $form_config;
 		
