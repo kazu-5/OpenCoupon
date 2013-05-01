@@ -20,14 +20,16 @@ $this->form()->AddForm($config);
 switch( $action ){
 	case 'index':
 		if( $this->form()->Secure('form_customer') ){
+			//登録情報変更処理
+			
+			
 			$data->message = '変更しました';
-			$this->template('index.phtml',$data);
-		}else{
-			//  Get t_address by account_id
-			$select = $this->config()->select_address($id);
-			$data->t_address = $this->pdo()->Select($select);
-			$this->template('index.phtml',$data);
 		}
+		//登録情報表示
+		//  Get t_address by account_id
+		$select = $this->config()->select_address($id);
+		$data->t_address = $this->pdo()->Select($select);
+		$this->template('index.phtml',$data);
 		break;
 	
 	/*
