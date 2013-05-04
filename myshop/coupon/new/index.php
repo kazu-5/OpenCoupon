@@ -1,15 +1,13 @@
 <?php
-/* 新規クーポン作成ページ */
+/* @var $this CouponApp */
 
 //  My shop ID.
 $shop_id = $this->GetShopID();
 
 //  Form
 $form_config = $this->config()->form_coupon( $shop_id );
-//$this->d($config);
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-$this->d( Toolbox::toArray($config) );
 
 //  Action
 $action = $this->GetAction();
@@ -26,6 +24,31 @@ switch( $action ){
 			$args['message'] = '入力内容を確かめて下さい。';
 			$this->template('index.phtml',$args);
 		}else{
+			$id = $this->model('Login')->GetLoginID();
+			$temp_file = $id.'_'.date("YmdHis");
+			
+			//var_dump($_POST);
+			//var_dump($_SESSION);
+			//$this->form()->Start('form_coupon');
+			//var_dump($this);
+			//$test = $this->form()->Value('coupon_normal_price');
+			//echo $test;
+			
+			//$this->form()->Finish('form_coupon');
+			//echo $this->d($_POST['coupon_image'][2]);
+			//var_dump($_POST);
+			//copy($_POST,$temp_file);
+			//echo $this->form()->Value('coupon_image');
+			$from = $this->form()->GetInputValue('coupon_image','form_coupon');
+			/*
+			echo $from;
+			echo '<br/>';
+			echo basename($from);
+			*/
+			//echo $this->GetRoute();		
+			echo $_SERVER['DOCUMENT_ROOT'];
+			echo $_SERVER['DOCUMENT_ROOT'].'/'.basename($from);
+			copy($from,$_SERVER['DOCUMENT_ROOT'].'/temp/'.basename($from));
 			$this->template('confirm.phtml');
 		}
 		$this->form()->debug('form_coupon');
