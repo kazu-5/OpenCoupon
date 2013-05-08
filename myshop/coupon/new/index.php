@@ -13,7 +13,6 @@ $form_name = $form_config->name;
 $action = $this->GetAction();
 $this->mark($action,'controller');
 
-
 switch( $action ){
 	case 'index':
 		$this->template('index.phtml');

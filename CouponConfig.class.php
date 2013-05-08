@@ -99,17 +99,20 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	function mail_identification_forget($email, $identification)
+	function mail_identification_forget($email, $identification, $ip)
 	{
 		$data = new Config();
 		$data->identification = $identification;
+		$data->ip             = $ip;
 		
 		$mail_config = new Config();
 		$mail_config->to      = $email;
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
-		$mail_config->message = $this->GetTemplate('mail/identification.phtml',$data);
-
+		$mail_config->message = $this->GetTemplate('mail/identification_forget.phtml',$data);
+		
+		$mail_config->d();
+		
 		return $mail_config;
 	}
 
@@ -127,26 +130,34 @@ class CouponConfig extends ConfigMgr
 		return $mail_config;
 	}
 	
-	
-	function password_forget($email){
-
+	function password_forget($email)
+	{
 		//	generate new password
 		$new_password = $this->model('Password')->get();
-		
-		//	get account_id
-		//$account_id = $this->model('Login')->GetLoginID();
-		//$config = $this->
-		
-		
-		$this->d($account_id);
-		
-		//	update database
-		//$res = $this->update_password_forget($account_id, $password);
-		
-		
 		return $new_password;
 	}
 	
+	/**
+	 * default value is 300 (= within 5 min.)
+	 * 
+	 * @return number
+	 */
+	function GetForgetLimitSecond()
+	{
+		$limit_sec = 300;
+		return $limit_sec;
+	}
+	
+	/**
+	 * default value is 3 (= less than 3 times.)
+	 * 
+	 * @return number
+	 */
+	function GetForgetLimitCount()
+	{
+		$limit_count = 3; 
+		return $limit_count;
+	}
 	
 	function form_buy($coupon_id)
 	{
@@ -386,7 +397,7 @@ class CouponConfig extends ConfigMgr
 
 	function form_forget()
 	{
-		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		$form_config = self::_form_default(__FUNCTION__);
 		
 		//  form name
 		$form_config->name   = 'form_forget';
@@ -404,14 +415,14 @@ class CouponConfig extends ConfigMgr
 	
 	function form_forget_identification()
 	{
-		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		$form_config = self::_form_default(__FUNCTION__);
 		
 		//  form name
 		$form_config->name   = 'form_forget_identification';
 		
 		//  identification code
 		$input_name = 'identification';
-		$form_config->input->$input_name->label = '確認コード';//requiredにしなくて良いのか？
+		$form_config->input->$input_name->label = '確認コード';
 		
 		return $form_config;
 	}
@@ -920,9 +931,11 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->shop_id->value = $shop_id;
 		
 		//  Remove new coupon required value.
-		if( $form_coupon_id ){
+		/*
+		if( $form_coupon_id ){ // TODO: これはもう要らない？変数名を変更（削除）した？
 			unset($form_config->coupon_id);
 		}
+		*/
 		
 		//  Added form name
 		$form_config->name = 'form_coupon' . $coupon_id;
@@ -947,6 +960,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_price';
 		$form_config->input->$input_name->label  = '販売価格';
@@ -956,24 +970,25 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_num_top';
 		$form_config->input->$input_name->label  = '最大販売数';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_num_bottom';
 		$form_config->input->$input_name->label  = '最小販売数';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_start';
 		$form_config->input->$input_name->label  = '販売開始日時';
@@ -1003,14 +1018,14 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->label  = '一人が購入できる枚数';
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_image';
 		$form_config->input->$input_name->label  = 'クーポンのイメージ';
 		$form_config->input->$input_name->type   = 'file';
 		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
+	//	$form_config->input->$input_name->save->path = $this->ConvertPath("app:/shop/$shop_id/$coupon_id/1");
+		$form_config->input->$input_name->validate->permit = 'image';
 		
 		//  submit
 		$input_name = 'submit';
@@ -1314,6 +1329,18 @@ class CouponConfig extends ConfigMgr
 		return $config; 
 	}
 	
+	function select_forget_email( $email )
+	{
+		$date = date( 'Y-m-d H:i:s', strtotime( '-1 day' ) - date("Z") );
+		
+		$config = $this->select();
+		$config->table = 't_forget';
+		$config->where->email_forget = md5($email);
+		$config->where->created = ">= $date";
+		$config->order = 'created DESC'; 
+		return $config;
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
@@ -1443,6 +1470,14 @@ class CouponConfig extends ConfigMgr
 		$config->set->url     = $this->Path2URL($path);
 		$config->update       = true;
 		return $config;
+	}
+	
+	function insert_forget_email( $email, $ip )
+	{
+		$config = parent::insert('t_forget');
+		$config->set->ip_address   = $ip;
+		$config->set->email_forget = md5($email);
+		return $config; 
 	}
 	
 	function update_uid( $aid, $uid )
