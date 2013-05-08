@@ -109,10 +109,9 @@ class CouponConfig extends ConfigMgr
 		$mail_config->to      = $email;
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
 		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
-		$mail_config->message = $this->GetTemplate('mail/identification_forget.phtml',$data);
-		
+		$mail_config->message = $this->GetTemplate('mail/identification_forget.phtml',$data);		
 		$mail_config->d();
-		
+				
 		return $mail_config;
 	}
 
@@ -158,6 +157,22 @@ class CouponConfig extends ConfigMgr
 		$limit_count = 3; 
 		return $limit_count;
 	}
+	
+	function GetForgetLimitSecond()
+	{
+		$limit_sec = 300;//	default value is 300 (= within 5 min.)
+		
+		return $limit_sec;
+	}
+	
+	
+	function GetForgetLimitCount()
+	{
+		$limit_count = 3;//	default value is 3 (= less than 3 times.)
+		
+		return $limit_count;
+	}
+	
 	
 	function form_buy($coupon_id)
 	{

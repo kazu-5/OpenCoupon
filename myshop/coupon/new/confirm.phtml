@@ -1,6 +1,7 @@
 <?php
 /* @var $this CouponApp */
 ?>
+<<<<<<< HEAD
 <style>
 	.confirm{
 		border: 0px dotted red; 
@@ -71,15 +72,17 @@
 		vertical-align: middle;
 	}
 </style>
+=======
+>>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
 
 <?php $this->form()->Start('form_coupon','commit') ?>
 
-<div class="arc confirm">
+<div class="arc contents">
 	<div class="title">
 		<h1>登録情報 - 確認</h1>
 	</div>
 	<div class="contents2">
-		<table>
+		<table class="table_border">
 			<tr>
 				<th>
 					<?php $this->form()->Label('coupon_title') ?>
@@ -154,7 +157,11 @@
 				</td>
 			</tr>
 			<tr>
+<<<<<<< HEAD
 				<th>a
+=======
+				<th>
+>>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
 					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
 				</th>
 				<td>
