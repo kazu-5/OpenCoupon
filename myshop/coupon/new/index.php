@@ -40,7 +40,11 @@ switch( $action ){
 			//copy($_POST,$temp_file);
 			//echo $this->form()->Value('coupon_image');
 			$from = $this->form()->GetInputValue('coupon_image','form_coupon');
-			copy($from,$_SERVER['DOCUMENT_ROOT'].'/temp/'.basename($from));
+			//var_dump($from);
+			//var_dump($_SERVER['DOCUMENT_ROOT'].'/temp/'.basename($from));
+			
+			$app_root = $this->ConvertPath('app:/');
+			copy($from,$app_root.'/temp/'.basename($from));
 			$this->template('confirm.phtml');
 		}
 		$this->form()->debug('form_coupon');
