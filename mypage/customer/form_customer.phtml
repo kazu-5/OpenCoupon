@@ -5,8 +5,8 @@
 				<td style="width:400px;">
 					姓：<?php $this->form()->Input('last_name');?>
 					名：<?php $this->form()->Input('first_name');?>
-					<p class="red"><?php $this->form()->InputError('last_name')?></p>
-					<p class="red"><?php $this->form()->InputError('first_name')?></p>
+					<p class="red"><?php $this->form()->Error('last_name')?></p>
+					<p class="red"><?php $this->form()->Error('first_name')?></p>
 				</td>
 			</tr>
 			<tr align="left">
@@ -66,7 +66,7 @@
 				<th>性別</th>
 				<td>
 					<?php $this->form()->Input('gender'); ?>
-					<p class="red"><?php $this->form()->InputError('gender');?></p>
+					<p class="red"><?php $this->form()->Error('gender');?></p>
 				</td>
 			</tr>
 		</table>
