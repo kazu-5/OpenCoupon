@@ -96,8 +96,10 @@
 					<?php $this->form()->Label('coupon_image') ?>
 				</th>
 				<td>
-					<?php $this->form()->Value('coupon_image') ?>
-					<img src="<?php $this->form()->Value('coupon_image') ?>">
+					<?php if( $path = $this->form()->GetInputValue('coupon_image') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image') ?>">
 				</td>
 			</tr>
 		</table>
