@@ -892,98 +892,113 @@ class CouponConfig extends ConfigMgr
 		//  Init shop_id
 		$form_config->input->shop_id->value = $shop_id;
 		
-		//  Remove new coupon required value.
-		/*
-		if( $form_coupon_id ){ // TODO: これはもう要らない？変数名を変更（削除）した？
-			unset($form_config->coupon_id);
-		}
-		*/
-		
 		//  Added form name
 		$form_config->name = 'form_coupon' . $coupon_id;
 		
 		$input_name = 'coupon_title';
 		$form_config->input->$input_name->label  = 'タイトル';
-		$form_config->input->$input_name->type   = 'text';
-		$form_config->input->$input_name->required = true;
+	//	$form_config->input->$input_name->type   = 'text';
+	//	$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->value	 = 'New coupon title';
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		$input_name = 'coupon_description';
 		$form_config->input->$input_name->label  = '説明';
-		$form_config->input->$input_name->type   = 'text';
-		$form_config->input->$input_name->required = true;
+	//	$form_config->input->$input_name->type   = 'text';
+	//	$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->value	 = "Coupon's description.";
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		
 		$input_name = 'coupon_normal_price';
 		$form_config->input->$input_name->label  = '通常価格';
-		$form_config->input->$input_name->type   = 'text';
-		$form_config->input->$input_name->required = true;
+	//	$form_config->input->$input_name->type   = 'text';
+	//	$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->value	 = 1000;
 		$form_config->input->$input_name->errors->required = '%sが未入力です。';
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
-		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
-		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
+	//	$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+	//	$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_price';
 		$form_config->input->$input_name->label  = '販売価格';
-		$form_config->input->$input_name->type   = 'text';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->errors->required = '%sが未入力です。';
-		$form_config->input->$input_name->validate->permit = 'integer';
-		$form_config->input->$input_name->validate->range = '1-';
-		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
-		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
+		$form_config->input->$input_name->value	 = 1000;
+	//	$form_config->input->$input_name->type   = 'text';
+	//	$form_config->input->$input_name->required = true;
+	//	$form_config->input->$input_name->errors->required = '%sが未入力です。';
+	//	$form_config->input->$input_name->validate->permit = 'integer';
+	//	$form_config->input->$input_name->validate->range = '1-';
+	//	$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
+	//	$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		
 		$input_name = 'coupon_sales_num_top';
 		$form_config->input->$input_name->label  = '最大販売数';
+		$form_config->input->$input_name->value	 = 100;
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
+		*/
 		
 		$input_name = 'coupon_sales_num_bottom';
 		$form_config->input->$input_name->label  = '最小販売数';
+		$form_config->input->$input_name->value	 = 80;
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'integer';
 		$form_config->input->$input_name->validate->range = '1-';
 		$form_config->input->$input_name->error->{'permit-integer'} = 'Only integer. (not decimal)';
 		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
+		*/
 		
 		$input_name = 'coupon_sales_start';
 		$form_config->input->$input_name->label  = '販売開始日時';
+		$form_config->input->$input_name->value	 = date('Y-m-d H:i:s',strtotime("+1hours"));
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
 		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
+		*/
 		
 		$input_name = 'coupon_sales_finish';
 		$form_config->input->$input_name->label  = '販売終了日時';
+		$form_config->input->$input_name->value	 = date('Y-m-d H:i:s',strtotime("+6hours"));
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
 		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
+		*/
 		
 		$input_name = 'coupon_expire';
 		$form_config->input->$input_name->label  = '有効期限';
+		$form_config->input->$input_name->value	 = date('Y-m-d H:i:s',strtotime("+24hours"));
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
 		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
+		*/
 		
 		$input_name = 'coupon_person_num';
 		$form_config->input->$input_name->label  = '一人が購入できる枚数';
+		$form_config->input->$input_name->value	 = 10;
+		/*
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
+		*/
 		
 		$input_name = 'coupon_image';
 		$form_config->input->$input_name->label  = 'クーポンのイメージ';
 		$form_config->input->$input_name->type   = 'file';
 		$form_config->input->$input_name->required = true;
-	//	$form_config->input->$input_name->save->path = $this->ConvertPath("app:/shop/$shop_id/$coupon_id/1");
+		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 		$form_config->input->$input_name->validate->permit = 'image';
 		
 		//  submit
@@ -1400,6 +1415,7 @@ class CouponConfig extends ConfigMgr
 		}
 		
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
+		unset($value->coupon_image);
 		unset($value->submit);
 		unset($value->submit_button);
 		
