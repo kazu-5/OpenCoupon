@@ -140,8 +140,7 @@ class CouponConfig extends ConfigMgr
 	
 		// form name
 		$form_config->name = 'form_buy';
-		$form_config->action = '/buy/'.$coupon_id; // URL controll by controller
-		//$form_config->action = '/buy/login'; // URL controll by controller
+		$form_config->action = '/buy/'.$coupon_id;
 		
 		// input text
 		$input_name = 'coupon_id';
@@ -1101,6 +1100,20 @@ class CouponConfig extends ConfigMgr
 		$config->user     = 'op_coupon';
 	
 		return $config;
+	}
+	
+	function select_login( $email, $password )
+	{
+		if(empty($email)){
+			$this->StackError("Empty email.");
+			return new Config();
+		}
+		
+		$select = parent::select('t_account');
+		$select->where->email_md5 = md5($email);
+		$select->where->password  = md5($password);
+		$select->limit = 1;
+		return $select;
 	}
 	
 	function select_coupon_list( $coupon_id=null )
