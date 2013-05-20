@@ -97,9 +97,8 @@
 				</th>
 				<td>
 					<?php if( $path = $this->form()->GetInputValue('coupon_image') ): ?>
-						<img src="<?=$this->ConvertURL($path)?>"/>
+						<img src="<?=$path?>"/>
 					<?php endif; ?>
-					<img src="<?php $this->form()->GetInputValue('coupon_image') ?>">
 				</td>
 			</tr>
 		</table>

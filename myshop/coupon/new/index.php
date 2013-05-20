@@ -8,7 +8,8 @@ $shop_id = $this->GetShopID();
 $form_config = $this->config()->form_coupon( $shop_id );
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-//$this->form()->Clear($form_name);
+$this->form()->Clear($form_name);
+//$this->d($_POST);
 
 //  Action
 $action = $this->GetAction();
@@ -30,10 +31,10 @@ switch( $action ){
 			$data->template = 'confirm.phtml';
 		}
 		break;
-	
+		
 	case 'commit':
 		if( $this->form()->Secure('form_coupon') ){
-				
+			
 			//  Do Insert
 			$config = $this->config()->insert_coupon($shop_id);
 			$coupon_id = $this->pdo()->insert($config);
@@ -42,8 +43,15 @@ switch( $action ){
 			if( $coupon_id === false ){
 				$data->message = 'Couponレコードの作成に失敗しました。';
 			}else{
+				
+				$path = $this->form()->GetInputValueRaw('coupon_image',$form_name);
+				$this->mark($path);
+				
 				$this->form()->Clear($form_name);
-				$this->Location("app://myshop/coupon/edit/$coupon_id");
+				
+				return;
+				
+			//	$this->Location("app://myshop/coupon/edit/$coupon_id");
 			}
 		}
 		break;

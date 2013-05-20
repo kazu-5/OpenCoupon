@@ -115,7 +115,7 @@
 				</td>
 				<td>
 					<?php if( $path = $this->form()->GetInputValue('coupon_image') ): ?>
-						<img src="<?=$this->ConvertURL($path)?>"/>
+						<img src="<?=$path?>"/>
 					<?php endif; ?>
 					<?php $this->form()->Input('coupon_image') ?><br/>
 					<?php $this->form()->Error('coupon_image') ?>
@@ -123,7 +123,7 @@
 			</tr>
 		</table>
 		<div style="text-align:center">
-			<?php $this->form()->Input( 'submit', '作成する') ?>
+			<?php $this->form()->Input( 'submit', '　入力内容の確認　') ?>
 		</div>
 		<?php $this->form()->Finish('form_coupon') ?>
 	</div>
