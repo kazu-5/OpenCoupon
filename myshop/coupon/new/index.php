@@ -8,8 +8,13 @@ $shop_id = $this->GetShopID();
 $form_config = $this->config()->form_coupon( $shop_id );
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
+<<<<<<< HEAD
 //$this->d($form_name);
 //$this->form()->Clear($form_name);
+=======
+$this->form()->Clear($form_name);
+//$this->d($_POST);
+>>>>>>> f327f379a3c246b981dca01440400aebaa1803c6
 
 //  Action
 $action = $this->GetAction();
@@ -31,7 +36,7 @@ switch( $action ){
 			$data->template = 'confirm.phtml';
 		}
 		break;
-	
+		
 	case 'commit':
 		if( $this->form()->Secure($form_name) ){
 			//  Do Insert
@@ -62,6 +67,8 @@ switch( $action ){
 				
 				//	Clear of form.
 				$this->form()->Clear($form_name);
+				
+				//	Transfer
 			//	$this->Location("app://myshop/coupon/edit/$coupon_id");
 			}
 		}

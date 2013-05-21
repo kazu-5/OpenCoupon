@@ -1,6 +1,13 @@
 <?php
 /* @var $this CouponApp */
 
+//  Check if logged-in.
+if( $id = $this->model('Login')->GetLoginId() ){
+	$data->message = '既にログインしています。';
+	$this->template('index.phtml',$data);
+	return;
+}
+
 //  init
 $data = new Config();
 
@@ -12,13 +19,6 @@ $this->form()->AddForm($config);
 $config = $this->config()->form_register();
 $this->form()->AddForm($config);
 
-//  Check login
-if( $id = $this->model('Login')->GetLoginId() ){
-	$data->message = '既にログインしています。';
-	$this->template('index.phtml',$data);
-	return;
-}
-
 //  Check secure
 if( $this->form()->Secure('form_login') ){
 	
@@ -26,27 +26,14 @@ if( $this->form()->Secure('form_login') ){
 	$email = $this->form()->GetValue('email',   'form_login');
 	$pass  = $this->form()->GetValue('password','form_login');
 	
-	//  Convert to md5
-	$email = md5($email);
-	$pass  = md5($pass);
-	
 	//  Get registered value.
-	list( $id, $password ) = $this->pdo()->quick("id, password <- t_account.email_md5 = $email");
-	
-	$config = new Config();
-	$config->table = 't_account';
-	$config->column->password = 'password';
-	$config->where->email_md5 = $email;
-	$record = $this->pdo()->Select($config);
+	$select = $this->config()->select_login($email,$pass);
+	$record = $this->pdo()->select($select);
 	
 	//  Check password.
-	if( $pass === $password ){
+	if( $record ){
 		//  OK
-		$this->model('Login')->SetLoginId($id);
-	//	$cid = $this->GetCouponID();
-	//	$url = $this->ConvertUrl("app:/buy/$cid");
-	//	$this->template('login_success.phtml',array('url'=>$url));
-	//	$this->module('Transfer')->Forward();
+		$this->model('Login')->SetLoginId($record['id']);
 		include('login_ok.phtml');
 		return;
 	}else{
@@ -57,3 +44,4 @@ if( $this->form()->Secure('form_login') ){
 
 //  Print default template
 $this->template('index.phtml',$data);
+
