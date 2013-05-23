@@ -1,18 +1,12 @@
 <?php
-/*
-$select = array();
-$select['table'] = 't_coupon';
-$select['limit'] = 10;
-$coupons = $this->mysql->select($select);
-*/
-//  SELECTの定義を作成
+/* @var $this CouponApp */
+
+//  Get select config
 $config = new Config();
 $config->table = 't_coupon';
 $config->limit = 10;
-$config = $this->config()->select_coupon();
-//  SELECTを実行
-$coupons = $this->pdo()->select($config);
-$this->d($coupons,'debug');
+$config = $this->config()->select_coupon_list();
+$t_coupon = $this->pdo()->select($config);
 
 ?>
 <style>
@@ -26,14 +20,14 @@ $this->d($coupons,'debug');
 	width: 234px;
 }
 
-div.info_coupon_small{
+#info_coupon_small div.info_coupon_small{
 	padding: 3px;
 	font-size: small;
 	border:1px solid grey;
 	border-width: 1px 0px 0px 0px;
 }
 
-p.info_coupon_small{
+#info_coupon_small p.info_coupon_small{
 	font-size: small;
 }
 
@@ -42,7 +36,7 @@ p.info_coupon_small{
 	<div class="center" style="">
 		<p class="small">おすすめのクーポン</p>
 	</div>
-	<?php foreach($coupons as $coupon): ?>
+	<?php foreach($t_coupon as $coupon): ?>
 	<?php $this->Template('right_side_info_small.phtml',$coupon); ?>
 	<?php endforeach; ?>
 </div>

@@ -1158,7 +1158,7 @@ class CouponConfig extends ConfigMgr
 	
 	function select_coupon_list( $coupon_id=null )
 	{
-		//  Init.
+		//  Init
 		$limit  = 10;
 		$page   = isset($_GET['page']) ? $_GET['page'] : 0;
 		$offset = $limit * $page;
