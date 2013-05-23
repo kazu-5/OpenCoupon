@@ -60,4 +60,4 @@ switch( $action ){
 }
 
 //  debug
-//$this->form()->debug($form_name);
+$this->form()->debug($form_name);
