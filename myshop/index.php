@@ -1,8 +1,10 @@
 <?php
 /* @var $this CouponApp */
 
+
+//	init
+$data = new Config();
 $action = $this->GetMyShopAction();
-$this->mark($action,'controller');
 
 switch( $action ){
 	case 'index':
@@ -19,7 +21,6 @@ switch( $action ){
 		//  Data to be passed.
 		$data->t_shop = $t_shop;
 		$data->t_list = $t_list;
-		//$this->d($data->t_list);
 		
 		$this->template("index.phtml",$data);
 		break;

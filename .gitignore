@@ -5,5 +5,4 @@
 .DS_Store
 img/
 system/
-
-
+.htaccess

@@ -5,7 +5,6 @@ $st = microtime(true);
 
 //  Include OnePiece-Framework
 include('OnePiece5.class.php');
-include('Coupon.app.php');
 $app = new CouponApp();
 
 //  Set environment.

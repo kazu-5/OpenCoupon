@@ -32,13 +32,15 @@ class Module_Transfer extends Model_Model
 	 */
 	function Set( $url, Config $config=null )
 	{
+		$transfer_url = $this->GetURL('url');
+		$this->SetSession( 'transfer_url', $transfer_url );
 		$this->SetSession( 'referer', $_SERVER['HTTP_REFERER'] );
 		
 		if( empty($url) ){
 			$this->StackError("URL is emtpy.");
 			return false;
 		}
-
+		
 		$this->_Behavior( $url, $config );
 	}
 	
