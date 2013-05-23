@@ -158,22 +158,6 @@ class CouponConfig extends ConfigMgr
 		return $limit_count;
 	}
 	
-	function GetForgetLimitSecond()
-	{
-		$limit_sec = 300;//	default value is 300 (= within 5 min.)
-		
-		return $limit_sec;
-	}
-	
-	
-	function GetForgetLimitCount()
-	{
-		$limit_count = 3;//	default value is 3 (= less than 3 times.)
-		
-		return $limit_count;
-	}
-	
-	
 	function form_buy($coupon_id)
 	{
 		$form_config = self::_form_default();
