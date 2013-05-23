@@ -98,6 +98,22 @@ class CouponConfig extends ConfigMgr
 		
 		return $mail_config;
 	}
+	
+	function mail_identification_forget($email, $identification, $ip)
+	{
+		$data = new Config();
+		$data->identification = $identification;
+		$data->ip             = $ip;
+		
+		$mail_config = new Config();
+		$mail_config->to      = $email;
+		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
+		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
+		$mail_config->message = $this->GetTemplate('mail/identification_forget.phtml',$data);		
+		$mail_config->d();
+				
+		return $mail_config;
+	}
 
 	function mail_forget($email, $password)
 	{
@@ -107,30 +123,54 @@ class CouponConfig extends ConfigMgr
 		$mail_config = new Config();
 		$mail_config->to      = $email;
 		$mail_config->from    = 'no-reply@open-coupon.com'; // TODO
-		$mail_config->subject = 'オープンクーポン：パスワードの再生成';
+		$mail_config->subject = 'オープンクーポン：パスワードの再生成（完了）';
 		$mail_config->message = $this->GetTemplate('mail/password_forget.phtml',$data);
 		
 		return $mail_config;
 	}
 	
-	
-	function password_forget($email){
-
+	function password_forget($email)
+	{
 		//	generate new password
 		$new_password = $this->model('Password')->get();
-		
-		//	get account_id
-		//$account_id = $this->model('Login')->GetLoginID();
-		//$config = $this->
-		
-		
-		$this->d($account_id);
-		
-		//	update database
-		//$res = $this->update_password_forget($account_id, $password);
-		
-		
 		return $new_password;
+	}
+	
+	/**
+	 * default value is 300 (= within 5 min.)
+	 * 
+	 * @return number
+	 */
+	function GetForgetLimitSecond()
+	{
+		$limit_sec = 300;
+		return $limit_sec;
+	}
+	
+	/**
+	 * default value is 3 (= less than 3 times.)
+	 * 
+	 * @return number
+	 */
+	function GetForgetLimitCount()
+	{
+		$limit_count = 3; 
+		return $limit_count;
+	}
+	
+	function GetForgetLimitSecond()
+	{
+		$limit_sec = 300;//	default value is 300 (= within 5 min.)
+		
+		return $limit_sec;
+	}
+	
+	
+	function GetForgetLimitCount()
+	{
+		$limit_count = 3;//	default value is 3 (= less than 3 times.)
+		
+		return $limit_count;
 	}
 	
 	
@@ -371,7 +411,7 @@ class CouponConfig extends ConfigMgr
 
 	function form_forget()
 	{
-		$form_config = self::_form_default(__FUNCTION__);//これでOK？
+		$form_config = self::_form_default(__FUNCTION__);
 		
 		//  form name
 		$form_config->name   = 'form_forget';
@@ -387,6 +427,19 @@ class CouponConfig extends ConfigMgr
 		return $form_config;
 	}
 	
+	function form_forget_identification()
+	{
+		$form_config = self::_form_default(__FUNCTION__);
+		
+		//  form name
+		$form_config->name   = 'form_forget_identification';
+		
+		//  identification code
+		$input_name = 'identification';
+		$form_config->input->$input_name->label = '確認コード';
+		
+		return $form_config;
+	}
 	
 	/**
 	 * 登録しようとしているメールアドレスが本人かキーコードを送信し、入力して貰って本人確認を行う。
@@ -871,7 +924,7 @@ class CouponConfig extends ConfigMgr
 		return $config;
 	}
 	
-	function form_coupon( $shop_id, $coupon_id=null )
+	function form_myshop_coupon( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){
 			$this->StackError('Empty shop_id.');
@@ -961,8 +1014,9 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
-		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
 		*/
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_sales_finish';
 		$form_config->input->$input_name->label  = '販売終了日時';
@@ -971,8 +1025,9 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
-		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
 		*/
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_expire';
 		$form_config->input->$input_name->label  = '有効期限';
@@ -981,8 +1036,9 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'text';
 		$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->validate->permit = 'datetime';
-		$form_config->input->$input_name->error->{'permit-datetime'} = 'Only datetime';
 		*/
+		$form_config->input->$input_name->error->required = '$labelが未入力です。';
+		$form_config->input->$input_name->error->{'permit-datetime'} = '$labelが日時ではありません。（$value）';
 		
 		$input_name = 'coupon_person_num';
 		$form_config->input->$input_name->label  = '一人が購入できる枚数';
@@ -1316,6 +1372,18 @@ class CouponConfig extends ConfigMgr
 		return $config; 
 	}
 	
+	function select_forget_email( $email )
+	{
+		$date = date( 'Y-m-d H:i:s', strtotime( '-1 day' ) - date("Z") );
+		
+		$config = $this->select();
+		$config->table = 't_forget';
+		$config->where->email_forget = md5($email);
+		$config->where->created = ">= $date";
+		$config->order = 'created DESC'; 
+		return $config;
+	}
+	
 	function insert_account()
 	{
 		$_post = $this->form()->GetInputValueAll('form_register');
@@ -1446,6 +1514,14 @@ class CouponConfig extends ConfigMgr
 		$config->set->url     = $this->Path2URL($path);
 		$config->update       = true;
 		return $config;
+	}
+	
+	function insert_forget_email( $email, $ip )
+	{
+		$config = parent::insert('t_forget');
+		$config->set->ip_address   = $ip;
+		$config->set->email_forget = md5($email);
+		return $config; 
 	}
 	
 	function update_uid( $aid, $uid )

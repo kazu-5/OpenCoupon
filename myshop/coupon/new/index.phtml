@@ -7,4 +7,143 @@
 	<p class="<?=$class?>" style="margin: 1em; font-size: 125%;"><?=$data->message?></p>
 <?php endif; ?>
 
+<<<<<<< HEAD
 <?php $this->template( $data->template ); ?>
+=======
+<div class="contents">
+	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
+		<h1 style="font-size: 20px;">クーポン購入</h1>
+	</div>
+	<h2 style="border-bottom: 4px solid #B0D485; margin-bottom: 10px; padding-top: 13px; font-size: 20px;">購入内容</h2>
+	<div id="coupon_content" style="padding-top:8px;">
+		
+		<?php $this->form()->Start('form_coupon','confirm') ?>
+		<table>
+			<tr>
+				<?php /* タイトル */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_title') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_title') ?><br/>
+					<?php $this->form()->Error('coupon_title') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 説明 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_description') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_description') ?><br/>
+					<?php $this->form()->Error('coupon_description') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 通常価格 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_normal_price') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_normal_price') ?><br/>
+					<?php $this->form()->Error('coupon_normal_price') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 販売価格 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_sales_price') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_sales_price') ?><br/>
+					<?php $this->form()->Error('coupon_sales_price') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 最大販売数 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_sales_num_top') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_sales_num_top') ?><br/>
+					<?php $this->form()->Error('coupon_sales_num_top') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 最小販売数 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_sales_num_bottom') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_sales_num_bottom') ?><br/>
+					<?php $this->form()->Error('coupon_sales_num_bottom') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 販売開始日時 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_sales_start') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_sales_start') ?><br/>
+					<?php $this->form()->Error('coupon_sales_start') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 終了開始日時 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_sales_finish') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_sales_finish') ?><br/>
+					<?php $this->form()->Error('coupon_sales_finish') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 有効期限 */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_expire') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_expire') ?><br/>
+					<?php $this->form()->Error('coupon_expire') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* 一人が購入できる枚数 */ ?>
+<<<<<<< HEAD
+				<td style="white-space:nowrap;">
+<<<<<<< HEAD
+					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
+=======
+					<?php $this->form()->Label('coupon_person_num') ?>
+=======
+				<td>
+					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
+>>>>>>> develop
+>>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_person_num') ?><br/>
+					<?php $this->form()->Error('coupon_person_num') ?>
+				</td>
+			</tr>
+			<tr>
+				<?php /* クーポンイメージ */ ?>
+				<td>
+					<?php $this->form()->Label('coupon_image') ?>
+				</td>
+				<td>
+					<?php $this->form()->Input('coupon_image') ?><br/>
+					<?php $this->form()->Error('coupon_image') ?>
+				</td>
+			</tr>
+		</table>
+		<div style="text-align:center">
+			<?php $this->form()->Input( 'submit', '作成する') ?>
+		</div>
+		<?php $this->form()->Finish('form_coupon') ?>
+	</div>
+</div>
+
+>>>>>>> develop-forget

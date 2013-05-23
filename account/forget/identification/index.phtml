@@ -1,0 +1,14 @@
+<?php
+/* @var $this CouponApp */
+$class   = $data->class;
+$message = $data->message;
+?>
+<section>
+	<div class="contents">
+	<h1>パスワードを再設定する</h1>
+	<p class="<?=$class?>"><?=$message?></p>
+		<?php
+		$this->template( $data->template, $data );
+		?>
+	</div>
+</section>

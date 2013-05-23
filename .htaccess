@@ -1,4 +1,3 @@
-
 php_value	short_open_tag	On
 php_value	display_errors	On
 php_flag	log_errors		Off
@@ -23,4 +22,3 @@ Options +FollowSymLinks +ExecCGI +Indexes
 	RewriteRule (\.css|\.php|\.htm|\.html|\.phtml)$ app.php [L]
 	
 </IfModule>
-

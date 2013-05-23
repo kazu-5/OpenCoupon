@@ -5,16 +5,10 @@
 $shop_id = $this->GetShopID();
 
 //  Form
-$form_config = $this->config()->form_coupon( $shop_id );
+$form_config = $this->config()->form_myshop_coupon( $shop_id );
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-<<<<<<< HEAD
-//$this->d($form_name);
 //$this->form()->Clear($form_name);
-=======
-$this->form()->Clear($form_name);
-//$this->d($_POST);
->>>>>>> f327f379a3c246b981dca01440400aebaa1803c6
 
 //  Action
 $action = $this->GetAction();
