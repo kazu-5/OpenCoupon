@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .buildpath
 .project
 .settings/
@@ -7,15 +6,3 @@
 img/
 system/
 .htaccess
-
-=======
-.buildpath
-.project
-.settings/
-.svn
-.DS_Store
-img/
-system/
-.htaccess
-
->>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
