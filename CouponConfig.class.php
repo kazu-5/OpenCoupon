@@ -1148,10 +1148,6 @@ class CouponConfig extends ConfigMgr
 		$qu = " email <- t_account.id = $id ";
 		$email = $this->pdo()->Quick($qu);
 		
-		//  Decrypt email
-		$blowfish = new Blowfish();
-		$email = $blowfish->Decrypt($email);
-		
 		$cardno = $this->form()->GetValue('card_no', 'form_payment');
 		$exp_yy = $this->form()->GetValue('exp_yy',  'form_payment');
 		$exp_mm = $this->form()->GetValue('exp_mm',  'form_payment');
@@ -1162,7 +1158,6 @@ class CouponConfig extends ConfigMgr
 		$config->cardno  = $cardno;
 		$config->cardexp = $cardexp;
 		$config->amount  = $amount;
-	//	$this->d( Toolbox::toArray($config) );
 		
 		return $config;
 	}
