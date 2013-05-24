@@ -58,8 +58,8 @@
 					月：<?php $this->form()->Input('exp_mm') ?>
 					   <span class="black">/</span>
 					年：<?php $this->form()->Input('exp_yy') ?>
-					<p><?php $this->form()->InputError('exp_yy') ?></p>
-					<p><?php $this->form()->InputError('exp_mm') ?></p>
+					<p><?php $this->form()->Error('exp_yy') ?></p>
+					<p><?php $this->form()->Error('exp_mm') ?></p>
 				</td>
 			</tr>
 			<!--  
@@ -68,8 +68,8 @@
 				<td>
 					<?php $this->form()->Input('paymode') ?>
 					<?php $this->form()->Input('incount') ?>
-					<p> <?php $this->form()->InputError('paymode') ?> </p>
-					<p> <?php $this->form()->InputError('incount') ?> </p>
+					<p> <?php $this->form()->Error('paymode') ?> </p>
+					<p> <?php $this->form()->Error('incount') ?> </p>
 				</td>
 			</tr>
 			-->
@@ -80,7 +80,7 @@
 					記載されているセキュリティコードを半角数字で入力してください<br/>
 					(例) 123 <br/>
 					<?php $this->form()->Input('csc') ?>
-					<p> <?php $this->form()->InputError('csc') ?> </p>
+					<p> <?php $this->form()->Error('csc') ?> </p>
 				</td>
 			</tr>
 		</table>

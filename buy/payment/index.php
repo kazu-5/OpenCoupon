@@ -14,6 +14,7 @@ $this->form()->AddForm($form_config);
 $id = $this->model('Login')->GetLoginId();
 if(empty($id)){
 	$this->mark("Not logged in.");
+	$this->model('Transfer')->Set('app:/login')->Get();
 	return;
 }
 
@@ -42,65 +43,78 @@ if(!$payment_coupon_id = $this->GetSession('payment_coupon_id')){
 	}
 }
 
-//  Switch action.
-switch( $action ){
-	case 'index':
-		include('form_payment.phtml');
-		break;
-		
-	case 'execute':
-		
-		//  Init
-		$amount = 100;
-		$config = $this->config()->credit( $id, $amount );
-		
-		//  Execute
-		if( $io = $this->model('credit')->Auth($config) ){
-			$io = $this->model('credit')->Commit($config);
-		}
-		$this->d( Toolbox::toArray($config), 'debug');
+//	Start transaction
+$this->pdo()->Transaction();
+
+try{	
+	//  Switch action.
+	switch( $action ){
+		case 'index':
+			include('form_payment.phtml');
+			break;
+			
+		case 'execute':
+			//  Init
+			$amount = 100;
+			$config = $this->config()->credit( $id, $amount );
+			
+			//  Execute
+			if( $io = $this->model('credit')->Auth($config) ){
+				$io = $this->model('credit')->Commit($config);
+			}
+			
+			//	Check error
+			if( !$io ){
+				throw new OpAppException("Payment is failed.");
+			}
+			
+			//  
+			$io      = $config->io;
+			$sid     = $config->sid; // 決済ID. このIDを決済(Commit)する
+			$uid     = $config->uid; // UserID. このIDで決済できるようになる
+			$status  = $config->status;
+			$message = $config->message;
+			
+			//  insert t_buy
+			$insert = $this->config()->insert_buy( $id, $cid, $sid );
+			if(!$id = $this->pdo()->insert($insert) ){
+				throw new OpAppException("Database's insert is failed.");
+			}
+			
+			//  update t_customer.uid
+			$update = $this->config()->update_uid( $id, $uid );
+			$io = $this->pdo()->update($update);
+			if(  $io === false ){
+				throw new OpAppException("Database's update t_customer.uid is failed.");
+			}
+			
+			//  print thanks page
+			include("thanks.phtml");
+			
+			//  All completed
+			$this->form()->clear('form_buy');
+			$this->form()->clear('form_address');
+			$this->form()->clear('form_payment');
+			break;
+			
+		case 'cancel':
+			$this->SetSession('payment_coupon_id',null);
+			$this->mark('Canceled this coupon.');
+			break;
+			
+		default:
+			$this->mark("undefined action: $action");
+			break;
+	}
+
+}catch( OpAppException $e ){
+	//	Rollback
+	$this->pdo()->Rollback();
 	
-		if( !$io ){
-			$this->StackError("Payment failed.");
-			return;
-		}
-		
-		//  
-		$io      = $config->io;
-		$sid     = $config->sid; // 決済ID. このIDを決済(Commit)する
-		$uid     = $config->uid; // UserID. このIDで決済できるようになる
-		$status  = $config->status;
-		$message = $config->message;
-		
-		//  insert t_buy
-		$insert = $this->config()->insert_buy( $id, $cid, $sid );
-		$this->pdo()->insert($insert);
-		
-		//  update t_customer.uid
-		$update = $this->config()->update_uid( $id, $uid );
-		$io = $this->pdo()->update($update);
-		if(  $io === false ){
-			$this->StackError("update t_customer.uid failed");
-			return false;
-		}
-		
-		//  print thanks page
-		include("thanks.phtml");
-		
-		//  All completed
-		$this->form()->clear('form_buy');
-		$this->form()->clear('form_address');
-		$this->form()->clear('form_payment');
-		
-		break;
-		
-	case 'cancel':
-		$this->SetSession('payment_coupon_id',null);
-		$this->mark('Canceled this coupon.');
-		break;
-		
-	default:
-		$this->mark("undefined action: $action");
-		break;
+	//	Error page
+	$data = new Config();
+	$data->message = $e->getMessage();
+	$this->Template('error.phtml',$data);
 }
 
+$this->pdo()->Commit();

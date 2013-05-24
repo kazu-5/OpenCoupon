@@ -133,7 +133,6 @@ switch( $action ){
 		break;
 		
 	case 'commit':
-		
 		//	retrieve 'image_[a-zA-Z0-9]{32}$' from Input
 		$array = null;
 		$value = $this->form()->GetInputValueRawAll($form_name);
