@@ -14,7 +14,7 @@ $action    = isset($args[1]) ? $args[1]: 'index';
 $shop_id = $this->GetShopID();
 
 //  Form
-$config = $this->config()->form_coupon($shop_id,$coupon_id);
+$config = $this->config()->form_myshop_coupon($shop_id,$coupon_id);
 $this->form()->AddForm( $config );
 
 //  Get form_name
@@ -60,4 +60,4 @@ switch( $action ){
 }
 
 //  debug
-//$this->form()->debug($form_name);
+$this->form()->debug($form_name);

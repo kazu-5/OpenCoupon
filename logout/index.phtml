@@ -1,14 +1,15 @@
 <section>
-<div class="contents">
-<p class="red">
-	<?=$data->message?>
-	<?php
-	//  Transfer module
-	$data = new Config();
-	$data->class   = 'red';
-	$data->message = $message;
-	$this->module('Transfer')->Set('app:/',$data);
-	?>
-</p>
-</div>
+	<div class="contents">
+		<?php if( isset($data->message) ): ?>
+			<?php $class = isset($data->class) ? $data->class: 'red'; ?>
+			<p class="<?=$class?>">
+				<?=$data->message?>
+			</p>
+		<?php endif; ?>
+		
+		<?php
+		//  Transfer module
+		$this->module('Transfer')->Set('app:/',$data);
+		?>
+	</div>
 </section>

@@ -1,15 +1,19 @@
 <?php
 /* @var $this CouponApp */
 
+$data = new Config();
+$data->message = null;
+
 if( $id = $this->model('Login')->GetLoginID() ){
 	$io = $this->model('Login')->Logout();
 	if( $io ){
-		$message = 'ログアウトしました。';
+		$data->message = 'ログアウトしました。';
 	}else{
-		$message = 'ログアウトに失敗しました。';
+		$data->message = 'ログアウトに失敗しました。';
 	}
 }else{
-	$message = 'ログインしていません。';
+	$data->message = 'ログインしていません。';
 }
 
 include('index.phtml');
+

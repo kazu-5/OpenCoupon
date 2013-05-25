@@ -1,7 +1,9 @@
-<?php
-/* @var $this CouponApp */
-?>
 <div>
-	<p>再生成したパスワードを送信しました。</p>
-	<p>メールを確認して、新しいパスワードでログインしてください。</p>	
+	<p>確認コードを送信しました。</p>
+	<p>次の画面でメールに記載されている確認コードを入力して下さい。</p>
+	<p>メールが届かない場合は、しばらくしてからもう一度お試しください。</p>	
 </div>
+<?php
+$url = $this->ConvertURL('ctrl:/identification');
+$this->module('Transfer')->Set($url);
+
