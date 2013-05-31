@@ -1,79 +1,6 @@
 <?php
 /* @var $this CouponApp */
 ?>
-<<<<<<< HEAD
-<style>
-	.confirm{
-		border: 0px dotted red; 
-		background-color:white; 
-		margin:5px; 
-		padding:13px;
-	}
-	.title{
-		font-size: 20px; 
-		border-bottom: 1px solid #D9D9D9; 
-		margin-top: 8px; 
-		padding-bottom: 13px;
-	}
-	.title h1{
-		font-size: 20px;
-	}
-	.contents2{
-		padding-top:8px;
-	}
-	.contents2 p{
-		font-size: 14px;
-	}
-	.contents2 th, td {
-		border: 1px solid #CCCCCC;
-	}
-	.contents2 table{
-		border-collapse: collapse;
-	}
-	.contents2 table tr{
-		height:50px; 
-		padding: 25px 0;
-		text-align: left;
-	}
-	
-	.contents2 table tr th{
-		background: none repeat scroll 0 0 #DEEDCE;
-		font-size: 14px;
-		width: 20px;
-		padding: 8px 0;
-		padding-left: 8px;
-		width:100px;
-	}
-	
-	.contents2 table tr td{
-		width:400px;
-		padding: 20px 0;
-		font-size: 14px; 
-		padding-left: 10px;
-	}
-	
-	.div_submit{
-		text-align:center;
-	}
-	.submit{
-		background: -moz-linear-gradient(center top , #78BED8, #309FC4) repeat scroll 0 0 transparent;
-		-webkit-box-shadow:rgba(0, 0, 0, 0.496094) 0 2px 4px;
-		background-image:-webkit-gradient(linear, 0 0%, 0 100%, from(#78BED8), to(#309FC4));
-		border: 1px solid #2D9DC2;
-		border-radius: 9px 9px 9px 9px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-		color: #FFFFFF !important;
-		cursor: pointer;
-		display: inline-block;
-		margin: 15px;
-		padding: 4px 30px;
-		text-align: center;
-		text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
-		vertical-align: middle;
-	}
-</style>
-=======
->>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
 
 <?php $this->form()->Start('form_coupon','commit') ?>
 
@@ -157,28 +84,143 @@
 				</td>
 			</tr>
 			<tr>
-<<<<<<< HEAD
-				<th>a
-=======
 				<th>
->>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
 					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
 				</th>
 				<td>
 					<?php $this->form()->Value('coupon_person_num') ?>
 				</td>
 			</tr>
+			<?php /*
 			<tr>
 				<th>
 					<?php $this->form()->Label('coupon_image') ?>
 				</th>
 				<td>
 					<?php if( $path = $this->form()->GetInputValue('coupon_image') ): ?>
-						<img src="<?=$path?>"/>
+						<img src="<?=$this->ConvertURL($path)?>"/>
 					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image') ?>">
 				</td>
 			</tr>
-		</table>
+			*/ ?>
+
+			<?php $value = $this->form()->GetInputValueRawAll('form_coupon');?>
+			<?php foreach ( $value as $key => $val ):?>
+				<?php if( preg_match( '/coupon_image_??/', $key ) and $val !== null ):?>
+					<?php $img_key = $key;?>
+					<?php print '<tr>';?>
+						<?php print '<th>';?>
+							<?php $this->form()->Label($img_key) ?>
+						<?php print '</th>';?>
+						<?php print '<td>';?>
+							<?php if( $path = $this->form()->GetInputValue($img_key) ): ?>
+								<?php print '<img src="';?>
+								<?=$this->ConvertURL($path)?>
+								<?php print '"/>';?>
+							<?php endif; ?>
+							<?php print '<img src="';?>
+							<?php $this->form()->GetInputValue($img_key) ?>
+							<?php print '">';?>
+						<?php print '</td>';?>
+					<?php print '</tr>';?>
+				<?php endif;?>
+			<?php endforeach;?>
+			
+			
+			<?php /*
+			
+			$value = $this->form()->GetInputValueRawAll('form_coupon');
+			
+			foreach ( $value as $key => $val ){
+				if( preg_match( '/coupon_image_??/', $key ) ){
+					$img_key = $key;
+					
+					// generate form
+					//$label = $this->form()->Label($img_key);
+					if( $path = $this->form()->GetInputValue($img_key) ){
+						$img_src = '<img src="'.$this->ConvertURL($path).'"/>'; 
+					$img = $this->form()->GetInputValue($img_key);
+					
+					print '
+					<tr>
+					<th>';
+					//$this->form()->Label($img_key);
+					//print $img_key;
+					
+					print '</th>
+					<td>';
+					print $img_src;
+					print '<img src="'.$img.'">';
+					print '</td>
+					</tr>
+					';
+
+					}
+				}
+			}
+			*/ ?>
+						
+			
+			<?php /*
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_image_1') ?>
+				</th>
+				<td>
+					<?php if( $path = $this->form()->GetInputValue('coupon_image_1') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image_1') ?>">
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<?php $this->form()->Label('coupon_image_2') ?>
+				</th>
+				<td>
+					<?php if( $path = $this->form()->GetInputValue('coupon_image_2') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image_2') ?>">
+				</td>
+			</tr>
+						<tr>
+				<th>
+					<?php $this->form()->Label('coupon_image_3') ?>
+				</th>
+				<td>
+					<?php if( $path = $this->form()->GetInputValue('coupon_image_3') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image_3') ?>">
+				</td>
+			</tr>
+						<tr>
+				<th>
+					<?php $this->form()->Label('coupon_image_4') ?>
+				</th>
+				<td>
+					<?php if( $path = $this->form()->GetInputValue('coupon_image_4') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image_4') ?>">
+				</td>
+			</tr>
+						<tr>
+				<th>
+					<?php $this->form()->Label('coupon_image_5') ?>
+				</th>
+				<td>
+					<?php if( $path = $this->form()->GetInputValue('coupon_image_5') ): ?>
+						<img src="<?=$this->ConvertURL($path)?>"/>
+					<?php endif; ?>
+					<img src="<?php $this->form()->GetInputValue('coupon_image_5') ?>">
+				</td>
+			</tr>
+			*/ ?>
+			
+			</table>
 		<div class="div_submit">
 			<?php $this->form()->Input('submit')?>
 		</div>
