@@ -1,20 +1,28 @@
 
 <script>
-var i  = parseInt(0);
-var id = parseInt(1);
-function show_input(){
-	i = i + 1;
-	id = i;
-	console.log( i );
-	//console.log( id );
+var selected = new Array();
+var img_no   = parseInt(0);
+var i        = parseInt(0);
+var id       = null;
+function show_input(img_no){
+	img_no = img_no - 1;
+	if( !selected[img_no] == true ){
+		selected[img_no] = true;
+		i = i + 1;
+	}
+
+	//console.log(selected.length);
+	//console.log(selected);
+
 	if( i >= 5 ){
-		id = id + 1;
-		console.log( id );
+		id = i + 1;
 		String(id);
+		//console.log(id);
+		//console.log(i);
 		if(document.getElementById(id).style.display == "none"){
 			document.getElementById(id).style.display = "";
 		}
-   }
+	}
 }
 </script>
 

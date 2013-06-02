@@ -1043,6 +1043,30 @@ class CouponConfig extends ConfigMgr
 		*/
 		
 		
+		$image_no      =  1;// # of default image.
+		$max_pics      = 15;// # of max image files.
+		$required_pics =  5;// # of required image files. Should be <= $max_pics.
+		if( $required_pics > $max_pics ){
+			$required_pics = $max_pics;
+		}
+		while( $image_no <= $max_pics ){
+			$input_name = 'coupon_image_'.$image_no;
+			$form_config->input->$input_name->label  = 'クーポンのイメージ '.$image_no;
+			$form_config->input->$input_name->type   = 'file';
+			if( $image_no <= $required_pics ){
+				$form_config->input->$input_name->required = true;
+			}
+			$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
+			if( $image_no < $max_pics ){
+				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';				
+			}
+			$form_config->input->$input_name->validate->permit = 'image';
+			
+			$image_no++;
+		}
+		
+		
+		/*
 		$input_name = 'coupon_image_1';
 		$form_config->input->$input_name->label  = 'クーポンのイメージ 1';
 		$form_config->input->$input_name->type   = 'file';
@@ -1121,7 +1145,7 @@ class CouponConfig extends ConfigMgr
 		//$form_config->input->$input_name->required = true;
 		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 		$form_config->input->$input_name->validate->permit = 'image';
-		
+		*/
 		
 		//  submit
 		$input_name = 'submit';

@@ -10,6 +10,9 @@ $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
 //$this->form()->Clear($form_name);
 
+
+//$this->d($form_config);//for test
+
 //  Action
 $action = $this->GetAction();
 
@@ -23,6 +26,25 @@ switch( $action ){
 		break;
 
 	case 'confirm':
+
+		//テスト用ここから。
+		//	Inputからcoupon_image_nnだけ取り出す
+		$array = null;
+		$n = 0;
+		$value = $this->form()->GetInputValueRawAll($form_name);
+		foreach ( $value as $key => $val ){
+			//if( preg_match( '/coupon_image_??/', $key ) ){
+			if( preg_match( '/coupon_image_??/', $key ) and $val !== null ){
+				$array[$key] = $val;
+				$n = $n + 1;//不要かも？
+			}
+		}
+		$this->d($array);//for test
+		$this->d($n);//for test
+		//テスト用ここまで。
+		
+		
+		//ここから下が本来のコード。
 		if(!$this->form()->Secure($form_name) ){
 			$data->message  = '入力内容を確かめて下さい。';
 			$data->template = 'form.phtml';
