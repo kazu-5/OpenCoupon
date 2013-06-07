@@ -24,6 +24,37 @@ function show_input(img_no){
 		}
 	}
 }
+
+/*
+function preview(ele, rownum){
+    if (!ele.files.length){
+         return;
+    }
+    var file = ele.files[0];
+    if (!/^image\/(png|jpeg)$/.test(file.type)){
+         return;
+    }
+    var img = document.createElement('img');
+    img.width  = 100;
+    img.height =  75; 
+    var fr = new FileReader();
+    fr.onload = function() {
+        img.src = fr.result;
+        var pv = "pv"+ rownum;
+        String(pv);
+        //document.getElementById(pv).appendChild(img);
+        var oldpv = document.getElementById(pv);
+        console.log(oldpv);//for test
+        if( oldpv.getElementsByTagName('img').length > 0){
+        	document.getElementById(pv).replaceChild(img, oldpv.firstChild);    
+        } else {
+            document.getElementById(pv).appendChild(img);//これ不要かも
+		}
+    }
+    fr.readAsDataURL(file);
+}
+*/
+
 </script>
 
 
@@ -134,8 +165,10 @@ function show_input(img_no){
 				<td>
 					<?php $this->form()->Input('coupon_person_num') ?><br/>
 					<?php $this->form()->Error('coupon_person_num') ?>
-				</td>
+<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
+					</td>
 			</tr>
+			
 			<?php /*
 			<tr>
 				<td>
@@ -150,7 +183,9 @@ function show_input(img_no){
 				</td>
 			</tr>
 			*/ ?>
-			
+<?php //$this->form()->Label('MAX_FILE_SIZE') ?>
+<?php //$this->form()->Input('MAX_FILE_SIZE') ?>
+
 <?php $row = 1; ?>
 <?php while( $row <= 10 ): ?>
 <?php $img_key = "coupon_image_".$row;?>
@@ -163,7 +198,11 @@ function show_input(img_no){
 <?php print '<td>';?>
 <?php $this->form()->Label($img_key) ?>
 <?php print '</td>';?>
-<?php print '<td>';?>
+<?php print '<td id="pv';?>
+<?php print $row;?>
+<?php print '">';?>
+<?php //print '<img src="/img/noimage.jpg">';?>
+<?php //print '<br/>';?>
 <?php if( $path = $this->form()->GetInputValue($img_key) ): ?>
 <?php print '<img src="';?>
 <?=$path?>
@@ -172,6 +211,7 @@ function show_input(img_no){
 <?php $this->form()->Input($img_key) ?>
 <?php print '<br/>';?>
 <?php $this->form()->Error($img_key) ?>
+<?php print '<br/>';?>
 <?php print '</td>';?>
 <?php print '</tr>';?>
 <?php $row++;?>
@@ -185,138 +225,6 @@ function show_input(img_no){
 				(オプションで最大 10 枚まで選択できます。)
 				</td>
 			</tr>
-			
-			
-			<?php /*
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_1') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_1') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_1') ?><br/>
-					<?php $this->form()->Error('coupon_image_1') ?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_2') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_2') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_2') ?><br/>
-					<?php $this->form()->Error('coupon_image_2') ?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_3') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_3') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_3') ?><br/>
-					<?php $this->form()->Error('coupon_image_3') ?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_4') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_4') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_4') ?><br/>
-					<?php $this->form()->Error('coupon_image_4') ?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_5') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_5') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_5') ?><br/>
-					<?php $this->form()->Error('coupon_image_5') ?>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-				<br>
-				画像は最低 5 枚選択が必要です (オプションで最大 10 枚選択できます)。
-				</td>
-			</tr>
-
-			<tr id="6" style="display:none;">
-				<td>
-					<?php $this->form()->Label('coupon_image_6') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_6') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_6') ?><br/>
-					<?php $this->form()->Error('coupon_image_6') ?>
-				</td>
-			</tr>
-			<tr id="7" style="display:none;">
-				<td>
-					<?php $this->form()->Label('coupon_image_7') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_7') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_7') ?><br/>
-					<?php $this->form()->Error('coupon_image_7') ?>
-				</td>
-			</tr>
-			<tr id="8" style="display:none;">
-				<td>
-					<?php $this->form()->Label('coupon_image_8') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_8') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_8') ?><br/>
-					<?php $this->form()->Error('coupon_image_8') ?>
-				</td>
-			</tr>
-			<tr id="9" style="display:none;">
-				<td>
-					<?php $this->form()->Label('coupon_image_9') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_9') ): ?>
-						<img src="<?=$path?>"/>1
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_9') ?><br/>
-					<?php $this->form()->Error('coupon_image_9') ?>
-				</td>
-			</tr>
-			<tr id="10" style="display:none;">
-				<td>
-					<?php $this->form()->Label('coupon_image_10') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_10') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_10') ?><br/>
-					<?php $this->form()->Error('coupon_image_10') ?>
-				</td>
-			</tr>
-			*/ ?>
 			
 			</table>
 		<div style="text-align:center">

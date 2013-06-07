@@ -91,7 +91,8 @@
 					<?php $this->form()->Value('coupon_person_num') ?>
 				</td>
 			</tr>
-			<?php /*
+			
+			<?php /* 元々のコード
 			<tr>
 				<th>
 					<?php $this->form()->Label('coupon_image') ?>
@@ -106,12 +107,14 @@
 			*/ ?>
 
 			<?php $value = $this->form()->GetInputValueRawAll('form_coupon');?>
+			<?php $i = 1;?>
 			<?php foreach ( $value as $key => $val ):?>
 				<?php if( preg_match( '/coupon_image_??/', $key ) and $val !== null ):?>
 					<?php $img_key = $key;?>
 					<?php print '<tr>';?>
 						<?php print '<th>';?>
-							<?php $this->form()->Label($img_key) ?>
+							<?php //$this->form()->Label($img_key) ?>
+							<?php print '<strong>クーポンのイメージ '.$i.'</strong>'; ?>
 						<?php print '</th>';?>
 						<?php print '<td>';?>
 							<?php if( $path = $this->form()->GetInputValue($img_key) ): ?>
@@ -124,44 +127,11 @@
 							<?php print '">';?>
 						<?php print '</td>';?>
 					<?php print '</tr>';?>
+				<?php $i++;?>
 				<?php endif;?>
 			<?php endforeach;?>
 			
-			
-			<?php /*
-			
-			$value = $this->form()->GetInputValueRawAll('form_coupon');
-			
-			foreach ( $value as $key => $val ){
-				if( preg_match( '/coupon_image_??/', $key ) ){
-					$img_key = $key;
-					
-					// generate form
-					//$label = $this->form()->Label($img_key);
-					if( $path = $this->form()->GetInputValue($img_key) ){
-						$img_src = '<img src="'.$this->ConvertURL($path).'"/>'; 
-					$img = $this->form()->GetInputValue($img_key);
-					
-					print '
-					<tr>
-					<th>';
-					//$this->form()->Label($img_key);
-					//print $img_key;
-					
-					print '</th>
-					<td>';
-					print $img_src;
-					print '<img src="'.$img.'">';
-					print '</td>
-					</tr>
-					';
 
-					}
-				}
-			}
-			*/ ?>
-						
-			
 			<?php /*
 			<tr>
 				<th>

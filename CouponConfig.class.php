@@ -1041,10 +1041,18 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 		$form_config->input->$input_name->validate->permit = 'image';
 		*/
+
 		
+		//	set MAX_FILE_SIZE for file upload.
+		$input_name = 'MAX_FILE_SIZE';
+		$form_config->input->$input_name->label  = 'MAX_FILE_SIZE';
+		$form_config->input->$input_name->name   = 'MAX_FILE_SIZE';
+		$form_config->input->$input_name->type   = 'hidden';
+		$form_config->input->$input_name->value  = '2000000';// default is 2M.
+
 		
 		$image_no      =  1;// # of default image.
-		$max_pics      = 15;// # of max image files.
+		$max_pics      = 10;// # of max image files.
 		$required_pics =  5;// # of required image files. Should be <= $max_pics.
 		if( $required_pics > $max_pics ){
 			$required_pics = $max_pics;
@@ -1058,7 +1066,8 @@ class CouponConfig extends ConfigMgr
 			}
 			$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 			if( $image_no < $max_pics ){
-				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';				
+				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';
+				//$form_config->input->$input_name->onchange  = 'show_input('.$image_no.'); preview(this,'.$image_no.')';
 			}
 			$form_config->input->$input_name->validate->permit = 'image';
 			
@@ -1588,9 +1597,11 @@ class CouponConfig extends ConfigMgr
 		
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
 		
+		//$this->d($value);
+		unset($value->max_file_size);
 		foreach ( $value as $key => $val ){
 			if( preg_match( '/coupon_image_??/', $key ) ){
-				unset( $value->$key );//このコードで問題ないか要確認
+				unset( $value->$key );
 			}
 		}
 		unset($value->submit);
