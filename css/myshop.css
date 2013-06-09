@@ -43,6 +43,26 @@
 	/*border: 1px solid #CCCCCC;*/
 }
 
+.contents2 .shop_table{
+	border-collapse: collapse;
+}
+
+.contents2 .shop_table .shop_tr{
+	height:50px; 
+	padding: 25px 0;
+	text-align: left;
+}
+
+.contents2 .shop_table .shop_tr .shop_th{
+	background: none repeat scroll 0 0 #DEEDCE;
+	font-size: 14px;
+	width: 20px;
+	padding: 8px 0;
+	padding-left: 8px;
+	width:100px;
+}
+
+/*
 .contents2 table{
 	border-collapse: collapse;
 }
@@ -68,6 +88,8 @@
 	font-size: 14px; 
 	padding-left: 10px;
 }
+
+*/
 
 .div_submit{
 	text-align:center;
