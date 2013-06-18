@@ -10,6 +10,12 @@ $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
 //$this->form()->Clear($form_name);
 
+/*
+//	Form (image)
+$form_image_config = $this->config()->form_myshop_coupon_image( $shop_id );
+$this->form()->AddForm($form_image_config);
+$form_image_name = $form_image_config->name;
+*/
 
 //$this->d($form_config);//for test
 //$this->d(gd_info());
@@ -28,6 +34,8 @@ switch( $action ){
 
 	case 'confirm':
 
+		$this->d($_POST);
+		
 		//テスト用ここから。
 		//	Inputからcoupon_image_nnだけ取り出す
 		$array = null;

@@ -930,6 +930,7 @@ class CouponConfig extends ConfigMgr
 		
 		//  Added form name
 		$form_config->name = 'form_coupon' . $coupon_id;
+		//$form_config->id = 'form_coupon';
 		
 		$input_name = 'coupon_title';
 		$form_config->input->$input_name->label  = 'タイトル';
@@ -1051,6 +1052,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->value  = '2000000';// default is 2M.
 
 		
+		/*
 		$image_no      =  1;// # of default image.
 		$max_pics      = 10;// # of max image files.
 		$required_pics =  5;// # of required image files. Should be <= $max_pics.
@@ -1073,88 +1075,8 @@ class CouponConfig extends ConfigMgr
 			
 			$image_no++;
 		}
-		
-		
-		/*
-		$input_name = 'coupon_image_1';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 1';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_2';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 2';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_3';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 3';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_4';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 4';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_5';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 5';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_6';// coupon_image_6-10 are optional.
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 6';
-		$form_config->input->$input_name->type   = 'file';
-		//$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_7';// coupon_image_6-10 are optional.
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 7';
-		$form_config->input->$input_name->type   = 'file';
-		//$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_8';// coupon_image_6-10 are optional.
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 8';
-		$form_config->input->$input_name->type   = 'file';
-		//$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_9';// coupon_image_6-10 are optional.
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 9';
-		$form_config->input->$input_name->type   = 'file';
-		//$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->onchange  = 'show_input();';
-		$form_config->input->$input_name->validate->permit = 'image';
-		
-		$input_name = 'coupon_image_10';// coupon_image_6-10 are optional.
-		$form_config->input->$input_name->label  = 'クーポンのイメージ 10';
-		$form_config->input->$input_name->type   = 'file';
-		//$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->validate->permit = 'image';
 		*/
+		
 		
 		//  submit
 		$input_name = 'submit';
@@ -1177,6 +1099,65 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->readonly = true; //  TODO: write testcase
 		*/
 	}
+	
+	function form_myshop_coupon_image ( $shop_id, $coupon_id=null )
+	{
+		//このコンフィグ削除するかも。
+		
+		//この部分不要？
+		if(!$shop_id ){
+			$this->StackError('Empty shop_id.');
+			return false;
+		}
+		
+		//この部分不要？
+		if( $coupon_id ){
+			//  t_coupon record
+			$record = $this->pdo()->quick("t_coupon.coupon_id = $coupon_id");
+		}else{
+			$record = null;
+		}
+		
+		
+		//  Init shop_id
+		$form_config->input->shop_id->value = $shop_id;
+		
+		//  Added form name
+		$form_config->name = 'form_coupon_image' . $coupon_id;
+		
+		$image_no      =  1;// # of default image.
+		$max_pics      =  3;// # of max image files.
+		$required_pics =  3;// # of required image files. Should be <= $max_pics.
+		if( $required_pics > $max_pics ){
+			$required_pics = $max_pics;
+		}
+		while( $image_no <= $max_pics ){
+			$input_name = 'coupon_image_'.$image_no;
+			$form_config->input->$input_name->label  = 'クーポンのイメージ '.$image_no;
+			$form_config->input->$input_name->type   = 'file';
+			if( $image_no <= $required_pics ){
+				$form_config->input->$input_name->required = true;
+			}
+			$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
+			if( $image_no < $max_pics ){
+				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';
+				//$form_config->input->$input_name->onchange  = 'show_input('.$image_no.'); preview(this,'.$image_no.')';
+			}
+			$form_config->input->$input_name->validate->permit = 'image';
+				
+			$image_no++;
+		}
+		
+		//  submit
+		$input_name = 'submit';
+		$form_config->input->$input_name->type   = 'submit';
+		$form_config->input->$input_name->class  = 'submit';
+		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = 'この画像を使用';//テキストこれでよいか要確認。
+		
+		return $form_config;
+	}
+	
 	
 	function form_password( $account_id )
 	{
