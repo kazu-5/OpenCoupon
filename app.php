@@ -47,5 +47,5 @@ if(!$io){
 $app->Dispatch();
 
 //  Measure the execution time.
-$en = microtime(true);
-printf('<div>Execute time is %s seconds.</div>', $en - $st );
+//$en = microtime(true);
+//printf('<div>Execute time is %s seconds.</div>', $en - $st );

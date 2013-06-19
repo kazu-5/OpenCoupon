@@ -15,25 +15,26 @@ function del_image(img_id){
 		var msg = document.getElementById("image_message");
 		if (req.readyState == 4){
 			if (req.status == 200){
-				var data = req.responseText;
-				//var data = req.responseXML;
-				//var data = req.getAllResponseHeaders();
-				console.log(data);
-				//var result = data.getElementsByTagName('message');
-				//console.log(result);
-
-
-				//console.log(data);
-				var result = eval( '(' + data + ')' );
-				console.log(result);
-				//msg.innerHTML = result.message;
-				//removeElement($(img_id));
-				//removeElement($(img_id+'_image'));
+					var data = req.responseText;
+					var result = eval( '(' + data + ')' );
+					//console.log(result);
+					var to_delete = String(result.deleted);
+					var img_pv = document.getElementById(to_delete);
+					//console.log(img_pv);
+					//console.log(to_delete);
+					img_pv.parentNode.removeChild(img_pv);
+					msg.removeChild(msg.firstChild);
+				
+					var input_to_delete = to_delete+'_image';
+					var del_target = document.getElementById(input_to_delete);
+					//console.log(del_target);
+					//console.log(input_to_delete);
+					del_target.parentNode.removeChild(del_target);
 			} else {
 				msg.innerHTML ="削除に失敗しました。";
 			}
 		} else {
-			msg.innerHTML ="削除しています...";
+			msg.innerHTML ="削除しています...";//メッセージ不要かも。
 		}
 	}
 

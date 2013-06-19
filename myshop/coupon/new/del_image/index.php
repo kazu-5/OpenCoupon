@@ -20,6 +20,7 @@ if( !empty($_POST['to_delete']) ){
 	if( file_exists( $upload_dir.$to_delete.'.jpg' )){
 		unlink( $upload_dir.$to_delete.'.jpg' );//現状、jpgしか消せない。要修正。
 		$re = $to_delete.' is deleted.';//ダミー
+		$deleted = $to_delete;
 	}else{
 		$re  = 'file does not exist.';
 		$err = 'file does not exist.';
@@ -30,6 +31,19 @@ if( !empty($_POST['to_delete']) ){
 	$err = 'file does not exist.';
 }
 
+
+//	return results with JSON.
+$this->SetJson('message', $re);
+if(isset($err) == true){
+	$this->SetJson('err', $err);
+}
+if(isset($deleted) == true){
+	$this->SetJson('deleted', $deleted);
+}
+
+
+
+/*
 //	ここで戻り値に使うJSON用の配列作る。
 
 $return = array();
@@ -41,6 +55,8 @@ $return = json_encode($return);
 
 header( 'Content-Type: text/html; charset=utf-8' );//これだとOCのレイアウト全体が返される。
 print $return;
+*/
+
 
 //$this->SetHeader($return);
 //print $to_delete;
