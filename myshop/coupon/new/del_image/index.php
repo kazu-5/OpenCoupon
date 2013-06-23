@@ -40,36 +40,3 @@ if(isset($err) == true){
 if(isset($deleted) == true){
 	$this->SetJson('deleted', $deleted);
 }
-
-
-
-/*
-//	ここで戻り値に使うJSON用の配列作る。
-
-$return = array();
-$return['message'] = $re;
-$return['path'] = $to_delete;
-$return = json_encode($return);
-
-//$return = $re;
-
-header( 'Content-Type: text/html; charset=utf-8' );//これだとOCのレイアウト全体が返される。
-print $return;
-*/
-
-
-//$this->SetHeader($return);
-//print $to_delete;
-
-//$data->header  = 'Content-Type: application/json; charset=utf-8';
-//$data->message = $return;
-
-
-
-/*
-print '<?xml version="1.0" encoding="ISO-8859-1"?><response>';
-
-echo "<message>" . $re . "</message>";
-echo "<err>" . $err . "</err>";
-echo '</response>';
-*/

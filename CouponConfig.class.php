@@ -1043,14 +1043,14 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->validate->permit = 'image';
 		*/
 
-		
+		/*
 		//	set MAX_FILE_SIZE for file upload.
 		$input_name = 'MAX_FILE_SIZE';
 		$form_config->input->$input_name->label  = 'MAX_FILE_SIZE';
 		$form_config->input->$input_name->name   = 'MAX_FILE_SIZE';
 		$form_config->input->$input_name->type   = 'hidden';
 		$form_config->input->$input_name->value  = '2000000';// default is 2M.
-
+		*/
 		
 		/*
 		$image_no      =  1;// # of default image.
@@ -1083,6 +1083,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'submit';
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->onClick  = 'return CheckImgCountMin()';
 		$form_config->input->$input_name->value  = '登録する';
 		
 		return $form_config;
@@ -1102,58 +1103,39 @@ class CouponConfig extends ConfigMgr
 	
 	function form_myshop_coupon_image ( $shop_id, $coupon_id=null )
 	{
-		//このコンフィグ削除するかも。
-		
-		//この部分不要？
 		if(!$shop_id ){
 			$this->StackError('Empty shop_id.');
 			return false;
 		}
-		
-		//この部分不要？
-		if( $coupon_id ){
-			//  t_coupon record
-			$record = $this->pdo()->quick("t_coupon.coupon_id = $coupon_id");
-		}else{
-			$record = null;
-		}
-		
+
+		$form_config = new Config();
 		
 		//  Init shop_id
-		$form_config->input->shop_id->value = $shop_id;
+		$form_config->input->shop_id->value = $shop_id;//不要？
 		
-		//  Added form name
-		$form_config->name = 'form_coupon_image' . $coupon_id;
+		$form_config->name   = 'form_coupon_image';
 		
-		$image_no      =  1;// # of default image.
-		$max_pics      =  3;// # of max image files.
-		$required_pics =  3;// # of required image files. Should be <= $max_pics.
-		if( $required_pics > $max_pics ){
-			$required_pics = $max_pics;
-		}
-		while( $image_no <= $max_pics ){
-			$input_name = 'coupon_image_'.$image_no;
-			$form_config->input->$input_name->label  = 'クーポンのイメージ '.$image_no;
-			$form_config->input->$input_name->type   = 'file';
-			if( $image_no <= $required_pics ){
-				$form_config->input->$input_name->required = true;
-			}
-			$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-			if( $image_no < $max_pics ){
-				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';
-				//$form_config->input->$input_name->onchange  = 'show_input('.$image_no.'); preview(this,'.$image_no.')';
-			}
-			$form_config->input->$input_name->validate->permit = 'image';
-				
-			$image_no++;
-		}
+		$form_config->target = 'targetFrame';
+		$form_config->id     = 'form_coupon_image';
+
+		$input_name = 'max_file_size';
+		$form_config->input->$input_name->type   = 'hidden';
+		$form_config->input->$input_name->label  = 'max_file_size';
+		$form_config->input->$input_name->value	 = 2000000;
 		
+		$input_name = 'upload_image';
+		$form_config->input->$input_name->label  = 'クーポンのイメージ';
+		$form_config->input->$input_name->type   = 'file';
+		$form_config->input->$input_name->required = true;
+		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
+		$form_config->input->$input_name->validate->permit = 'image';
+
 		//  submit
 		$input_name = 'submit';
 		$form_config->input->$input_name->type   = 'submit';
-		$form_config->input->$input_name->class  = 'submit';
-		$form_config->input->$input_name->style  = 'font-size: 16px;';
-		$form_config->input->$input_name->value  = 'この画像を使用';//テキストこれでよいか要確認。
+		//$form_config->input->$input_name->class  = 'submit';
+		//$form_config->input->$input_name->style  = 'font-size: 16px;';
+		$form_config->input->$input_name->value  = '画像をアップロード';
 		
 		return $form_config;
 	}
@@ -1581,7 +1563,7 @@ class CouponConfig extends ConfigMgr
 		//$this->d($value);
 		unset($value->max_file_size);
 		foreach ( $value as $key => $val ){
-			if( preg_match( '/coupon_image_??/', $key ) ){
+			if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) ){
 				unset( $value->$key );
 			}
 		}

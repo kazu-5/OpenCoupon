@@ -10,12 +10,14 @@ $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
 //$this->form()->Clear($form_name);
 
+
 /*
-//	Form (image)
+//	Form (image) ★画像アップロード用フォーム。現時点ではop-coreが対応していないため未使用★
 $form_image_config = $this->config()->form_myshop_coupon_image( $shop_id );
 $this->form()->AddForm($form_image_config);
 $form_image_name = $form_image_config->name;
 */
+
 
 //$this->d($form_config);//for test
 //$this->d(gd_info());
@@ -34,37 +36,84 @@ switch( $action ){
 
 	case 'confirm':
 
-		$this->d($_POST);
-		
-		//テスト用ここから。
-		//	Inputからcoupon_image_nnだけ取り出す
+		//	Retrieve values from input and put it into $array.
 		$array = null;
 		$n = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
+		//$this->d($value);
 		$image_format = null;
 		foreach ( $value as $key => $val ){
-			//if( preg_match( '/coupon_image_??/', $key ) ){
-			if( preg_match( '/coupon_image_??/', $key ) and $val !== null ){
-				$array[$key] = $val;
-				$n = $n + 1;//不要かも？
-				
-				/*
-				//	check mime type
-				$info = getimagesize($val);
-				$this->d($info);
-				if( $info['mime'] !== 'jpeg' and $info['mime'] !== 'png'){
-					$this->d($info['mime']);
-					$img_format = false;
-					//$this->form()->SetInputValue(null, $key, $form_name);//
-				}
-				*/
+			$array[$key] = $val;
+			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+				//$array[$key] = $val;
+				//$n = $n + 1;
+				++$n;
 			}
 		}
-		//$this->d($array);//for test
-		//$this->d($n);//for test
-		//テスト用ここまで。
+		$this->d($array);//for test
+		$this->d($n);//for test
 
+		$err = null;
+		$img_min = 5;//★便宜上1に設定してるので、作業完了後に5に戻す。★
+		$img_max = 10;
+		if( $n < $img_min or $n > $img_max ){
+			$err = "画像は $img_min 以上 $img_max 枚まで指定してください。<br>";
+		}
 		
+		//	Retrieve and set data into variables for err check.
+		$normal_price     = $array['coupon_normal_price'];
+		$sales_price      = $array['coupon_sales_price'];
+		$sales_num_top    = $array['coupon_sales_num_top'];
+		$sales_num_bottom = $array['coupon_sales_num_bottom'];
+		$sales_start      = strtotime($array['coupon_sales_start']);
+		$sales_finish     = strtotime($array['coupon_sales_finish']);
+		$expire           = strtotime($array['coupon_expire']);
+		
+		$this->d($sales_start);//for test
+		$this->d($sales_finish);//for test
+		$this->d($expire);//for test
+		
+		//	error check.
+		if( $normal_price < $sales_price ){
+			$err = $err.'販売価格が通常価格を超えています。<br>';
+		}
+		
+		$min_sales_num = 1;
+		if( $sales_num_bottom < $min_sales_num ){
+			$err = $err."最小販売数は $min_sales_num 枚以上にする必要があります。<br>";
+		}
+		
+		if( $sales_num_top < $sales_num_bottom ){
+			$err = $err.'最小販売数が最大販売数を超えています。<br>';
+		}
+		
+		if( $sales_start > $sales_finish ){
+			$err = $err.'販売終了日時が販売開始日時より前に設定されています。<br>';
+		}
+
+		if( $sales_start == $sales_finish ){
+			$err = $err.'販売終了日時と販売開始日時に同じ日時が設定されています。<br>';
+		}
+		
+		if( $expire < $sales_finish ){
+			$err = $err.'有効期限が販売終了日時より前に設定されています。<br>';
+		}
+		
+		//	Switch phtml file.
+		if(!$this->form()->Secure($form_name) ){
+			$data->message  = '入力内容を確かめて下さい。';
+			$data->template = 'form.phtml';
+		}else if(isset($err)){
+			$data->message  = $err;//★エラーメッセージの表示方法について要調整
+			$data->template = 'form.phtml';
+		}else{
+			$data->template = 'confirm.phtml';
+		}
+		break;
+		
+		
+		
+		/* 元のコード
 		if(!$this->form()->Secure($form_name) ){
 			$data->message  = '入力内容を確かめて下さい。';
 			$data->template = 'form.phtml';
@@ -72,18 +121,22 @@ switch( $action ){
 			$data->template = 'confirm.phtml';
 		}
 		break;
+		*/
 		
 	case 'commit':
 		
-		//	retrieve 'coupon_image_nn' from Input
+		//	retrieve 'image_nn' from Input
 		$array = null;
 		$n = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
 		foreach ( $value as $key => $val ){
 			//if( preg_match( '/coupon_image_??/', $key ) ){
-			if( preg_match( '/coupon_image_??/', $key ) and $val !== null ){
-				$array[$key] = $val;
-				$n = $n + 1;//不要かも？
+			//if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+				$array[$key] = $val;//正規表現要修正 
+				//$n = $n + 1;//不要かも？
+				++$n;
+				//$this->d($val);//for test
 			}
 		}
 		//$this->d($array);//for test
@@ -104,12 +157,13 @@ switch( $action ){
 				$new_dir = $this->ConvertPath("app:/shop/$shop_id/$coupon_id");
 				
 				foreach( $array as $k => $path_from ){
-					//$path_from = $this->ConvertPath('app:/'.$path_from);
+					$path_from = $this->ConvertPath('app:/'.$path_from);
 					if( preg_match( '|\.([a-z]{3})$|i', $path_from, $match ) ){
 						$ext = $match[1];
 						//$path_to = $this->ConvertPath("app:/shop/$shop_id/$coupon_id/$n.$ext");
 						$path_to = $this->ConvertPath("app:/shop/$shop_id/$coupon_id/$n.jpg");
-						$n = $n + 1;
+						//$n = $n + 1;
+						++$n;
 					}else{
 						$this->StackError("Does not match extention.");
 					}
@@ -119,8 +173,23 @@ switch( $action ){
 						mkdir($new_dir, 0777, true);
 					}
 					
+					//	Check if file moved.
+					if(!rename( $path_from, $path_to ) ){
+						$this->StackError("File move is failed.");
+					}
+						
+					//	Clear form.
+					$this->form()->Clear($form_name);
+					
+					
+					/*
 					// Check the extention.
 					if( $ext === 'jpg' ){
+						$this->d($path_from);//for test
+						$this->d($this->ConvertURL('app:/'.$path_from));//for test
+						$this->d($this->ConvertPath('app:/'.$path_from));//for test
+						
+						$path_from = $this->ConvertURL('app:/'.$path_from);//for test
 						$img = imagecreatefromjpeg($path_from);
 					}elseif( $ext === 'png' ){
 						$img = imagecreatefrompng($path_from);
@@ -144,22 +213,6 @@ switch( $action ){
 						$dst_x = $src_x / ( $src_y / $base_size);
 					}
 						
-					/*
-					// retrieve size of source image.
-					$src_x = imagesx($img);
-					$src_y = imagesy($img);
-					//$this->d($src_x);//for test
-					//$this->d($src_y);//for test
-					
-					// Convert and resize the image.
-					$dst_x = 320;//new width
-					$dst_y = 240;//new height
-					
-					if( $src_x < $src_y ){
-						list($dst_x, $dst_y) = array($dst_y, $dst_x);
-					}
-					*/
-					
 					$new_img = imagecreatetruecolor($dst_x, $dst_y);
 					if( imagecopyresampled($new_img, $img, 0,0,0,0,$dst_x, $dst_y, $src_x, $src_y) == false ){
 						$this->StackError("Image convert and resize is failed.");
@@ -176,8 +229,12 @@ switch( $action ){
 					imagedestroy($img);
 					
 					//$this->d($path_from);//for test
+					*/
 				}
+
 				
+				
+				/*
 				//	Delete temp files from tmp/$shop_id/new folder.
 				//$this->d($array);//for test
 				foreach( $array as $k => $to_delete ){
@@ -185,9 +242,7 @@ switch( $action ){
 						unlink($to_delete);
 					}
 				}
-				
-				//	Clear of form.
-				$this->form()->Clear($form_name);
+				*/
 				
 
 				

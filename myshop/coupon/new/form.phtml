@@ -43,6 +43,56 @@ function del_image(img_id){
 	req.send(encodeURI('to_delete='+img_id));
 
 }
+
+
+function CheckImgCount(){
+	var pv_div   = document.getElementById("uploaded_image");
+	var pv_count = pv_div.getElementsByTagName("img");
+	var len      = pv_count.length;
+	//console.log(len);//for test
+	var img_max = 10;
+	if( len >= img_max ){
+		alert('画像は '+img_max+' 枚まで指定できます。');
+		document.getElementById('form_coupon_image').reset();
+		return false;
+	}else{
+		return true;
+	}
+}
+
+function CheckImgCountMin(){
+	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
+	console.log(regexp);
+	//img_input = String(img_input);
+
+	form_to_send = document.getElementsByTagName('form')[0];
+	console.log(form_to_send);
+	
+	var input_tags  = form_to_send.getElementsByTagName('input');
+	console.log(input_tags);
+
+	var input_count = 0;
+	for(var i =0;i<input_tags.length;i++){
+		if(regexp.test(input_tags[i].getAttribute("id"))){
+			input_count++;
+		}
+	}
+	console.log(input_count);
+	
+	var img_min = 1;//★便宜上1枚以上に設定中。要修正★
+	var img_max = 10;
+	if( input_count < img_min ){
+		alert('画像を '+img_min+' 枚以上指定してください。');
+		return false;
+	}else if( input_count >= img_max ){
+		alert('画像は '+img_max+' 枚まで指定できます。');
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
 </script>
 
 
@@ -172,54 +222,6 @@ function del_image(img_id){
 			</tr>
 			*/ ?>
 			
-
-<?php //$this->form()->Label('MAX_FILE_SIZE') ?>
-<?php //$this->form()->Input('MAX_FILE_SIZE') ?>
-
-<?php /*
-<?php $row = 1; ?>
-<?php while( $row <= 10 ): ?>
-<?php $img_key = "coupon_image_".$row;?>
-<?php print '<tr id="';?>
-<?=$row?>
-<?php if( $row >= 6 ):?>
-<?php print '" style="display:none;';?>
-<?php endif; ?>
-<?php print '">';?>
-<?php print '<td>';?>
-<?php $this->form()->Label($img_key) ?>
-<?php print '</td>';?>
-<?php print '<td id="pv';?>
-<?php print $row;?>
-<?php print '">';?>
-<?php //print '<img src="/img/noimage.jpg">';?>
-<?php //print '<br/>';?>
-<?php if( $path = $this->form()->GetInputValue($img_key) ): ?>
-<?php print '<img src="';?>
-<?=$path?>
-<?php print '"/>';?>
-<?php endif; ?>
-<?php $this->form()->Input($img_key) ?>
-<?php print '<br/>';?>
-<?php $this->form()->Error($img_key) ?>
-<?php print '<br/>';?>
-<?php print '</td>';?>
-<?php print '</tr>';?>
-<?php $row++;?>
-<?php endwhile; ?>
-*/ ?>
-			
-			<?php /*?>
-			<tr>
-				<td></td>
-				<td>
-				<br>
-				画像は最低 5 枚選択が必要です。<br>
-				(オプションで最大 10 枚まで選択できます。)
-				</td>
-			</tr>
-			*/ ?>
-			
 			</table>
 			
 		<?php /* ネガティブマージン用。要調整。
@@ -228,27 +230,111 @@ function del_image(img_id){
 		*/ ?>
 		
 		<div style="text-align:center">
+			<!-- <input type="button" name="check" value="check" onclick="return CheckImgCountMin();"> -->
 			<?php $this->form()->Input( 'submit', '　入力内容の確認　') ?>
 		</div>
+		<?php $array = null;?>
+		<?php if($_POST):?>
+			<?php $value = $_POST;?>
+			<?php //$array = null;?>
+			<?php //$this->d($value);?>
+			<?php foreach( $value as $key => $val):?>
+				<?php if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
+				<?php $array[$key] = $val;?>
+				<?php endif;?>
+			<?php endforeach;?>
+			
+<?php if($array):?>
+	<?php foreach( $array as $k => $v ):?>
+		<?php $k2 = str_replace("image_", "", $k);?>
+	<?php //$this->d($k);?>
+	<?php //$this->d($v);?>
+<?php print '<input id="';?>
+<?php print $k2.'_image';?>
+<?php print '" type="hidden" name="';?>
+<?=$k?>
+<?php print '" value="';?>
+<?=$v?>
+<?php print '">';?>
+		<?php endforeach;?>
+<?php endif;?>		
+			
+		<?php endif;?>
+		
 		<?php $this->form()->Finish('form_coupon') ?>
 		
 
 		<div>
 		<form name="form_coupon_image" enctype="multipart/form-data" method="post" action="./upload/" target="targetFrame" id="form_coupon_image">
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
-			<input type="file" name="upload_image" ><br>
-			<input type="submit" value="画像をアップロード" >
+			<input type="file" name="upload_image" required><br>
+			<!-- <input type="submit" value="画像をアップロード" > -->
+			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
 		</form>
 		</div>
 		
-		<div id="image_message">
+		<?php /*
+		<div><!-- op-core使ってアップロードフォーム記述したテスト。targetの指定に対応していないため未使用 -->
+		<?php $this->form()->Start('form_coupon_image','./upload/') ?>
+		<?php $this->form()->Input('max_file_size') ?>
+		
+		<?php $this->form()->Label('upload_image') ?>
+		<?php $this->form()->Input('upload_image') ?><br>
+		
+		<?php $this->form()->Input('submit') ?>
+		
+		<?php $this->form()->Finish('form_coupon_image') ?>
+		</div>
+		*/ ?>
+		
+		<div id="image_message"><!-- ★これ使ってないので削除するかも。★ -->
 		</div>
 		
 		<div id="uploaded_image">
+<?php //$value = $this->form()->GetInputValueRawAll('form_coupon');?>
+<?php //$array = null;?>
+<?php //$this->d($value);?>
+
+<?php //$value = $_POST;?>
+<?php //$array = null;?>
+<?php //$this->d($value);?>
+<?php //foreach( $value as $key => $val):?>
+	<?php //if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
+		<?php //$array[$key] = $val;?>
+	<?php //endif;?>
+<?php //endforeach;?>
+<?php //$i = 1;//不要？?>
+<?php //$this->d($array);?>
+<?php if($array):?>
+	<?php foreach( $array as $k => $v ):?>
+	<?php $k = str_replace("image_", "", $k);?>
+	<?php $v = $this->ConvertUrl("app:$v");?>
+	<?php //$this->d($k);?>
+	<?php //$this->d($v);?>
+<?php print '<div class="uploaded_image" id="';?>
+<?php print $k;?>
+<?php print '">';?>
+<?php print '<div>';?>
+<?php print '<img src="';?>
+<?php print $v;?>
+<?php print '" width="100" height="75">';?>
+<?php print '</div>';?>
+<?php print '<div>';?>
+<?php print '<span class="image_del_button">';?>
+<?php print '<a href="javascript: del_image(\'';?>
+<?php print $k; ?>
+<?php print '\')">[x]</a>';?>
+<?php print '</span>';?>
+<?php print '</div>';?>
+<?php print '</div>';?>
+	<?php endforeach;?>
+<?php endif;?>		
 		</div>
 		
 		<div id="result">
-		<iframe id="targetFrame" src="" style="width:0px;height:0px;border:0px;"></iframe>
+		<!-- <iframe id="targetFrame" src="" style="width:0px;height:0px;border:0px;"></iframe> -->
+		<!-- ★現在テストのためiframe表示中★ -->
+		<iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe>
 		</div>
 		
 		
