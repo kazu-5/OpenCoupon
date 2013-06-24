@@ -118,7 +118,7 @@
 				<?php endif; ?>
 			<?php endforeach; ?>
 			<?php $i = 1;?>
-			<?php $this->d($array);?>
+			<?php //$this->d($array);?>
 			<?php if($array):?>
 			<?php foreach ( $array as $k => $v ):?>
 					<?php print '<tr>';?>
@@ -169,15 +169,14 @@
 			<?php endforeach;?>
 			*/ ?>
 			
-			
-			
-			
 			</table>
 		<div class="div_submit">
 			<?php $this->form()->Input('submit')?>
 		</div>
 		<?php $this->form()->Finish('form_coupon') ?>
 		
+		
+		<!--  「内容を修正する」ボタン用のフォーム  -->
 		<div>
 		<form method="post" action="./">
 			<?php if($array):?>

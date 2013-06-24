@@ -16,10 +16,10 @@ if( !empty($_POST['to_delete']) ){
 	
 	//$this->d($to_delete);
 	
-	//	unlink()をここに記述。ファイル存在チェックとかして、なかったらエラー返す。
+	//	Delete file with unlink()
 	if( file_exists( $upload_dir.$to_delete.'.jpg' )){
-		unlink( $upload_dir.$to_delete.'.jpg' );//現状、jpgしか消せない。要修正。
-		$re = $to_delete.' is deleted.';//ダミー
+		unlink( $upload_dir.$to_delete.'.jpg' );//拡張子の指定要調整
+		$re = $to_delete.' is deleted.';//メッセージ要調整
 		$deleted = $to_delete;
 	}else{
 		$re  = 'file does not exist.';

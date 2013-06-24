@@ -12,7 +12,7 @@ $form_name = $form_config->name;
 
 
 /*
-//	Form (image) ★画像アップロード用フォーム。現時点ではop-coreが対応していないため未使用★
+//	Form (image) ★画像アップロード用フォーム。現時点ではop-coreで出力できないため未使用★
 $form_image_config = $this->config()->form_myshop_coupon_image( $shop_id );
 $this->form()->AddForm($form_image_config);
 $form_image_name = $form_image_config->name;
@@ -50,11 +50,11 @@ switch( $action ){
 				++$n;
 			}
 		}
-		$this->d($array);//for test
-		$this->d($n);//for test
+		//$this->d($array);//for test
+		//$this->d($n);//for test
 
 		$err = null;
-		$img_min = 5;//★便宜上1に設定してるので、作業完了後に5に戻す。★
+		$img_min = 5;
 		$img_max = 10;
 		if( $n < $img_min or $n > $img_max ){
 			$err = "画像は $img_min 以上 $img_max 枚まで指定してください。<br>";
@@ -69,9 +69,9 @@ switch( $action ){
 		$sales_finish     = strtotime($array['coupon_sales_finish']);
 		$expire           = strtotime($array['coupon_expire']);
 		
-		$this->d($sales_start);//for test
-		$this->d($sales_finish);//for test
-		$this->d($expire);//for test
+		//$this->d($sales_start);//for test
+		//$this->d($sales_finish);//for test
+		//$this->d($expire);//for test
 		
 		//	error check.
 		if( $normal_price < $sales_price ){
@@ -125,16 +125,15 @@ switch( $action ){
 		
 	case 'commit':
 		
-		//	retrieve 'image_nn' from Input
+		//	retrieve 'image_[a-zA-Z0-9]{32}$' from Input
 		$array = null;
 		$n = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
 		foreach ( $value as $key => $val ){
-			//if( preg_match( '/coupon_image_??/', $key ) ){
 			//if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
 			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
-				$array[$key] = $val;//正規表現要修正 
-				//$n = $n + 1;//不要かも？
+				$array[$key] = $val; 
+				//$n = $n + 1;
 				++$n;
 				//$this->d($val);//for test
 			}
@@ -150,7 +149,7 @@ switch( $action ){
 			
 			//  View result
 			if( $coupon_id === false ){
-				$data->message = 'Couponレコードの作成に失敗しました。';
+				$data->message = 'Coupon レコードの作成に失敗しました。';
 			}else{
 				
 				$n = 1;
@@ -230,6 +229,8 @@ switch( $action ){
 					
 					//$this->d($path_from);//for test
 					*/
+
+				
 				}
 
 				

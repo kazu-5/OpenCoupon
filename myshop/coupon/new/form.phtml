@@ -1,5 +1,3 @@
-
-
 <script>
 var img_id = parseInt(0);
 function del_image(img_id){
@@ -34,7 +32,7 @@ function del_image(img_id){
 				msg.innerHTML ="削除に失敗しました。";
 			}
 		} else {
-			msg.innerHTML ="削除しています...";//メッセージ不要かも。
+			msg.innerHTML ="削除しています...";//メッセージ必要かどうか要確認
 		}
 	}
 
@@ -50,7 +48,7 @@ function CheckImgCount(){
 	var pv_count = pv_div.getElementsByTagName("img");
 	var len      = pv_count.length;
 	//console.log(len);//for test
-	var img_max = 10;
+	var img_max = 10;// # of max image file(s)
 	if( len >= img_max ){
 		alert('画像は '+img_max+' 枚まで指定できます。');
 		document.getElementById('form_coupon_image').reset();
@@ -62,14 +60,13 @@ function CheckImgCount(){
 
 function CheckImgCountMin(){
 	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-	console.log(regexp);
-	//img_input = String(img_input);
+	//console.log(regexp);//for test
 
 	form_to_send = document.getElementsByTagName('form')[0];
-	console.log(form_to_send);
+	//console.log(form_to_send);//for test
 	
 	var input_tags  = form_to_send.getElementsByTagName('input');
-	console.log(input_tags);
+	//console.log(input_tags);//for test
 
 	var input_count = 0;
 	for(var i =0;i<input_tags.length;i++){
@@ -79,8 +76,8 @@ function CheckImgCountMin(){
 	}
 	console.log(input_count);
 	
-	var img_min = 1;//★便宜上1枚以上に設定中。要修正★
-	var img_max = 10;
+	var img_min =  5;//	# of minimum image file(s)
+	var img_max = 10;// # of max image file(s)
 	if( input_count < img_min ){
 		alert('画像を '+img_min+' 枚以上指定してください。');
 		return false;
@@ -95,6 +92,12 @@ function CheckImgCountMin(){
 
 </script>
 
+<style>
+.uploaded_image{
+	display: inline-block;
+}
+
+</style>
 
 <div class="contents">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
@@ -287,10 +290,10 @@ function CheckImgCountMin(){
 		</div>
 		*/ ?>
 		
-		<div id="image_message"><!-- ★これ使ってないので削除するかも。★ -->
+		<div id="image_message"><!-- エラーメッセージ表示用 -->
 		</div>
 		
-		<div id="uploaded_image">
+		<div id="uploaded_image" >
 <?php //$value = $this->form()->GetInputValueRawAll('form_coupon');?>
 <?php //$array = null;?>
 <?php //$this->d($value);?>
@@ -332,9 +335,9 @@ function CheckImgCountMin(){
 		</div>
 		
 		<div id="result">
-		<!-- <iframe id="targetFrame" src="" style="width:0px;height:0px;border:0px;"></iframe> -->
-		<!-- ★現在テストのためiframe表示中★ -->
-		<iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe>
+		<iframe id="targetFrame" src="" style="width:0px;height:0px;border:0px;"></iframe>
+		<!-- 以下はテスト用のiframe -->
+		<!-- <iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe> -->
 		</div>
 		
 		

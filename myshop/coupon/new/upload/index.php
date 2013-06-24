@@ -21,7 +21,7 @@ $upload_dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 
 
 //	Check uploaded file with ValidateImage()
-//★opのValidateInput使えないので処理を部分的に移植テスト。input名はハードコードした★
+//★opのValidateInput使えないので処理を部分的に移植テスト。input名はハードコードで処理★
 $err = null;//エラーメッセージスタック用
 if(!isset($_FILES['upload_image'])){
 	$err = 'アップロードに失敗しました。';
@@ -54,15 +54,13 @@ if($_FILES['upload_image']['error'] == 0){
 }else{
 	$err = 'アップロードに失敗しました。';
 }
-//★移植テストここまで★
 
-//★移植テスト用のエラー処理
+//	Show Error (if any)
 if( $err !==null ){
 	echo '<script>parent.document.getElementById(\'form_coupon_image\').reset();</script>';
 	echo '<script>alert(\''.$err.'\');</script>';//alert()使ってよいか確認
 	return;//これでよいか要確認
 }
-//★エラー処理ここまで★
 
 
 $_file    = $_FILES['upload_image'];
@@ -77,7 +75,7 @@ $ext  = array_pop($temp);
 $op_uniq_id = $this->GetCookie( self::KEY_COOKIE_UNIQ_ID );
 $time = microtime(true);//for 'salt'
 //$path = $upload_dir .'/'. md5($filename . $op_uniq_id).".$ext";
-//$path = $upload_dir . md5($filename . $op_uniq_id . $time ).".$ext";//変換するならここをjpgで決め打ちにする
+//$path = $upload_dir . md5($filename . $op_uniq_id . $time ).".$ext";
 $path = $upload_dir . md5($filename . $op_uniq_id . $time ).".jpg";
 
 //	Check if the distination dir exists.
@@ -89,7 +87,8 @@ if(!file_exists( $dirname = dirname($path) )){
 	}
 }
 
- //	★この段階で画像変換するかどうか要検討。★ →テスト実装中。
+//	Image conversion.
+//	Set file path.
 $path_from = $tmp;
 $path_to   = $path;
 
@@ -140,10 +139,6 @@ if( $res == false ){
 //	Destroy image.
 imagedestroy($new_img);
 imagedestroy($img);
-
-//★画像変換処理移植テストここまで★
-
-
 
 //	output path info for creating preview.
 //$upload_dir = $this->ConvertURL("app:/temp/$shop_id/new/");
