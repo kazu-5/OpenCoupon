@@ -3,13 +3,11 @@
 ?>
 
 <?php if( isset($data->message) ): ?>
-	<?php $class = isset($data->class) ? $data->class: 'red'; ?>
-	<p class="<?=$class?>" style="margin: 1em; font-size: 125%;"><?=$data->message?></p>
+<?php $class = isset($data->class) ? $data->class: 'red'; ?>
+<p class="<?=$class?>" style="margin: 1em; font-size: 125%;"><?=$data->message?></p>
 <?php endif; ?>
 
-<<<<<<< HEAD
 <?php $this->template( $data->template ); ?>
-=======
 <div class="contents">
 	<div class="hgroup1" style="font-size: 20px; border-bottom: 1px solid #D9D9D9; margin-top: 8px; padding-bottom: 13px;">
 		<h1 style="font-size: 20px;">クーポン購入</h1>
@@ -111,17 +109,8 @@
 			</tr>
 			<tr>
 				<?php /* 一人が購入できる枚数 */ ?>
-<<<<<<< HEAD
-				<td style="white-space:nowrap;">
-<<<<<<< HEAD
-					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
-=======
-					<?php $this->form()->Label('coupon_person_num') ?>
-=======
 				<td>
-					<nobr><?php $this->form()->Label('coupon_person_num') ?></nobr>
->>>>>>> develop
->>>>>>> eb80b7666deb73b7614beafe5b6b60cf3ddfd052
+					<?php $this->form()->Label('coupon_person_num') ?>
 				</td>
 				<td>
 					<?php $this->form()->Input('coupon_person_num') ?><br/>
