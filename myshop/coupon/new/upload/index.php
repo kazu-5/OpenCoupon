@@ -21,7 +21,7 @@ $upload_dir = $this->ConvertPath("app:/temp/$shop_id/new/");
 
 
 //	Check uploaded file with ValidateImage()
-//★opのValidateInput使えないので処理を部分的に移植テスト。input名はハードコードで処理★
+//★op-coreのValidateInputを利用できないので処理を部分的に移植。input名はハードコードで処理★
 $err = null;//エラーメッセージスタック用
 if(!isset($_FILES['upload_image'])){
 	$err = 'アップロードに失敗しました。';
@@ -62,20 +62,17 @@ if( $err !==null ){
 	return;//これでよいか要確認
 }
 
-
+//	Retrieve data from $_FILES and set them into local valiables.
 $_file    = $_FILES['upload_image'];
 $filename = $_file['name'];
 $tmp      = $_file['tmp_name'];
 
-
-//Form5のファイルアップロード処理を部分的に移植
-// extention
+//	Form5のファイルアップロード処理を部分的に移植
+//	extention
 $temp = explode('.',$filename);
 $ext  = array_pop($temp);
 $op_uniq_id = $this->GetCookie( self::KEY_COOKIE_UNIQ_ID );
 $time = microtime(true);//for 'salt'
-//$path = $upload_dir .'/'. md5($filename . $op_uniq_id).".$ext";
-//$path = $upload_dir . md5($filename . $op_uniq_id . $time ).".$ext";
 $path = $upload_dir . md5($filename . $op_uniq_id . $time ).".jpg";
 
 //	Check if the distination dir exists.
@@ -87,14 +84,18 @@ if(!file_exists( $dirname = dirname($path) )){
 	}
 }
 
+
 //	Image conversion.
+//	Reference:
+//		http://www.geekpage.jp/web/php-gd/
+//		http://redwarcueid.seesaa.net/article/167597752.html
+
 //	Set file path.
 $path_from = $tmp;
 $path_to   = $path;
 
 //	Extract image data from tmp file, based on original file extension.
 if( $ext === 'jpg' ){
-	//$path_from = $this->ConvertPath('app:/'.$path_from);//for test
 	$img = imagecreatefromjpeg($path_from);
 }elseif( $ext === 'png' ){
 	$img = imagecreatefrompng($path_from);
@@ -140,29 +141,17 @@ if( $res == false ){
 imagedestroy($new_img);
 imagedestroy($img);
 
-//	output path info for creating preview.
-//$upload_dir = $this->ConvertURL("app:/temp/$shop_id/new/");
+//	output path info for creating preview image.
 $imgpath = $this->ConvertURL($path);//ここをフルパスにするか？
 $img_id  = pathinfo($path, PATHINFO_FILENAME);
 
-
-//	Copy file to $shop_id/new and delete tmp file.
-/*
- if(!$io = copy($tmp, $path)){
-$this->StackError("Does not copy at upload file. ($tmp, $path)");
-return;//ここどうするか要検討
-}else{
-$res = unlink($tmp);
-if( $res == false ){
-$this->StackError("Failed to delete tmp file. ($tmp)");
-}
-}
-*/
-
-
-
 ?>
 <script type="text/javascript">
+
+//	Reference:
+//		http://blog.joyfullife.jp/archives/2007/07/18115458.php
+//		http://nui.joyfullife.jp/sui/edit/
+
 
 //	for preview image.
 //	create div for preview img.
@@ -207,10 +196,8 @@ parent.document.getElementById('form_coupon_image').reset();
 input_image = parent.document.createElement('input');
 input_image.id = '<?php print ($img_id);?>_image';
 input_image.type = 'hidden';
-input_image.name = 'image_<?php print ($img_id);?>';//ここ要修正かも
+input_image.name = 'image_<?php print ($img_id);?>';
 input_image.value = '<?php print ($imgpath);?>';
-
-//ここにキャッチコピー用のinput作成が入るが使わないので省略
 
 form = parent.document.getElementsByTagName('form')[0];//formにidを設定できないためタグ名と順序で取得
 form.appendChild(input_image);

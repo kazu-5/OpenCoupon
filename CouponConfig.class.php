@@ -1034,50 +1034,6 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->error->{'permit-numeric'} = 'Only numeric.';
 		*/
 		
-		/*
-		$input_name = 'coupon_image';
-		$form_config->input->$input_name->label  = 'クーポンのイメージ';
-		$form_config->input->$input_name->type   = 'file';
-		$form_config->input->$input_name->required = true;
-		$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-		$form_config->input->$input_name->validate->permit = 'image';
-		*/
-
-		/*
-		//	set MAX_FILE_SIZE for file upload.
-		$input_name = 'MAX_FILE_SIZE';
-		$form_config->input->$input_name->label  = 'MAX_FILE_SIZE';
-		$form_config->input->$input_name->name   = 'MAX_FILE_SIZE';
-		$form_config->input->$input_name->type   = 'hidden';
-		$form_config->input->$input_name->value  = '2000000';// default is 2M.
-		*/
-		
-		/*
-		$image_no      =  1;// # of default image.
-		$max_pics      = 10;// # of max image files.
-		$required_pics =  5;// # of required image files. Should be <= $max_pics.
-		if( $required_pics > $max_pics ){
-			$required_pics = $max_pics;
-		}
-		while( $image_no <= $max_pics ){
-			$input_name = 'coupon_image_'.$image_no;
-			$form_config->input->$input_name->label  = 'クーポンのイメージ '.$image_no;
-			$form_config->input->$input_name->type   = 'file';
-			if( $image_no <= $required_pics ){
-				$form_config->input->$input_name->required = true;
-			}
-			$form_config->input->$input_name->save->dir = $this->ConvertPath("app:/temp/$shop_id/new/");
-			if( $image_no < $max_pics ){
-				$form_config->input->$input_name->onchange  = 'show_input('.$image_no.');';
-				//$form_config->input->$input_name->onchange  = 'show_input('.$image_no.'); preview(this,'.$image_no.')';
-			}
-			$form_config->input->$input_name->validate->permit = 'image';
-			
-			$image_no++;
-		}
-		*/
-		
-		
 		//  submit
 		$input_name = 'submit';
 		$form_config->input->$input_name->type   = 'submit';
@@ -1100,7 +1056,9 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->readonly = true; //  TODO: write testcase
 		*/
 	}
+
 	
+	//	以下の定義は現在未使用。画像用フォームでop-coreを使用しない場合は要削除。
 	function form_myshop_coupon_image ( $shop_id, $coupon_id=null )
 	{
 		if(!$shop_id ){

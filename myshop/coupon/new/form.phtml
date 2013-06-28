@@ -2,6 +2,11 @@
 var img_id = parseInt(0);
 function del_image(img_id){
 
+	//	Reference:
+	//		http://blog.joyfullife.jp/archives/2007/07/18115458.php
+	//		http://nui.joyfullife.jp/sui/edit/
+	//		http://itpro.nikkeibp.co.jp/article/COLUMN/20060607/240192/
+
 	try {
 		req = new ActiveXObject("Microsoft.XMLHTTP");
 	} catch(e) {
@@ -15,21 +20,16 @@ function del_image(img_id){
 			if (req.status == 200){
 					var data = req.responseText;
 					var result = eval( '(' + data + ')' );
-					//console.log(result);
 					var to_delete = String(result.deleted);
 					var img_pv = document.getElementById(to_delete);
-					//console.log(img_pv);
-					//console.log(to_delete);
 					img_pv.parentNode.removeChild(img_pv);
 					msg.removeChild(msg.firstChild);
 				
 					var input_to_delete = to_delete+'_image';
 					var del_target = document.getElementById(input_to_delete);
-					//console.log(del_target);
-					//console.log(input_to_delete);
 					del_target.parentNode.removeChild(del_target);
 			} else {
-				msg.innerHTML ="削除に失敗しました。";
+				msg.innerHTML ="削除に失敗しました。";//メッセージの削除処理を追加する
 			}
 		} else {
 			msg.innerHTML ="削除しています...";//メッセージ必要かどうか要確認
@@ -47,7 +47,6 @@ function CheckImgCount(){
 	var pv_div   = document.getElementById("uploaded_image");
 	var pv_count = pv_div.getElementsByTagName("img");
 	var len      = pv_count.length;
-	//console.log(len);//for test
 	var img_max = 10;// # of max image file(s)
 	if( len >= img_max ){
 		alert('画像は '+img_max+' 枚まで指定できます。');
@@ -60,13 +59,10 @@ function CheckImgCount(){
 
 function CheckImgCountMin(){
 	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-	//console.log(regexp);//for test
 
 	form_to_send = document.getElementsByTagName('form')[0];
-	//console.log(form_to_send);//for test
 	
 	var input_tags  = form_to_send.getElementsByTagName('input');
-	//console.log(input_tags);//for test
 
 	var input_count = 0;
 	for(var i =0;i<input_tags.length;i++){
@@ -74,14 +70,13 @@ function CheckImgCountMin(){
 			input_count++;
 		}
 	}
-	console.log(input_count);
 	
 	var img_min =  5;//	# of minimum image file(s)
 	var img_max = 10;// # of max image file(s)
 	if( input_count < img_min ){
 		alert('画像を '+img_min+' 枚以上指定してください。');
 		return false;
-	}else if( input_count >= img_max ){
+	}else if( input_count > img_max ){
 		alert('画像は '+img_max+' 枚まで指定できます。');
 		return false;
 	}else{
@@ -206,25 +201,8 @@ function CheckImgCountMin(){
 				<td>
 					<?php $this->form()->Input('coupon_person_num') ?><br/>
 					<?php $this->form()->Error('coupon_person_num') ?>
-<!-- <input type="hidden" name="MAX_FILE_SIZE" value="2000000" >  -->
 					</td>
 			</tr>
-			
-			<?php /*
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image') ?><br/>
-					<?php $this->form()->Error('coupon_image') ?>
-				</td>
-			</tr>
-			*/ ?>
-			
 			</table>
 			
 		<?php /* ネガティブマージン用。要調整。
@@ -233,14 +211,11 @@ function CheckImgCountMin(){
 		*/ ?>
 		
 		<div style="text-align:center">
-			<!-- <input type="button" name="check" value="check" onclick="return CheckImgCountMin();"> -->
 			<?php $this->form()->Input( 'submit', '　入力内容の確認　') ?>
 		</div>
 		<?php $array = null;?>
 		<?php if($_POST):?>
 			<?php $value = $_POST;?>
-			<?php //$array = null;?>
-			<?php //$this->d($value);?>
 			<?php foreach( $value as $key => $val):?>
 				<?php if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
 				<?php $array[$key] = $val;?>
@@ -248,18 +223,10 @@ function CheckImgCountMin(){
 			<?php endforeach;?>
 			
 <?php if($array):?>
-	<?php foreach( $array as $k => $v ):?>
-		<?php $k2 = str_replace("image_", "", $k);?>
-	<?php //$this->d($k);?>
-	<?php //$this->d($v);?>
-<?php print '<input id="';?>
-<?php print $k2.'_image';?>
-<?php print '" type="hidden" name="';?>
-<?=$k?>
-<?php print '" value="';?>
-<?=$v?>
-<?php print '">';?>
-		<?php endforeach;?>
+<?php foreach( $array as $k => $v ):?>
+<?php $k2 = str_replace("image_", "", $k);?>
+<?php print '<input id="'.$k2.'_image" type="hidden" name="'.$k.'" value="'.$v.'">';?>
+<?php endforeach;?>
 <?php endif;?>		
 			
 		<?php endif;?>
@@ -271,65 +238,24 @@ function CheckImgCountMin(){
 		<form name="form_coupon_image" enctype="multipart/form-data" method="post" action="./upload/" target="targetFrame" id="form_coupon_image">
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
 			<input type="file" name="upload_image" required><br>
-			<!-- <input type="submit" value="画像をアップロード" > -->
 			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
+			<span id="image_message"></span><!-- エラーメッセージ表示用 -->
 		</form>
 		</div>
 		
-		<?php /*
-		<div><!-- op-core使ってアップロードフォーム記述したテスト。targetの指定に対応していないため未使用 -->
-		<?php $this->form()->Start('form_coupon_image','./upload/') ?>
-		<?php $this->form()->Input('max_file_size') ?>
-		
-		<?php $this->form()->Label('upload_image') ?>
-		<?php $this->form()->Input('upload_image') ?><br>
-		
-		<?php $this->form()->Input('submit') ?>
-		
-		<?php $this->form()->Finish('form_coupon_image') ?>
-		</div>
-		*/ ?>
-		
-		<div id="image_message"><!-- エラーメッセージ表示用 -->
+		<div id="image_message_"><!-- エラーメッセージ表示用 -->
 		</div>
 		
 		<div id="uploaded_image" >
-<?php //$value = $this->form()->GetInputValueRawAll('form_coupon');?>
-<?php //$array = null;?>
-<?php //$this->d($value);?>
-
-<?php //$value = $_POST;?>
-<?php //$array = null;?>
-<?php //$this->d($value);?>
-<?php //foreach( $value as $key => $val):?>
-	<?php //if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
-		<?php //$array[$key] = $val;?>
-	<?php //endif;?>
-<?php //endforeach;?>
-<?php //$i = 1;//不要？?>
-<?php //$this->d($array);?>
 <?php if($array):?>
 	<?php foreach( $array as $k => $v ):?>
 	<?php $k = str_replace("image_", "", $k);?>
 	<?php $v = $this->ConvertUrl("app:$v");?>
-	<?php //$this->d($k);?>
-	<?php //$this->d($v);?>
-<?php print '<div class="uploaded_image" id="';?>
-<?php print $k;?>
-<?php print '">';?>
-<?php print '<div>';?>
-<?php print '<img src="';?>
-<?php print $v;?>
-<?php print '" width="100" height="75">';?>
-<?php print '</div>';?>
-<?php print '<div>';?>
-<?php print '<span class="image_del_button">';?>
-<?php print '<a href="javascript: del_image(\'';?>
-<?php print $k; ?>
-<?php print '\')">[x]</a>';?>
-<?php print '</span>';?>
-<?php print '</div>';?>
-<?php print '</div>';?>
+<?php print '<div class="uploaded_image" id="'.$k.'">';?>
+<?php print '<div><img src="'.$v.'" width="100" height="75"></div>';?>
+<?php print '<div><span class="image_del_button">';?>
+<?php print "<a href=\"javascript: del_image('$k')\">[x]</a>";?>
+<?php print '</span></div></div>';?>
 	<?php endforeach;?>
 <?php endif;?>		
 		</div>
@@ -339,35 +265,5 @@ function CheckImgCountMin(){
 		<!-- 以下はテスト用のiframe -->
 		<!-- <iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe> -->
 		</div>
-		
-		
-		
-		<?php /* ネガティブマージン用。要調整。
-		<div style="width:100%;height:200px;margin-top:-300px;">
-		<table>
-		
-		<?php $this->form()->Start('form_coupon_image') ?>
-
-			<tr>
-				<td>
-					<?php $this->form()->Label('coupon_image_1') ?>
-				</td>
-				<td>
-					<?php if( $path = $this->form()->GetInputValue('coupon_image_1') ): ?>
-						<img src="<?=$path?>"/>
-					<?php endif; ?>
-					<?php $this->form()->Input('coupon_image_1') ?><br/>
-					<?php $this->form()->Error('coupon_image_1') ?>
-				</td>
-			</tr>
-		
-		
-		</table>
-		</div>
-		<div style="text-align:center">
-		<?php $this->form()->Input( 'submit' ) ?>
-		<?php $this->form()->Finish('form_coupon_image') ?>
-		</div>
-		*/ ?>
 	</div>
 </div>
