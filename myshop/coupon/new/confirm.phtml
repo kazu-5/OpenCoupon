@@ -91,6 +91,7 @@
 				</td>
 			</tr>
 			
+			<?php /*
 			<?php $value = $this->form()->GetInputValueRawAll('form_coupon');?>
 			<?php $array = null; ?>
 			<?php foreach ( $value as $key => $val ):?>
@@ -98,14 +99,21 @@
 					<?php $array[$key] = $val;?>
 				<?php endif; ?>
 			<?php endforeach; ?>
-			<?php $i = 1;?>
+			*/ ?>
+			
 			<?php //$this->d($array);?>
-			<?php if($array):?>
+			<?php //if($array):?>
+			<?php //foreach ( $array as $k => $v ):?>
+			<?php if($data->array_img):?>
+			<?php $array = $data->array_img;?>
+			<?php $i = 1;?>
 			<?php foreach ( $array as $k => $v ):?>
-
+			
 <?php print '<tr><th><strong>クーポンのイメージ '.$i.'</strong></th><td>';?>
-<?php print '<img src="'.$this->ConvertURL($v).'"/>';?>
-<?php print '<input id="'.$k.'_image" type="hidden" name="'.$k.'" value="'.$this->ConvertPath($v).'">';?>
+<?php //print '<img src="'.$this->ConvertURL($v).'"/>';//この処理不要かも?>
+<?php print '<img src="'.$v.'"/>';?>
+<?php //print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$this->ConvertPath($v).'">';?>
+<?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
 <?php print '</td></tr>';?>
 
 			<?php ++$i;?>

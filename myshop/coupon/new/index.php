@@ -18,25 +18,49 @@ $action = $this->GetAction();
 $data = new Config();
 $data->template = 'form.phtml';
 
+
+//	Retrieve img data from input (if any), and set them into $array_img. 
+$array_img = array();
+if($_POST){
+	//$value        = $this->form()->GetInputValueRawAll($form_name);
+	$value = $_POST;
+	foreach ( $value as $key => $val ){
+		if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+			$key = str_replace("image_", "", $key);
+			$array_img[$key] = $val;
+		}
+	}
+	$this->d($array_img);
+}
+
+
+//	Switch to appropriate logic based on $action.
 switch( $action ){
 	case 'index':
+		//	Set template file.
 		$data->template = 'form.phtml';
+		
+		//	If exist, Pass the image data to form.phtml file.
+		if($array_img){
+			$data->array_img = $array_img;
+		}
 		break;
 
 	case 'confirm':
 		
 		//	Retrieve values from input and put it into $array.
-		$array = null;
-		$n = 0;
+		$array = array();
+		$n     = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
-		$image_format = null;
 		foreach ( $value as $key => $val ){
 			$array[$key] = $val;
 			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+				//$array_img[$key] = $val;
 				++$n;
 			}
 		}
-
+		
+		//	Initialize $err (for error message).
 		$err = null;
 		
 		//	Check if # of image file(s) is correct.
@@ -87,15 +111,16 @@ switch( $action ){
 			$err = $err.'有効期限が販売終了日時より前に設定されています。<br>';
 		}
 		
-		//	Switch phtml file.
+		//	Set appropriate phtml file and message based on the result of error check.
 		if(!$this->form()->Secure($form_name) ){
-			$data->message  = '入力内容を確かめて下さい。';
-			$data->template = 'form.phtml';
+			$data->message   = '入力内容を確かめて下さい。';
+			$data->template  = 'form.phtml';
 		}else if(isset($err)){
-			$data->message  = $err;//★エラーメッセージの表示方法について要調整
-			$data->template = 'form.phtml';
+			$data->message   = $err;//★エラーメッセージの表示方法について要調整
+			$data->template  = 'form.phtml';
 		}else{
-			$data->template = 'confirm.phtml';
+			$data->template  = 'confirm.phtml';
+			$data->array_img = $array_img;
 		}
 		break;
 		
@@ -105,8 +130,10 @@ switch( $action ){
 		$array = null;
 		//$n = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
+		$this->d($value);//for test
 		foreach ( $value as $key => $val ){
 			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
+			//if( preg_match( '/^[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
 				$array[$key] = $val; 
 				//++$n;
 			}
@@ -134,7 +161,8 @@ switch( $action ){
 						$path_to = $this->ConvertPath("app:/shop/$shop_id/$coupon_id/$n.jpg");
 						++$n;
 					}else{
-						$this->StackError("Does not match extention.");
+						//$this->StackError("Does not match extention.");
+						$data->message = '拡張子が一致しません。';
 					}
 
 					//	Create directory if it doesn't exist.
@@ -144,7 +172,8 @@ switch( $action ){
 					
 					//	Check if file is moved.
 					if(!rename( $path_from, $path_to ) ){
-						$this->StackError("File move is failed.");
+						//$this->StackError("File move is failed.");
+						$data->message = 'ファイルの移動に失敗しました。';
 					}
 						
 					//	Clear form.

@@ -1518,10 +1518,11 @@ class CouponConfig extends ConfigMgr
 		
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
 		
-		//$this->d($value);
+		$this->d($value);//for test
 		unset($value->max_file_size);
 		foreach ( $value as $key => $val ){
 			if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) ){
+			//if( preg_match( '/^[a-zA-Z0-9]{32}$/', $key ) ){
 				unset( $value->$key );
 			}
 		}

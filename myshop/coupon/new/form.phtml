@@ -85,12 +85,92 @@ function CheckImgCountMin(){
 }
 
 
+
+function CheckAndSubmit(){
+	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
+
+	form_to_send = document.getElementsByTagName('form')[0];
+	
+	var input_tags  = form_to_send.getElementsByTagName('input');
+
+	var input_count = 0;
+	for(var i =0;i<input_tags.length;i++){
+		if(regexp.test(input_tags[i].getAttribute("id"))){
+			input_count++;
+		}
+	}
+	
+	var img_min =  5;//	# of minimum image file(s)
+	var img_max = 10;// # of max image file(s)
+	if( input_count < img_min ){
+		alert('画像を '+img_min+' 枚以上指定してください。');
+		//return false;
+		return;
+	}else if( input_count > img_max ){
+		alert('画像は '+img_max+' 枚まで指定できます。');
+		//return false;
+		return;
+	}else{
+		//return true;
+		document.getElementsByTagName('form')[0].submit();
+	}
+}
+
+
 </script>
 
 <style>
-.uploaded_image{
-	display: inline-block;
+/* Reference:
+		http://www.halawata.net/2011/10/css-float-display-box/
+		http://partisan.wwwxyz.jp/seed/2013/01/31/165435.php
+*/
+
+.uploaded_image {
+	/* margin-left: 154px; */
+	/* padding-left: 154px; */
 }
+
+.uploaded_image_div {
+	display: inline-block;
+	padding: 4px;
+	margin-right: -4px;
+}
+
+html*.uploaded_image_div {
+	display: inline;
+	zoom: 1;
+}
+
+
+/*
+html { font-size: 100%; }
+.uploaded_image, .uploaded_image_div {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.uploaded_image {
+	background: gray;
+	letter-spacing: -1em;
+	word-spacing: -1em;
+}
+
+:root div {
+	font-size: 1px;
+	letter-spacing: -1px;
+	word-spacing: -1px;
+}
+
+.uploaded_image_div {
+	display: inline-block;
+	font-size: 1rem;
+	letter-spacing: normal;
+	word-spacing: normal;
+	*display: inline;
+	*zoom: 1;
+}
+*/
 
 </style>
 
@@ -205,14 +285,14 @@ function CheckImgCountMin(){
 			</tr>
 			</table>
 			
-		<?php /* ネガティブマージン用。要調整。
-		<div style="width: 100%; height:100px;"></div>
-		<div style="height:200px;"></div>
-		*/ ?>
-		
+		<?php /*
 		<div style="text-align:center">
 			<?php $this->form()->Input( 'submit', '　入力内容の確認　') ?>
 		</div>
+		*/ ?>
+		
+		<?php /*
+		<?php $this->d($data->array_img);?>
 		<?php $array = null;?>
 		<?php if($_POST):?>
 			<?php $value = $_POST;?>
@@ -223,35 +303,51 @@ function CheckImgCountMin(){
 			<?php endforeach;?>
 			
 <?php if($array):?>
+		*/ ?>
+
+<?php if($data->array_img):?>
+<?php $array = $data->array_img;?>
+
 <?php foreach( $array as $k => $v ):?>
-<?php $k2 = str_replace("image_", "", $k);?>
-<?php print '<input id="'.$k2.'_image" type="hidden" name="'.$k.'" value="'.$v.'">';?>
+<?php //$k2 = str_replace("image_", "", $k);?>
+<?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
 <?php endforeach;?>
 <?php endif;?>		
 			
-		<?php endif;?>
-		
-		<?php $this->form()->Finish('form_coupon') ?>
-		
+		<?php //endif;?>
 
-		<div>
+		<?php $this->form()->Finish('form_coupon') ?>
+
+		<!-- <div style="width:100%;height:150px;margin-top:-150px;"> -->
+
+		<table>
+			<tr>
+				<td style="width: 154px;">
+					クーポンのイメージ
+				</td>
+				<td>
+		
+		
+		<!-- <div> -->
 		<form name="form_coupon_image" enctype="multipart/form-data" method="post" action="./upload/" target="targetFrame" id="form_coupon_image">
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
 			<input type="file" name="upload_image" required><br>
 			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
 			<span id="image_message"></span><!-- エラーメッセージ表示用 -->
 		</form>
-		</div>
-		
-		<div id="image_message_"><!-- エラーメッセージ表示用 -->
-		</div>
-		
+		<!-- </div> -->
+
+				</td>
+			</tr>
+		</table>
+
+
 		<div id="uploaded_image" >
 <?php if($array):?>
 	<?php foreach( $array as $k => $v ):?>
-	<?php $k = str_replace("image_", "", $k);?>
-	<?php $v = $this->ConvertUrl("app:$v");?>
-<?php print '<div class="uploaded_image" id="'.$k.'">';?>
+	<?php //$k = str_replace("image_", "", $k);?>
+	<?php //$v = $this->ConvertUrl("app:$v");//この処理不要かも?>
+<?php print '<div class="uploaded_image_div" id="'.$k.'">';?>
 <?php print '<div><img src="'.$v.'" width="100" height="75"></div>';?>
 <?php print '<div><span class="image_del_button">';?>
 <?php print "<a href=\"javascript: del_image('$k')\">[x]</a>";?>
@@ -265,5 +361,10 @@ function CheckImgCountMin(){
 		<!-- 以下はテスト用のiframe -->
 		<!-- <iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe> -->
 		</div>
+		
+		<div style="text-align:center">
+		<input type="button" name="submit" value="登録する" class="submit" onclick="javascript: CheckAndSubmit();">
+		</div>
+		
 	</div>
 </div>

@@ -178,7 +178,7 @@ div_catch.appendChild(span_del_button);
 
 //	create a wrapping div.
 div_all = parent.document.createElement('div');
-div_all.className = 'uploaded_image';
+div_all.className = 'uploaded_image_div';
 div_all.id = '<?php print ($img_id);?>';
 
 //	add img and button to the wrapping div.
