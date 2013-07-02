@@ -91,28 +91,13 @@
 				</td>
 			</tr>
 			
-			<?php /*
-			<?php $value = $this->form()->GetInputValueRawAll('form_coupon');?>
-			<?php $array = null; ?>
-			<?php foreach ( $value as $key => $val ):?>
-				<?php if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
-					<?php $array[$key] = $val;?>
-				<?php endif; ?>
-			<?php endforeach; ?>
-			*/ ?>
-			
-			<?php //$this->d($array);?>
-			<?php //if($array):?>
-			<?php //foreach ( $array as $k => $v ):?>
 			<?php if($data->array_img):?>
 			<?php $array = $data->array_img;?>
 			<?php $i = 1;?>
 			<?php foreach ( $array as $k => $v ):?>
 			
 <?php print '<tr><th><strong>クーポンのイメージ '.$i.'</strong></th><td>';?>
-<?php //print '<img src="'.$this->ConvertURL($v).'"/>';//この処理不要かも?>
-<?php print '<img src="'.$v.'"/>';?>
-<?php //print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$this->ConvertPath($v).'">';?>
+<?php print '<img src="'.$v.'" width="160" height="120"/>';?>
 <?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
 <?php print '</td></tr>';?>
 
@@ -131,11 +116,9 @@
 		<form method="post" action="./">
 			<?php if($array):?>
 			<?php foreach ( $array as $k => $v ):?>
-				<?php $k = str_replace("image_", "", $k);?>
 <?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
 			<?php endforeach;?>
 			<?php endif;?>
-		
 			<input type="submit" value="内容を修正する" class="submit">
 		</form>
 		</div>

@@ -58,8 +58,8 @@ if($_FILES['upload_image']['error'] == 0){
 //	Show Error (if any)
 if( $err !==null ){
 	echo '<script>parent.document.getElementById(\'form_coupon_image\').reset();</script>';
-	echo '<script>alert(\''.$err.'\');</script>';//alert()使ってよいか確認
-	return;//これでよいか要確認
+	echo '<script>alert(\''.$err.'\');</script>';
+	return;
 }
 
 //	Retrieve data from $_FILES and set them into local valiables.
@@ -80,7 +80,7 @@ if(!file_exists( $dirname = dirname($path) )){
 	$this->mark("Does not exists directory. ($dirname)");
 	if(!$io = mkdir( $dirname, 0777, true ) ){
 		$this->StackError("Failed to make directory. (".dirname($path).")");
-		return;//ここどうするか要検討
+		return;
 	}
 }
 
@@ -103,8 +103,8 @@ if( $ext === 'jpg' ){
 	unlink($path_from);
 	$err = 'jpg または png 形式の画像のみ使用できます。';
 	echo '<script>parent.document.getElementById(\'form_coupon_image\').reset();</script>';
-	echo '<script>alert(\''.$err.'\');</script>';//alert()使ってよいか確認
-	return;//これでよいか要確認
+	echo '<script>alert(\''.$err.'\');</script>';
+	return;
 }
 
 //	retrieve size of source image.
@@ -159,8 +159,8 @@ div_image = parent.document.createElement('div');
 
 image = parent.document.createElement('img');
 image.src = '<?php print ($imgpath);?>';
-image.width  = 100;
-image.height =  75; 
+image.width  = 80;//	width of preview image. Should be the same as that of form.phtml.
+image.height = 60;//	height of preview image. Should be the same as that of form.phtml.
 
 div_image.appendChild(image);
 

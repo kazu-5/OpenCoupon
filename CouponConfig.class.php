@@ -1039,7 +1039,7 @@ class CouponConfig extends ConfigMgr
 		$form_config->input->$input_name->type   = 'submit';
 		$form_config->input->$input_name->class  = 'submit';
 		$form_config->input->$input_name->style  = 'font-size: 16px;';
-		$form_config->input->$input_name->onClick  = 'return CheckImgCountMin()';
+		//$form_config->input->$input_name->onClick  = 'return CheckImgCountMin()';
 		$form_config->input->$input_name->value  = '登録する';
 		
 		return $form_config;
@@ -1518,23 +1518,13 @@ class CouponConfig extends ConfigMgr
 		
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
 		
-		$this->d($value);//for test
-		unset($value->max_file_size);
 		foreach ( $value as $key => $val ){
-			if( preg_match( '/^[a-z]{5}_[a-zA-Z0-9]{32}$/', $key ) ){
-			//if( preg_match( '/^[a-zA-Z0-9]{32}$/', $key ) ){
+			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) ){
 				unset( $value->$key );
 			}
 		}
 		unset($value->submit);
 		unset($value->submit_button);
-		
-		
-		/* original code:
-		unset($value->coupon_image);
-		unset($value->submit);
-		unset($value->submit_button);
-		*/
 		
 		$config = parent::insert('t_coupon');
 		$config->set->shop_id = $shop_id;

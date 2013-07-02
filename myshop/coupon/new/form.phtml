@@ -29,10 +29,10 @@ function del_image(img_id){
 					var del_target = document.getElementById(input_to_delete);
 					del_target.parentNode.removeChild(del_target);
 			} else {
-				msg.innerHTML ="削除に失敗しました。";//メッセージの削除処理を追加する
+				msg.innerHTML ="削除に失敗しました。";
 			}
 		} else {
-			msg.innerHTML ="削除しています...";//メッセージ必要かどうか要確認
+			msg.innerHTML ="削除しています...";
 		}
 	}
 
@@ -58,13 +58,13 @@ function CheckImgCount(){
 }
 
 function CheckImgCountMin(){
-	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-
-	form_to_send = document.getElementsByTagName('form')[0];
+	//	 op-core の機能で form_coupon の submit ボタンを出力しない場合、この関数は削除。	
 	
+	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
+	form_to_send = document.getElementsByTagName('form')[0];
 	var input_tags  = form_to_send.getElementsByTagName('input');
-
 	var input_count = 0;
+
 	for(var i =0;i<input_tags.length;i++){
 		if(regexp.test(input_tags[i].getAttribute("id"))){
 			input_count++;
@@ -88,20 +88,18 @@ function CheckImgCountMin(){
 
 function CheckAndSubmit(){
 	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-
 	form_to_send = document.getElementsByTagName('form')[0];
-	
 	var input_tags  = form_to_send.getElementsByTagName('input');
-
 	var input_count = 0;
+	var img_min =  5;//	# of minimum image file(s)
+	var img_max = 10;// # of max image file(s)
+	
 	for(var i =0;i<input_tags.length;i++){
 		if(regexp.test(input_tags[i].getAttribute("id"))){
 			input_count++;
 		}
 	}
 	
-	var img_min =  5;//	# of minimum image file(s)
-	var img_max = 10;// # of max image file(s)
 	if( input_count < img_min ){
 		alert('画像を '+img_min+' 枚以上指定してください。');
 		//return false;
@@ -140,37 +138,6 @@ html*.uploaded_image_div {
 	display: inline;
 	zoom: 1;
 }
-
-
-/*
-html { font-size: 100%; }
-.uploaded_image, .uploaded_image_div {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.uploaded_image {
-	background: gray;
-	letter-spacing: -1em;
-	word-spacing: -1em;
-}
-
-:root div {
-	font-size: 1px;
-	letter-spacing: -1px;
-	word-spacing: -1px;
-}
-
-.uploaded_image_div {
-	display: inline-block;
-	font-size: 1rem;
-	letter-spacing: normal;
-	word-spacing: normal;
-	*display: inline;
-	*zoom: 1;
-}
-*/
 
 </style>
 
@@ -290,35 +257,16 @@ html { font-size: 100%; }
 			<?php $this->form()->Input( 'submit', '　入力内容の確認　') ?>
 		</div>
 		*/ ?>
-		
-		<?php /*
-		<?php $this->d($data->array_img);?>
-		<?php $array = null;?>
-		<?php if($_POST):?>
-			<?php $value = $_POST;?>
-			<?php foreach( $value as $key => $val):?>
-				<?php if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ):?>
-				<?php $array[$key] = $val;?>
-				<?php endif;?>
-			<?php endforeach;?>
-			
-<?php if($array):?>
-		*/ ?>
 
 <?php if($data->array_img):?>
 <?php $array = $data->array_img;?>
 
 <?php foreach( $array as $k => $v ):?>
-<?php //$k2 = str_replace("image_", "", $k);?>
 <?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
 <?php endforeach;?>
 <?php endif;?>		
 			
-		<?php //endif;?>
-
 		<?php $this->form()->Finish('form_coupon') ?>
-
-		<!-- <div style="width:100%;height:150px;margin-top:-150px;"> -->
 
 		<table>
 			<tr>
@@ -327,28 +275,23 @@ html { font-size: 100%; }
 				</td>
 				<td>
 		
-		
-		<!-- <div> -->
 		<form name="form_coupon_image" enctype="multipart/form-data" method="post" action="./upload/" target="targetFrame" id="form_coupon_image">
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
 			<input type="file" name="upload_image" required><br>
 			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
 			<span id="image_message"></span><!-- エラーメッセージ表示用 -->
 		</form>
-		<!-- </div> -->
 
 				</td>
 			</tr>
 		</table>
 
 
-		<div id="uploaded_image" >
+		<div id="uploaded_image" style="margin-left: 162px;">
 <?php if($array):?>
 	<?php foreach( $array as $k => $v ):?>
-	<?php //$k = str_replace("image_", "", $k);?>
-	<?php //$v = $this->ConvertUrl("app:$v");//この処理不要かも?>
 <?php print '<div class="uploaded_image_div" id="'.$k.'">';?>
-<?php print '<div><img src="'.$v.'" width="100" height="75"></div>';?>
+<?php print '<div><img src="'.$v.'" width="80" height="60"></div>';?>
 <?php print '<div><span class="image_del_button">';?>
 <?php print "<a href=\"javascript: del_image('$k')\">[x]</a>";?>
 <?php print '</span></div></div>';?>

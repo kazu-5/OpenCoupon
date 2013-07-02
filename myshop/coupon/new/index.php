@@ -8,8 +8,6 @@ $shop_id = $this->GetShopID();
 $form_config = $this->config()->form_myshop_coupon( $shop_id );
 $this->form()->AddForm( $form_config );
 $form_name = $form_config->name;
-//$this->form()->Clear($form_name);
-
 
 //  Action
 $action = $this->GetAction();
@@ -19,10 +17,10 @@ $data = new Config();
 $data->template = 'form.phtml';
 
 
-//	Retrieve img data from input (if any), and set them into $array_img. 
+//	Retrieve img data from input (if any). 
 $array_img = array();
 if($_POST){
-	//$value        = $this->form()->GetInputValueRawAll($form_name);
+	//$value = $this->form()->GetInputValueRawAll($form_name);//op-coreのformにする場合はこのように記述
 	$value = $_POST;
 	foreach ( $value as $key => $val ){
 		if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
@@ -30,7 +28,9 @@ if($_POST){
 			$array_img[$key] = $val;
 		}
 	}
-	$this->d($array_img);
+	
+	//	Set img data into $data.
+	$data->array_img = $array_img;
 }
 
 
@@ -39,11 +39,6 @@ switch( $action ){
 	case 'index':
 		//	Set template file.
 		$data->template = 'form.phtml';
-		
-		//	If exist, Pass the image data to form.phtml file.
-		if($array_img){
-			$data->array_img = $array_img;
-		}
 		break;
 
 	case 'confirm':
@@ -55,7 +50,6 @@ switch( $action ){
 		foreach ( $value as $key => $val ){
 			$array[$key] = $val;
 			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
-				//$array_img[$key] = $val;
 				++$n;
 			}
 		}
@@ -78,6 +72,7 @@ switch( $action ){
 		$sales_start      = strtotime($array['coupon_sales_start']);
 		$sales_finish     = strtotime($array['coupon_sales_finish']);
 		$expire           = strtotime($array['coupon_expire']);
+		$sales_person_num = $array['coupon_person_num'];
 
 		//	Error check
 		//	Check if normal price > sales price.
@@ -107,20 +102,27 @@ switch( $action ){
 		}
 		
 		//	Check if the expiration date is prior to the sales end date.
-		if( $expire < $sales_finish ){
-			$err = $err.'有効期限が販売終了日時より前に設定されています。<br>';
+		if( $expire < $sales_finish or $expire < $sales_start ){
+			$err = $err.'有効期限が販売開始日時または販売終了日時より前に設定されています。<br>';
 		}
+		
+		//	Check if the 'sales person num' is correctly set.
+		if( $sales_person_num == 0 ){
+			$err = $err."1 人が購入できる枚数は 1 枚以上にする必要があります。<br>";
+		}elseif( $sales_person_num > $sales_num_top ){
+			$err = $err."1 人が購入できる枚数が最大販売数を超えています。<br>";
+		}
+		
 		
 		//	Set appropriate phtml file and message based on the result of error check.
 		if(!$this->form()->Secure($form_name) ){
 			$data->message   = '入力内容を確かめて下さい。';
 			$data->template  = 'form.phtml';
 		}else if(isset($err)){
-			$data->message   = $err;//★エラーメッセージの表示方法について要調整
+			$data->message   = $err;
 			$data->template  = 'form.phtml';
 		}else{
 			$data->template  = 'confirm.phtml';
-			$data->array_img = $array_img;
 		}
 		break;
 		
@@ -128,14 +130,10 @@ switch( $action ){
 		
 		//	retrieve 'image_[a-zA-Z0-9]{32}$' from Input
 		$array = null;
-		//$n = 0;
 		$value = $this->form()->GetInputValueRawAll($form_name);
-		$this->d($value);//for test
 		foreach ( $value as $key => $val ){
 			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
-			//if( preg_match( '/^[a-zA-Z0-9]{32}$/', $key ) and $val !== null ){
 				$array[$key] = $val; 
-				//++$n;
 			}
 		}
 		
@@ -151,7 +149,7 @@ switch( $action ){
 			}else{
 				
 				//	If no error, move img files into $shop_id/$coupon_id folder with new name.
-				$n = 1;
+				$n = 1; 
 				$new_dir = $this->ConvertPath("app:/shop/$shop_id/$coupon_id");
 				
 				foreach( $array as $k => $path_from ){
@@ -176,12 +174,17 @@ switch( $action ){
 						$data->message = 'ファイルの移動に失敗しました。';
 					}
 						
-					//	Clear form.
-					$this->form()->Clear($form_name);
 				}
+				
+				//	Clear form.
+				$this->form()->Clear($form_name);
+				
+				//	Clear the 'selected image file' data.
+				$array_img = array();
+				unset($data->array_img);
 			}
 		}
-		//ここにelseの処理を書くか？
+		
 		break;
 	default:
 }
