@@ -248,7 +248,7 @@ html*.uploaded_image_div {
 				<td>
 					<?php $this->form()->Input('coupon_person_num') ?><br/>
 					<?php $this->form()->Error('coupon_person_num') ?>
-					</td>
+				</td>
 			</tr>
 			</table>
 			
@@ -258,13 +258,12 @@ html*.uploaded_image_div {
 		</div>
 		*/ ?>
 
-<?php if($data->array_img):?>
-<?php $array = $data->array_img;?>
-
-<?php foreach( $array as $k => $v ):?>
-<?php print '<input id="'.$k.'_image" type="hidden" name="image_'.$k.'" value="'.$v.'">';?>
-<?php endforeach;?>
-<?php endif;?>		
+		<?php if($data->array_img):?>
+		<?php $array = $data->array_img;?>
+			<?php foreach( $array as $k => $v ):?>
+				<input id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
+			<?php endforeach;?>
+		<?php endif;?>		
 			
 		<?php $this->form()->Finish('form_coupon') ?>
 
@@ -279,7 +278,7 @@ html*.uploaded_image_div {
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
 			<input type="file" name="upload_image" required><br>
 			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
-			<span id="image_message"></span><!-- エラーメッセージ表示用 -->
+			<span id="image_message"></span><!-- メッセージ表示用 -->
 		</form>
 
 				</td>
@@ -290,11 +289,11 @@ html*.uploaded_image_div {
 		<div id="uploaded_image" style="margin-left: 162px;">
 <?php if($array):?>
 	<?php foreach( $array as $k => $v ):?>
-<?php print '<div class="uploaded_image_div" id="'.$k.'">';?>
-<?php print '<div><img src="'.$v.'" width="80" height="60"></div>';?>
-<?php print '<div><span class="image_del_button">';?>
-<?php print "<a href=\"javascript: del_image('$k')\">[x]</a>";?>
-<?php print '</span></div></div>';?>
+<div class="uploaded_image_div" id="<?=$k?>">
+<div><img src="<?=$v?>" width="80" height="60"></div>
+<div><span class="image_del_button">
+<a href="javascript: del_image('<?=$k?>')">[x]</a>
+</span></div></div>
 	<?php endforeach;?>
 <?php endif;?>		
 		</div>

@@ -91,6 +91,12 @@ switch( $action ){
 			$err = $err.'最小販売数が最大販売数を超えています。<br>';
 		}
 		
+		//	Check if the dates are correctly set.
+		$current = time();
+		if( $sales_start < $current or $sales_finish < $current or $expire < $current ){
+			$err = $err.'日時または有効期限に過去の日時が設定されています。<br>';
+		}
+		
 		//	Check if the end date is prior to the start date.
 		if( $sales_start > $sales_finish ){
 			$err = $err.'販売終了日時が販売開始日時より前に設定されています。<br>';
