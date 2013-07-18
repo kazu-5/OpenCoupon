@@ -1,121 +1,110 @@
-<script>
-var img_id = parseInt(0);
-function del_image(img_id){
+<script type="text/javascript" src="jquery.upload-1.0.2.js"></script>
+
+<script type="text/javascript">
+
+$(function(){
 
 	//	Reference:
 	//		http://blog.joyfullife.jp/archives/2007/07/18115458.php
 	//		http://nui.joyfullife.jp/sui/edit/
-	//		http://itpro.nikkeibp.co.jp/article/COLUMN/20060607/240192/
 
-	try {
-		req = new ActiveXObject("Microsoft.XMLHTTP");
-	} catch(e) {
-		req = new XMLHttpRequest();
-	}
+	$('#image_select').change(function(){
+		
+		var img_max = 10;// # of max image file(s)
+		if($('.image').size() >= img_max){
+			alert('画像は '+ img_max + ' 枚まで指定できます。');
+			$("form")[1].reset();
+			return;
+		}
+		
+		$(this).upload('./upload/index.php', function(res){
+				if( res.error ){
+					alert( res.error );
+					$("form")[1].reset();
+				}else{
+					var id        = res.img_id;
+					var path      = res.img_path; 
+					var div_image = $('<div>');
+					var image_ele = $('<img src="' + path + '" width="80" height="60" >');
+					div_image.append(image_ele);
+					
+					var span_del_button = $('<span class="image_del_button" ></span>');
+					var del_button = $('<a href="javascript:del_image(\''+ id +'\')"></a>');
+					del_button.text("[x]");
+					span_del_button.append(del_button);
+					var div_button = $('<div>');
+					div_button.append(span_del_button);
 
-	req.onreadystatechange = function()
-	{
-		var msg = document.getElementById("image_message");
-		if (req.readyState == 4){
-			if (req.status == 200){
-					var data = req.responseText;
-					var result = eval( '(' + data + ')' );
-					var to_delete = String(result.deleted);
-					var img_pv = document.getElementById(to_delete);
-					img_pv.parentNode.removeChild(img_pv);
-					msg.removeChild(msg.firstChild);
-				
-					var input_to_delete = to_delete+'_image';
-					var del_target = document.getElementById(input_to_delete);
-					del_target.parentNode.removeChild(del_target);
-			} else {
-				msg.innerHTML ="削除に失敗しました。";
+					var container = $('<div class="uploaded_image_div" id="'+ id + '">');
+					container.append(div_image);
+					container.append(div_button);
+					$("#uploaded_image").append(container);
+
+					var form = $("form")[0];
+					$('<input class="image" id="' + id + '_image" type="hidden" name="image_' + id + '" value="' + path + '" />').appendTo(form);
+
+					$("form")[1].reset();
+				}
+			}, 'json');
+	});
+});
+
+
+$(function(){
+	$("#submit_btn").click(function(){
+		var img_min   =  5;// # of minimum image file(s)
+		var img_max   = 10;// # of max image file(s)
+		var input_count = $('.image').size();
+
+		if( input_count < img_min ){
+			alert('画像を ' + img_min + ' 枚以上指定してください。');
+			return;
+		}else if( input_count > img_max ){
+			alert('画像は ' + img_max + ' 枚まで指定できます。');
+			return;
+		}else{
+			$("form")[0].submit();
+		}
+	});
+});
+
+
+function del_image(id){
+
+	//	Reference:
+	//		http://blog.joyfullife.jp/archives/2007/07/18115458.php
+	//		http://nui.joyfullife.jp/sui/edit/
+
+	$("#image_message").text('削除しています...');
+	var img_id = encodeURI('to_delete=' + id);
+	
+	$.ajax({
+		url: './del_image/',
+		type: 'POST',
+		data: img_id,
+		dataType: 'json',
+		success: function(data){
+			
+			if( data.error ){
+				alert( data.error );
 			}
-		} else {
-			msg.innerHTML ="削除しています...";
+			
+			if( data.deleted ){
+				var deleted_id = data.deleted;
+				$('#' + deleted_id + '_image').remove();
+				$('#' + deleted_id ).remove();
+				$("#image_message").text('');
+			}
+		},
+		error: function(){
+			alert( '削除に失敗しました。');
+			$("#image_message").text('');
 		}
-	}
-
-	req.open("post", "./del_image/", true);
-	req.setRequestHeader("content-type", "application/x-www-form-urlencoded;");
-	req.send(encodeURI('to_delete='+img_id));
-
+	});
 }
-
-
-function CheckImgCount(){
-	var pv_div   = document.getElementById("uploaded_image");
-	var pv_count = pv_div.getElementsByTagName("img");
-	var len      = pv_count.length;
-	var img_max = 10;// # of max image file(s)
-	if( len >= img_max ){
-		alert('画像は '+img_max+' 枚まで指定できます。');
-		document.getElementById('form_coupon_image').reset();
-		return false;
-	}else{
-		return true;
-	}
-}
-
-function CheckImgCountMin(){
-	//	 op-core の機能で form_coupon の submit ボタンを出力しない場合、この関数は削除。	
-	
-	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-	form_to_send = document.getElementsByTagName('form')[0];
-	var input_tags  = form_to_send.getElementsByTagName('input');
-	var input_count = 0;
-
-	for(var i =0;i<input_tags.length;i++){
-		if(regexp.test(input_tags[i].getAttribute("id"))){
-			input_count++;
-		}
-	}
-	
-	var img_min =  5;//	# of minimum image file(s)
-	var img_max = 10;// # of max image file(s)
-	if( input_count < img_min ){
-		alert('画像を '+img_min+' 枚以上指定してください。');
-		return false;
-	}else if( input_count > img_max ){
-		alert('画像は '+img_max+' 枚まで指定できます。');
-		return false;
-	}else{
-		return true;
-	}
-}
-
-
-
-function CheckAndSubmit(){
-	var regexp   = new RegExp("^[a-zA-Z0-9]{32}_image$");
-	form_to_send = document.getElementsByTagName('form')[0];
-	var input_tags  = form_to_send.getElementsByTagName('input');
-	var input_count = 0;
-	var img_min =  5;//	# of minimum image file(s)
-	var img_max = 10;// # of max image file(s)
-	
-	for(var i =0;i<input_tags.length;i++){
-		if(regexp.test(input_tags[i].getAttribute("id"))){
-			input_count++;
-		}
-	}
-	
-	if( input_count < img_min ){
-		alert('画像を '+img_min+' 枚以上指定してください。');
-		//return false;
-		return;
-	}else if( input_count > img_max ){
-		alert('画像は '+img_max+' 枚まで指定できます。');
-		//return false;
-		return;
-	}else{
-		//return true;
-		document.getElementsByTagName('form')[0].submit();
-	}
-}
-
 
 </script>
+
 
 <style>
 /* Reference:
@@ -261,7 +250,7 @@ html*.uploaded_image_div {
 		<?php if($data->array_img):?>
 		<?php $array = $data->array_img;?>
 			<?php foreach( $array as $k => $v ):?>
-				<input id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
+				<input class="image" id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
 			<?php endforeach;?>
 		<?php endif;?>		
 			
@@ -276,15 +265,13 @@ html*.uploaded_image_div {
 		
 		<form name="form_coupon_image" enctype="multipart/form-data" method="post" action="./upload/" target="targetFrame" id="form_coupon_image">
 			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" >
-			<input type="file" name="upload_image" required><br>
-			<input type="submit" value="画像をアップロード" onClick="return CheckImgCount();">
+			<input type="file" name="upload_image" id="image_select" ><br>
 			<span id="image_message"></span><!-- メッセージ表示用 -->
 		</form>
 
 				</td>
 			</tr>
 		</table>
-
 
 		<div id="uploaded_image" style="margin-left: 162px;">
 <?php if($array):?>
@@ -298,14 +285,8 @@ html*.uploaded_image_div {
 <?php endif;?>		
 		</div>
 		
-		<div id="result">
-		<iframe id="targetFrame" src="" style="width:0px;height:0px;border:0px;"></iframe>
-		<!-- 以下はテスト用のiframe -->
-		<!-- <iframe id="targetFrame" src="" style="width:400px;height:200px;"></iframe> -->
-		</div>
-		
 		<div style="text-align:center">
-		<input type="button" name="submit" value="登録する" class="submit" onclick="javascript: CheckAndSubmit();">
+		<input id="submit_btn" type="button" name="submit" value="登録する" class="submit" />
 		</div>
 		
 	</div>

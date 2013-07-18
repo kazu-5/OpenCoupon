@@ -5,7 +5,6 @@ $this->SetLayoutName("");
 //$this->SetTemplateDir("");
 //$this->SetLayoutDir("");
 
-
 //  My shop ID.
 $shop_id = $this->GetShopID();
 
@@ -17,25 +16,23 @@ if( !empty($_POST['to_delete']) ){
 	$to_delete = $_POST['to_delete'];
 	
 	//	Delete file with unlink()
-	if( file_exists( $upload_dir.$to_delete.'.jpg' )){
-		unlink( $upload_dir.$to_delete.'.jpg' );//拡張子の指定要調整
-		$re = $to_delete.' is deleted.';//メッセージ要調整
+	$ext = '.jpg';
+	if( file_exists( $upload_dir.$to_delete.$ext )){
+		unlink( $upload_dir.$to_delete.$ext );
 		$deleted = $to_delete;
 	}else{
-		$re  = 'file does not exist.';//メッセージ要調整
-		$err = 'file does not exist.';//メッセージ要調整
+		$err = 'ファイルが存在しません。';
+		$deleted = $to_delete;
 	}
 	
 }else{
-	$re = 'failed to delete.';//メッセージ要調整
-	$err = 'file does not exist.';//メッセージ要調整
+	$err = '削除に失敗しました。';
 }
 
 
 //	Return results with JSON.
-$this->SetJson('message', $re);
-if(isset($err) == true){
-	$this->SetJson('err', $err);
+if(isset($err) == true) {
+	$this->SetJson('error', $err);
 }
 
 if(isset($deleted) == true){

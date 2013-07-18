@@ -97,7 +97,7 @@
 				<?php foreach ( $array as $k => $v ):?>
 <tr><th><strong>クーポンのイメージ <?=$i?></strong></th><td>
 <img src="<?=$v?>" width="160" height="120"/>
-<input id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
+<input class="image" id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
 </td></tr>
 				<?php ++$i;?>
 				<?php endforeach;?>
@@ -114,7 +114,7 @@
 		<form method="post" action="./">
 			<?php if($array):?>
 				<?php foreach ( $array as $k => $v ):?>
-					<input id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
+					<input class="image" id="<?=$k?>_image" type="hidden" name="image_<?=$k?>" value="<?=$v?>">
 				<?php endforeach;?>
 			<?php endif;?>
 			<input type="submit" value="内容を修正する" class="submit">
