@@ -1,15 +1,11 @@
 <script type="text/javascript" src="jquery.upload-1.0.2.js"></script>
-
 <script type="text/javascript">
-
 $(function(){
-
 	//	Reference:
 	//		http://blog.joyfullife.jp/archives/2007/07/18115458.php
 	//		http://nui.joyfullife.jp/sui/edit/
 
 	$('#image_select').change(function(){
-		
 		var img_max = 10;// # of max image file(s)
 		if($('.image').size() >= img_max){
 			alert('画像は '+ img_max + ' 枚まで指定できます。');
@@ -18,34 +14,35 @@ $(function(){
 		}
 		
 		$(this).upload('./upload/index.php', function(res){
-				if( res.error ){
-					alert( res.error );
-					$("form")[1].reset();
-				}else{
-					var id        = res.img_id;
-					var path      = res.img_path; 
-					var div_image = $('<div>');
-					var image_ele = $('<img src="' + path + '" width="80" height="60" >');
-					div_image.append(image_ele);
-					
-					var span_del_button = $('<span class="image_del_button" ></span>');
-					var del_button = $('<a href="javascript:del_image(\''+ id +'\')"></a>');
-					del_button.text("[x]");
-					span_del_button.append(del_button);
-					var div_button = $('<div>');
-					div_button.append(span_del_button);
+			if( res.error ){
+				alert( res.error );
+				$("form")[1].reset();
+			}else{
 
-					var container = $('<div class="uploaded_image_div" id="'+ id + '">');
-					container.append(div_image);
-					container.append(div_button);
-					$("#uploaded_image").append(container);
+				var id        = res.img_id;
+				var path      = res.img_path; 
+				var div_image = $('<div>');
+				var image_ele = $('<img src="' + path + '" width="80" height="60" >');
+				div_image.append(image_ele);
+				
+				var span_del_button = $('<span class="image_del_button" ></span>');
+				var del_button = $('<a href="javascript:del_image(\''+ id +'\')"></a>');
+				del_button.text("[x]");
+				span_del_button.append(del_button);
+				var div_button = $('<div>');
+				div_button.append(span_del_button);
 
-					var form = $("form")[0];
-					$('<input class="image" id="' + id + '_image" type="hidden" name="image_' + id + '" value="' + path + '" />').appendTo(form);
+				var container = $('<div class="uploaded_image_div" id="'+ id + '">');
+				container.append(div_image);
+				container.append(div_button);
+				$("#uploaded_image").append(container);
 
-					$("form")[1].reset();
-				}
-			}, 'json');
+				var form = $("form")[0];
+				$('<input class="image" id="' + id + '_image" type="hidden" name="image_' + id + '" value="' + path + '" />').appendTo(form);
+
+				$("form")[1].reset();
+			}
+		}, 'json');
 	});
 });
 

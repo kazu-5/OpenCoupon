@@ -1,8 +1,14 @@
 <?php
 /* @var $this CouponApp */
 
-$this->SetLayoutName("");
+if( $this->admin() ){
+	$this->SetJson('test',true);
+}
 
+if( empty($_FILES['upload_image']) ){
+	$this->SetJson('mime',$this->GetEnv('mime'));
+	return;
+}
 
 //  My shop ID.
 $shop_id = $this->GetShopID();
@@ -106,6 +112,7 @@ $path_from = $tmp;
 $path_to   = $path;
 
 //	Extract image data from tmp file, based on original file extension.
+$ext = strtolower($ext);
 if( $ext === 'jpg' ){
 	$img = imagecreatefromjpeg($path_from);
 }elseif( $ext === 'png' ){

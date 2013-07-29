@@ -49,4 +49,4 @@ if(!$shop_id = $this->GetSession('myshop_id') ){
 	}
 }
 
-$this->template('breadcrumb.phtml');
+//$this->template('breadcrumb.phtml');
