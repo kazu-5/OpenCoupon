@@ -2,8 +2,7 @@
 
 /**
  * master
- * 
- * */
+ */
 
 class CouponConfig extends ConfigMgr
 {
