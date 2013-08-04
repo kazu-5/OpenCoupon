@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 
+ */
 class CouponConfig extends ConfigMgr
 {
 	function __call($name, $args)
