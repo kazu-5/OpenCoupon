@@ -1,6 +1,8 @@
 <?php
 /**
  * 
+ * 
+ * 
  */
 class CouponConfig extends ConfigMgr
 {
