@@ -1514,8 +1514,8 @@ class CouponConfig extends ConfigMgr
 		$value = $this->form()->GetInputValueRawAll('form_coupon');
 		
 		foreach ( $value as $key => $val ){
-			if( preg_match( '/^image_[a-zA-Z0-9]{32}$/', $key ) ){
-				unset( $value->$key );
+			if( preg_match( '/^image_[a-z0-9]{32}$/i', $key ) ){
+				unset( $value[$key] );
 			}
 		}
 		unset($value->submit);
