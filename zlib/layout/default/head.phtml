@@ -1,11 +1,11 @@
 <head>
-	<meta charset="<?=$this->charset()?>">
+	<meta charset="<?=$this->GetCharset()?>">
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=<?=$this->GetCharset()?>">
 	<meta http-equiv="Content-Style-Type" content="text/css">
 	
-	<meta name="keywords" content="<?=$this->Keywords()?>">
-	<meta name="description" content="<?=$this->Description()?>">
+	<meta name="keywords" content="<?=$this->GetKeywords()?>">
+	<meta name="description" content="<?=$this->GetDescription()?>">
 	
 	<link rel="stylesheet" type="text/css" href="/css/import.css">
 	
@@ -28,5 +28,5 @@
         })
     </script>
     
-	<title><?=$this->title()?></title>
+    <title><?=$this->GetTitle()?></title>
 </head>
